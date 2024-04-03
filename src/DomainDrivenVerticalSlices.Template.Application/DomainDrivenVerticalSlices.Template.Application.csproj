@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" />
+    <PackageReference Include="FluentValidation" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+    <PackageReference Include="MediatR" />
+    <PackageReference Include="Microsoft.Extensions.Logging" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DomainDrivenVerticalSlices.Template.Common\DomainDrivenVerticalSlices.Template.Common.csproj" />
+    <ProjectReference Include="..\DomainDrivenVerticalSlices.Template.Domain\DomainDrivenVerticalSlices.Template.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

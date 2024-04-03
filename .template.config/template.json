@@ -1,0 +1,28 @@
+{
+    "$schema": "http://json.schemastore.org/template",
+    "author": "Reza Mashayekhi",
+    "classifications": [
+        "Web",
+        "API",
+        "ASP.NET",
+        "Clean Architecture",
+        "Domain Driven Design",
+        "Vertical Slice Architecture"
+    ],
+    "identity": "RM.DomainDrivenVerticalSlices.Template",
+    "name": "Domain Driven Vertical Slices Template",
+    "shortName": "ddvs",
+    "tags": {
+        "language": "C#",
+        "type": "project"
+    },
+    "sourceName": "DomainDrivenVerticalSlices.Template",
+    "symbols": {
+        "projectName": {
+            "type": "parameter",
+            "dataType": "string",
+            "replaces": "DomainDrivenVerticalSlices.Template"
+        }
+    },
+    "preferNameDirectory": true
+}

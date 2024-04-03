@@ -1,0 +1,28 @@
+name: Publish NuGet
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'DomainDrivenVerticalSlices.Template.nuspec'
+
+jobs:
+  publish:
+    name: Publish to NuGet.org
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        name: Checkout code
+
+      - uses: nuget/setup-nuget@v1
+        name: Setup NuGet
+        with:
+          nuget-version: '6.x'
+
+      - name: Create the package
+        run: nuget pack DomainDrivenVerticalSlices.Template.nuspec -NoDefaultExcludes
+        
+      - name: Publish the package
+        run: nuget push RM.DomainDrivenVerticalSlices.Template.*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}} -SkipDuplicate

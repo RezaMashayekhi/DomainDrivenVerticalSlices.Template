@@ -1,0 +1,58 @@
+@DomainDrivenVerticalSlices.Template.WebApi_HostAddress = http://localhost:5246
+@id = 4ac3abab-5112-4e40-a76e-9695acebfe68
+@property1 = Prop1
+@filterProperty = Prop
+@updatedProperty1 = UpdatedPro1
+
+###
+
+GET {{DomainDrivenVerticalSlices.Template.WebApi_HostAddress}}/api/Entity1/{{id}}
+Accept: application/json
+
+###
+
+GET {{DomainDrivenVerticalSlices.Template.WebApi_HostAddress}}/api/Entity1/all
+Accept: application/json
+
+###
+
+GET {{DomainDrivenVerticalSlices.Template.WebApi_HostAddress}}/api/Entity1/list?property1={{filterProperty}}
+Accept: application/json
+
+###
+
+GET {{DomainDrivenVerticalSlices.Template.WebApi_HostAddress}}/api/Entity1/find?property1={{filterProperty}}
+Accept: application/json
+
+###
+
+POST {{DomainDrivenVerticalSlices.Template.WebApi_HostAddress}}/api/Entity1
+Content-Type: application/json
+Accept: application/json
+
+{
+  "property1": "{{property1}}"
+}
+
+###
+
+PUT {{DomainDrivenVerticalSlices.Template.WebApi_HostAddress}}/api/Entity1/{{id}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "Entity1": {
+    "id": "{{id}}",
+    "valueObject1": {
+      "property1": "{{updatedProperty1}}"
+    }
+  }
+}
+
+###
+
+DELETE {{DomainDrivenVerticalSlices.Template.WebApi_HostAddress}}/api/Entity1/{{id}}
+Accept: application/json
+
+###
+
