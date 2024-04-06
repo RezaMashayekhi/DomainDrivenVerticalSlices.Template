@@ -2,8 +2,8 @@
 
 [![Build](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template/actions/workflows/build.yml/badge.svg)](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template/actions/workflows/build.yml)
 [![CodeQL](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template/actions/workflows/codeql.yml/badge.svg)](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template/actions/workflows/codeql.yml)
-[![Nuget](https://img.shields.io/nuget/v/RM.DomainDrivenVerticalSlices.Template?label=NuGet)](https://www.nuget.org/packages/DomainDrivenVerticalSlices.Template)
-[![Nuget](https://img.shields.io/nuget/dt/RM.DomainDrivenVerticalSlices.Template?label=Downloads)](https://www.nuget.org/packages/DomainDrivenVerticalSlices.Template)
+[![Nuget](https://img.shields.io/nuget/v/RM.DomainDrivenVerticalSlices.Template?label=NuGet)](https://www.nuget.org/packages/RM.DomainDrivenVerticalSlices.Template)
+[![Nuget](https://img.shields.io/nuget/dt/RM.DomainDrivenVerticalSlices.Template?label=Downloads)](https://www.nuget.org/packages/RM.DomainDrivenVerticalSlices.Template)
 
 This template is designed to jumpstart the development of web APIs following the principles of Domain-Driven Design (DDD) within a vertical slice architecture. Ideal for enterprise applications where separation of concerns and scalability are key, this template simplifies the adoption of DDD and clean architecture principles, ensuring your application remains agile, testable, and easy to understand.
 
@@ -20,7 +20,7 @@ To use this template, ensure you have the following prerequisites installed:
 Install the template from NuGet:
 
 ```bash
-dotnet new install RM.DomainDrivenVerticalSlices.Template::8.0.1
+dotnet new install RM.DomainDrivenVerticalSlices.Template::8.0.2
 ```
 
 Create a new project based on the template:
