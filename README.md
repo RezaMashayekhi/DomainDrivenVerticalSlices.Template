@@ -93,10 +93,12 @@ This template supports optional integration with a React frontend. For developer
         ```
 
         -   **Setting Permanent Environment Variables**:
+
             ```bash
             setx UiType React  # Sets 'UiType' permanently for the current user
             setx UiType React /M  # Sets 'UiType' permanently system-wide
             ```
+            
             Note: `setx` changes will only affect new command prompt sessions, not the current session.
 
     -   **For Linux/macOS:**

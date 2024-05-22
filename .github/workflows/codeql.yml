@@ -3,33 +3,52 @@ name: CodeQL Analysis
 on:
   push:
     branches: [ main ]
-  pull_request_target:
+  pull_request:
     branches: [ main ]
   schedule:
     - cron: '0 8 * * 1'
 
 jobs:
   analyze:
-    name: CodeQL Analysis
+    name: Perform CodeQL Analysis
     runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ['csharp', 'javascript']
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Initialize CodeQL for C# and JavaScript/TypeScript
+      - name: Setup .NET for C# analysis
+        if: matrix.language == 'csharp'
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.100'
+
+      - name: Setup Node.js for JavaScript/TypeScript analysis
+        if: matrix.language == 'javascript'
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
-          languages: 'csharp, javascript'
+          languages: ${{ matrix.language }}
 
       - name: Autobuild for C#
-        uses: github/codeql-action/autobuild@v2
         if: matrix.language == 'csharp'
+        uses: github/codeql-action/autobuild@v2
 
-      - name: Manual build for JavaScript/TypeScript
+      - name: Install and build JavaScript/TypeScript
         if: matrix.language == 'javascript'
         run: |
           npm install
           npm run build
+        working-directory: src/DomainDrivenVerticalSlices.Template.UI.React
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2
