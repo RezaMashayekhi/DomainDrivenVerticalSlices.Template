@@ -13,6 +13,19 @@ public static class ServiceExtensions
         builder.Services.AddApplication();
         builder.Services.AddInfrastructure(config);
         builder.Services.AddLogging();
+#if INCLUDE_REACT
+        var corsPolicyName = config.GetSection("CorsSettings:PolicyName").Value ?? throw new InvalidOperationException("CORS policy name not found in configuration.");
+        var allowedOrigins = config.GetSection("CorsSettings:AllowedOrigins").Get<string[]>() ?? throw new InvalidOperationException("CORS AllowedOrigins not found in configuration.");
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy(corsPolicyName, builder =>
+            {
+                builder.WithOrigins(allowedOrigins)
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            });
+        });
+#endif
         return builder;
     }
 }

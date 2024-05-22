@@ -17,12 +17,55 @@
         "type": "project"
     },
     "sourceName": "DomainDrivenVerticalSlices.Template",
+    "preferNameDirectory": true,
     "symbols": {
         "projectName": {
             "type": "parameter",
             "dataType": "string",
             "replaces": "DomainDrivenVerticalSlices.Template"
+        },
+        "UiType": {
+            "type": "parameter",
+            "datatype": "choice",
+            "choices": [
+                {
+                    "choice": "React",
+                    "description": "Include React UI"
+                },
+                {
+                    "choice": "None",
+                    "description": "Web API only"
+                }
+            ],
+            "defaultValue": "None",
+            "description": "Specify the UI framework to include"
+        },
+        "INCLUDE_REACT": {
+            "type": "computed",
+            "value": "(UiType == \"React\")"
+        },
+        "INCLUDE_API_ONLY": {
+            "type": "computed",
+            "value": "(UiType == \"None\")"
         }
     },
-    "preferNameDirectory": true
+    "sources": [
+        {
+            "source": "./",
+            "target": "./",
+            "exclude": [
+                "**/*.lock.json",
+                "*.nuspec",
+                ".template.config/**"
+            ],
+            "modifiers": [
+                {
+                    "condition": "(INCLUDE_API_ONLY)",
+                    "exclude": [
+                        "src/DomainDrivenVerticalSlices.Template.UI.React/**"
+                    ]
+                }
+            ]
+        }
+    ]
 }

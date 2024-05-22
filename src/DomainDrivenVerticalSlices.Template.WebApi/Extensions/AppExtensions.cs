@@ -15,6 +15,10 @@ public static class AppExtensions
             DatabaseInitializer.Initialize(connectionString);
         }
 
+#if INCLUDE_REACT
+        var corsPolicyName = config.GetSection("CorsSettings:PolicyName").Value ?? throw new InvalidOperationException("CORS policy name not found in configuration.");
+        app.UseCors(corsPolicyName);
+#endif
         app.UseHttpsRedirection();
         app.UseAuthorization();
         app.MapControllers();
