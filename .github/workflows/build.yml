@@ -1,4 +1,4 @@
-name: Build and Test .NET Solution
+name: Build and Test .NET and React Solution
 
 on:
   push:
@@ -22,11 +22,13 @@ jobs:
     - uses: actions/checkout@v4
       name: Checkout code
 
+    # Setup .NET
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '8.0.100'
 
+    # Cache NuGet packages
     - name: Cache NuGet packages
       uses: actions/cache@v4
       with:
@@ -35,11 +37,47 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-nuget-
 
+    # Restore .NET dependencies
     - name: Restore dependencies
       run: dotnet restore
 
+    # Build .NET solution
     - name: Build solution
       run: dotnet build --no-restore --configuration Release
 
+    # Test .NET solution
     - name: Test solution
       run: dotnet test --no-build --configuration Release
+
+    # Setup Node.js for React project
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+
+    # Cache node_modules
+    - name: Cache node modules
+      uses: actions/cache@v4
+      with:
+        path: '**/node_modules'
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    # Install React project dependencies
+    - name: Install React dependencies
+      run: |
+        cd src/DomainDrivenVerticalSlices.Template.UI.React
+        npm install
+
+    # Build React project
+    - name: Build React project
+      run: |
+        cd src/DomainDrivenVerticalSlices.Template.UI.React
+        npm run build
+
+    # Optional: Run tests for React project
+    - name: Test React project
+      run: |
+        cd src/DomainDrivenVerticalSlices.Template.UI.React
+        npm test

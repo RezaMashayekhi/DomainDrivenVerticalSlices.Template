@@ -16,13 +16,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Initialize CodeQL
+      - name: Initialize CodeQL for C# and JavaScript/TypeScript
         uses: github/codeql-action/init@v3
         with:
-          languages: csharp
+          languages: 'csharp, javascript'
 
-      - name: Autobuild
+      - name: Autobuild for C#
         uses: github/codeql-action/autobuild@v2
+        if: matrix.language == 'csharp'
+
+      - name: Manual build for JavaScript/TypeScript
+        if: matrix.language == 'javascript'
+        run: |
+          npm install
+          npm run build
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2
