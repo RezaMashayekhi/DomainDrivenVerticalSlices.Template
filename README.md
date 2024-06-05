@@ -20,7 +20,7 @@ To use this template, ensure you have the following prerequisites installed:
 Install the template from NuGet:
 
 ```bash
-dotnet new install RM.DomainDrivenVerticalSlices.Template::8.0.2
+dotnet new install RM.DomainDrivenVerticalSlices.Template::8.0.4
 ```
 
 ### Create a new project based on the template:
