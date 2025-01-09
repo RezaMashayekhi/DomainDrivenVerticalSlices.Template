@@ -18,13 +18,11 @@ public class ValidationBehaviour<TRequest, TResponse>(IEnumerable<IValidator<TRe
         {
             var context = new ValidationContext<TRequest>(request);
             var validationResults = await Task.WhenAll(_validators.Select(v => v.ValidateAsync(context, cancellationToken)));
-            var failures = validationResults.SelectMany(r => r.Errors).Where(f => f != null).ToList();
+            var failures = validationResults.SelectMany(r => r.Errors).Where(f => f != null).Select(e => e.ErrorMessage).ToList();
 
             if (failures.Count != 0)
             {
-                var errorMessage = string.Join(Environment.NewLine, failures);
-
-                var error = Error.Create(ErrorType.InvalidInput, errorMessage);
+                var error = Error.Create(ErrorType.InvalidInput, failures);
 
                 if (typeof(IResult).IsAssignableFrom(typeof(TResponse)))
                 {

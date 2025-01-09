@@ -21,7 +21,7 @@ public class DeleteEntity1CommandHandler(
         var entity1 = await _entity1Repository.GetByIdAsync(request.Id, cancellationToken);
         if (entity1 == null)
         {
-            _logger.LogError("Entity1 with id {requestId} not found.", request.Id);
+            _logger.LogError("Entity1 with id {RequestId} not found.", request.Id);
             return Result.Failure(Error.Create(ErrorType.NotFound, $"Entity1 with id {request.Id} not found."));
         }
 
@@ -33,7 +33,7 @@ public class DeleteEntity1CommandHandler(
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error deleting Entity1 with id {requestId}.", request.Id);
+            _logger.LogError(ex, "Error deleting Entity1 with id {RequestId}.", request.Id);
             return Result.Failure(Error.Create(ErrorType.OperationFailed, $"Error deleting Entity1 with id {request.Id}."));
         }
     }

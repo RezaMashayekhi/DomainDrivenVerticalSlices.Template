@@ -20,14 +20,22 @@ public class GetEntity1ByIdQueryHandler(
 
     public async Task<Result<Entity1Dto>> Handle(GetEntity1ByIdQuery request, CancellationToken cancellationToken)
     {
-        var entity1 = await _entity1Repository.GetByIdAsync(request.Id, cancellationToken);
-        if (entity1 == null)
+        try
         {
-            _logger.LogError("Entity1 with id {requestId} not found.", request.Id);
-            return Result<Entity1Dto>.Failure(Error.Create(ErrorType.NotFound, $"Entity1 with id {request.Id} not found."));
-        }
+            var entity1 = await _entity1Repository.GetByIdAsync(request.Id, cancellationToken);
+            if (entity1 == null)
+            {
+                _logger.LogError("Entity1 with id {RequestId} not found.", request.Id);
+                return Result<Entity1Dto>.Failure(Error.Create(ErrorType.NotFound, $"Entity1 with id {request.Id} not found."));
+            }
 
-        var entity1Dto = _mapper.Map<Entity1Dto>(entity1);
-        return Result<Entity1Dto>.Success(entity1Dto);
+            var entity1Dto = _mapper.Map<Entity1Dto>(entity1);
+            return Result<Entity1Dto>.Success(entity1Dto);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error retrieving Entity1 by id.");
+            return Result<Entity1Dto>.Failure(Error.Create(ErrorType.OperationFailed, ex.Message));
+        }
     }
 }

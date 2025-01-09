@@ -121,4 +121,23 @@ public class GetEntity1ByIdQueryHandlerTests
 
         _entity1RepositoryMock.Verify(r => r.GetByIdAsync(It.IsAny<Guid>(), CancellationToken.None), Times.Once);
     }
+
+    [Fact]
+    public async Task Handle_WithRepositoryException_ShouldReturnFailureResult()
+    {
+        // Arrange
+        _entity1RepositoryMock
+            .Setup(r => r.GetByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new Exception("DB error"));
+        var request = new GetEntity1ByIdQuery(Guid.NewGuid());
+
+        // Act
+        var result = await _handler.Handle(request, CancellationToken.None);
+
+        // Assert
+        result.Should().BeOfType<Result<Entity1Dto>>();
+        result.IsSuccess.Should().BeFalse();
+        _loggerMock.VerifyLogLevelTotalCalls(LogLevel.Error, Times.Once);
+        _loggerMock.VerifyLogging("Error retrieving Entity1 by id.", LogLevel.Error, Times.Once());
+    }
 }

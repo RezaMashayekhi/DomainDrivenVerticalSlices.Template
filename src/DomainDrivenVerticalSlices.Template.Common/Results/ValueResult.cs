@@ -10,7 +10,7 @@ public class Result<TValue> : IResult<TValue>
 
     protected Result(bool isSuccess, IError? error, TValue? value)
     {
-        if (isSuccess && (value == null || value.Equals(default(TValue))))
+        if (isSuccess && (value is null || value.Equals(default(TValue))))
         {
             throw new ArgumentException("Value cannot be null or empty for a successful result.", nameof(value));
         }
@@ -52,7 +52,7 @@ public class Result<TValue> : IResult<TValue>
 
     public static Result<TValue> Success(TValue value)
     {
-        return value == null ? throw new ArgumentNullException(nameof(value)) : new Result<TValue>(true, default, value);
+        return value is null ? throw new ArgumentNullException(nameof(value)) : new Result<TValue>(true, default, value);
     }
 
     public static Result<TValue> Failure(IError error)

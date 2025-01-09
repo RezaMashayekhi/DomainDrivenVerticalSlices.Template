@@ -10,7 +10,7 @@ public class Entity1CreatedEventHandler(ILogger<Entity1CreatedEventHandler> logg
 
     public Task Handle(Entity1CreatedEvent notification, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Entity1CreatedEvent: A new Entity1 was created with ID {entity1Id}.", notification.Entity1Id);
+        _logger.LogInformation("Entity1CreatedEvent: A new Entity1 was created with ID {Entity1Id}.", notification.Entity1Id);
 
         return Task.CompletedTask;
     }

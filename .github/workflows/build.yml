@@ -1,83 +1,83 @@
 name: Build and Test .NET and React Solution
 
 on:
-  push:
-    branches: [ main ]
-    paths-ignore:
-      - '.scripts/**'
-      - '**/*.md'
-      - '.gitignore'
-  pull_request:
-    branches: [ main ]
-    paths-ignore:
-      - '.scripts/**'
-      - '**/*.md'
-      - '.gitignore'
+    push:
+        branches: [main]
+        paths-ignore:
+            - ".scripts/**"
+            - "**/*.md"
+            - ".gitignore"
+    pull_request:
+        branches: [main]
+        paths-ignore:
+            - ".scripts/**"
+            - "**/*.md"
+            - ".gitignore"
 
 jobs:
-  build-and-test:
-    runs-on: ubuntu-latest
+    build-and-test:
+        runs-on: ubuntu-latest
 
-    steps:
-    - uses: actions/checkout@v4
-      name: Checkout code
+        steps:
+            - uses: actions/checkout@v4
+              name: Checkout code
 
-    # Setup .NET
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '8.0.100'
+            # Setup .NET
+            - name: Setup .NET
+              uses: actions/setup-dotnet@v4
+              with:
+                  dotnet-version: "9.0.100"
 
-    # Cache NuGet packages
-    - name: Cache NuGet packages
-      uses: actions/cache@v4
-      with:
-        path: ~/.nuget/packages
-        key: ${{ runner.os }}-nuget-${{ hashFiles('**/Directory.Packages.props', '**/*.csproj') }}
-        restore-keys: |
-          ${{ runner.os }}-nuget-
+            # Cache NuGet packages
+            - name: Cache NuGet packages
+              uses: actions/cache@v4
+              with:
+                  path: ~/.nuget/packages
+                  key: ${{ runner.os }}-nuget-${{ hashFiles('**/Directory.Packages.props', '**/*.csproj') }}
+                  restore-keys: |
+                      ${{ runner.os }}-nuget-
 
-    # Restore .NET dependencies
-    - name: Restore dependencies
-      run: dotnet restore
+            # Restore .NET dependencies
+            - name: Restore dependencies
+              run: dotnet restore
 
-    # Build .NET solution
-    - name: Build solution
-      run: dotnet build --no-restore --configuration Release
+            # Build .NET solution
+            - name: Build solution
+              run: dotnet build --no-restore --configuration Release
 
-    # Test .NET solution
-    - name: Test solution
-      run: dotnet test --no-build --configuration Release
+            # Test .NET solution
+            - name: Test solution
+              run: dotnet test --no-build --configuration Release
 
-    # Setup Node.js for React project
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16'
+            # Setup Node.js for React project
+            - name: Setup Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: "16"
 
-    # Cache node_modules
-    - name: Cache node modules
-      uses: actions/cache@v4
-      with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
+            # Cache node_modules
+            - name: Cache node modules
+              uses: actions/cache@v4
+              with:
+                  path: "**/node_modules"
+                  key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-
 
-    # Install React project dependencies
-    - name: Install React dependencies
-      run: |
-        cd src/DomainDrivenVerticalSlices.Template.UI.React
-        npm install
+            # Install React project dependencies
+            - name: Install React dependencies
+              run: |
+                  cd src/DomainDrivenVerticalSlices.Template.UI.React
+                  npm install
 
-    # Build React project
-    - name: Build React project
-      run: |
-        cd src/DomainDrivenVerticalSlices.Template.UI.React
-        npm run build
+            # Build React project
+            - name: Build React project
+              run: |
+                  cd src/DomainDrivenVerticalSlices.Template.UI.React
+                  npm run build
 
-    # Optional: Run tests for React project
-    - name: Test React project
-      run: |
-        cd src/DomainDrivenVerticalSlices.Template.UI.React
-        npm test
+            # Optional: Run tests for React project
+            - name: Test React project
+              run: |
+                  cd src/DomainDrivenVerticalSlices.Template.UI.React
+                  npm test

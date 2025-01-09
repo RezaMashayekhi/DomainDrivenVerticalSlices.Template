@@ -46,7 +46,7 @@ public class ValidationBehaviourTests
     {
         // Arrange
         var expectedErrorMessage = "Error Message";
-        var validatorMock = CreateValidatorMock(new List<ValidationFailure> { new("Property", expectedErrorMessage) });
+        var validatorMock = CreateValidatorMock([new("Property", expectedErrorMessage)]);
         _validators.Add(validatorMock.Object);
 
         // Act
@@ -64,18 +64,18 @@ public class ValidationBehaviourTests
     public async Task Handle_WithInvalidRequest_WhenMultipleValidatorsExist_ShouldReturnFailureResultWithMultipleValidationErrors()
     {
         // Arrange
-        var validatorMock1 = CreateValidatorMock(new List<ValidationFailure>
-        {
+        var validatorMock1 = CreateValidatorMock(
+        [
             new("Property1", "Error Message 1"),
             new("Property2", "Error Message 2"),
             new("Property3", "Error Message 3"),
-        });
+        ]);
 
-        var validatorMock2 = CreateValidatorMock(new List<ValidationFailure>
-        {
+        var validatorMock2 = CreateValidatorMock(
+        [
             new("Property4", "Error Message 4"),
             new("Property5", "Error Message 5"),
-        });
+        ]);
 
         _validators.AddRange(new[]
         {
@@ -118,7 +118,7 @@ public class ValidationBehaviourTests
     public async Task Handle_WithInvalidRequest_WhenValidatorsExist_ShouldReturnFailureResultWithValidationError()
     {
         // Arrange
-        var validatorMock = CreateValidatorMock(new List<ValidationFailure> { new("Property", "Error Message") });
+        var validatorMock = CreateValidatorMock([new("Property", "Error Message")]);
         _validators.Add(validatorMock.Object);
 
         // Act
@@ -149,7 +149,7 @@ public class ValidationBehaviourTests
     public async Task Handle_WithValidatorsExistAndValidationErrors_ShouldNotInvokeNextHandler()
     {
         // Arrange
-        var validatorMock = CreateValidatorMock(new List<ValidationFailure> { new("Property", "Error Message") });
+        var validatorMock = CreateValidatorMock([new("Property", "Error Message")]);
         _validators.Add(validatorMock.Object);
 
         // Act
@@ -165,7 +165,7 @@ public class ValidationBehaviourTests
     public async Task Handle_WithValidatorsExistButNoValidationErrors_ShouldInvokeNextHandler()
     {
         // Arrange
-        var validatorMock = CreateValidatorMock(new List<ValidationFailure>());
+        var validatorMock = CreateValidatorMock([]);
         _validators.Add(validatorMock.Object);
 
         // Act

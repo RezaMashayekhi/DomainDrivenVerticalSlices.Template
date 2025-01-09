@@ -18,6 +18,7 @@ public class ErrorTests
         // Assert
         error.ErrorType.Should().Be(errorType);
         error.ErrorMessage.Should().Be(errorMessage);
+        error.ErrorMessages.Should().Contain(errorMessage);
     }
 
     [Theory]
@@ -34,5 +35,38 @@ public class ErrorTests
         // Assert
         error.ErrorType.Should().Be(errorType);
         error.ErrorMessage.Should().Be(expectedErrorMessage);
+        error.ErrorMessages.Should().Contain(expectedErrorMessage);
+    }
+
+    [Fact]
+    public void Create_ErrorWithList_ReturnsCorrectValues()
+    {
+        // Arrange
+        var errorType = ErrorType.NotFound;
+        var errorMessages = new List<string> { "Resource not found.", "Another message." };
+
+        // Act
+        var error = Error.Create(errorType, errorMessages);
+
+        // Assert
+        error.ErrorType.Should().Be(errorType);
+        error.ErrorMessage.Should().Be("Resource not found., Another message.");
+        error.ErrorMessages.Should().BeEquivalentTo(errorMessages);
+    }
+
+    [Fact]
+    public void Create_ErrorWithEmptyList_ReturnsCorrectDefaultErrorMessage()
+    {
+        // Arrange
+        var errorType = ErrorType.NotFound;
+        var errorMessages = new List<string>();
+
+        // Act
+        var error = Error.Create(errorType, errorMessages);
+
+        // Assert
+        error.ErrorType.Should().Be(errorType);
+        error.ErrorMessage.Should().Be("Resource not found.");
+        error.ErrorMessages.Should().Contain("Resource not found.");
     }
 }

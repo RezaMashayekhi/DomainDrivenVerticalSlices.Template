@@ -48,7 +48,7 @@ public class CreateEntity1CommandHandler(
 
             await _publisher.Publish(new Entity1CreatedEvent(entity1.Id), cancellationToken);
 
-            _logger.LogInformation("Entity1 created with id {entity1Id}.", entity1.Id);
+            _logger.LogInformation("Entity1 created with id {Entity1Id}.", entity1.Id);
             var entity1Dto = _mapper.Map<Entity1Dto>(entity1);
             return Result<Entity1Dto>.Success(entity1Dto);
         }
