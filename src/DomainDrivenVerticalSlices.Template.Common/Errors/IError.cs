@@ -7,4 +7,6 @@ public interface IError
     string ErrorMessage { get; }
 
     ErrorType ErrorType { get; }
+
+    IEnumerable<string> ErrorMessages { get; }
 }

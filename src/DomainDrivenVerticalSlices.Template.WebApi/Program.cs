@@ -1,4 +1,4 @@
-using DomainDrivenVerticalSlices.Template.WebApi.Configurations;
+﻿using DomainDrivenVerticalSlices.Template.WebApi.Configurations;
 using DomainDrivenVerticalSlices.Template.WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,8 +11,8 @@ var app = builder
     .ConfigureServices(config)
     .Build();
 
-app.ConfigureApp(config)
-    .Run();
+await app.ConfigureApp(config)
+    .RunAsync();
 
 /// <summary>
 /// It is used in integration testing.
