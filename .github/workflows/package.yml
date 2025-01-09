@@ -5,9 +5,6 @@ on:
     branches:
       - main
       - develop
-    paths:
-      - "DomainDrivenVerticalSlices.Template.nuspec"
-    workflow_dispatch:
 
 jobs:
   publish:
