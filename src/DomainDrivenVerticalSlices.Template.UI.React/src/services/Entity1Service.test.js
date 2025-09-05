@@ -1,8 +1,10 @@
+import { vi } from "vitest";
 import * as Entity1Service from "./Entity1Service";
 
 describe("Entity1Service", () => {
     beforeEach(() => {
-        global.fetch = jest.fn();
+        global.fetch = vi.fn();
+        import.meta.env.VITE_API_BASE_URL = "/api/entity1";
     });
 
     test("getAllEntity1 returns data on success", async () => {
@@ -18,7 +20,7 @@ describe("Entity1Service", () => {
             { id: 1, valueObject1: { property1: "value" } },
         ]);
         expect(global.fetch).toHaveBeenCalledWith(
-            `${process.env.REACT_APP_API_BASE_URL}/all`
+            `${import.meta.env.VITE_API_BASE_URL}/all`
         );
     });
 
@@ -41,7 +43,7 @@ describe("Entity1Service", () => {
         const entity = await Entity1Service.getEntity1ById(mockId);
         expect(entity).toEqual(mockEntity);
         expect(global.fetch).toHaveBeenCalledWith(
-            `${process.env.REACT_APP_API_BASE_URL}/${mockId}`
+            `${import.meta.env.VITE_API_BASE_URL}/${mockId}`
         );
     });
 
@@ -70,7 +72,7 @@ describe("Entity1Service", () => {
         expect(entities).toEqual(mockData);
         expect(global.fetch).toHaveBeenCalledWith(
             `${
-                process.env.REACT_APP_API_BASE_URL
+                import.meta.env.VITE_API_BASE_URL
             }/list?property1=${encodeURIComponent(mockProperty1)}`
         );
     });
@@ -96,7 +98,7 @@ describe("Entity1Service", () => {
         const response = await Entity1Service.updateEntity1(mockEntity);
         expect(response).toBeTruthy();
         expect(global.fetch).toHaveBeenCalledWith(
-            `${process.env.REACT_APP_API_BASE_URL}/${mockEntity.id}`,
+            `${import.meta.env.VITE_API_BASE_URL}/${mockEntity.id}`,
             expect.objectContaining({
                 method: "PUT",
                 headers: {
@@ -127,7 +129,7 @@ describe("Entity1Service", () => {
         const response = await Entity1Service.deleteEntity1ById(mockId);
         expect(response).toBeTruthy();
         expect(global.fetch).toHaveBeenCalledWith(
-            `${process.env.REACT_APP_API_BASE_URL}/${mockId}`,
+            `${import.meta.env.VITE_API_BASE_URL}/${mockId}`,
             expect.objectContaining({
                 method: "DELETE",
             })
@@ -157,7 +159,7 @@ describe("Entity1Service", () => {
         expect(response).toEqual({ id: "123", ...mockEntity });
 
         expect(global.fetch).toHaveBeenCalledWith(
-            `${process.env.REACT_APP_API_BASE_URL}`,
+            `${import.meta.env.VITE_API_BASE_URL}`,
             expect.objectContaining({
                 method: "POST",
                 headers: {

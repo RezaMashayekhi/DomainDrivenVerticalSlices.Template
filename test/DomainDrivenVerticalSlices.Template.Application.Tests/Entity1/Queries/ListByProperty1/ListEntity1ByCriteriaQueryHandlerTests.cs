@@ -1,7 +1,7 @@
 ﻿namespace DomainDrivenVerticalSlices.Template.Application.Tests.Entity1.Queries.ListByProperty1;
 
 using System.Linq.Expressions;
-using AutoMapper;
+
 using DomainDrivenVerticalSlices.Template.Application.Dtos;
 using DomainDrivenVerticalSlices.Template.Application.Entity1.Queries.ListByProperty1;
 using DomainDrivenVerticalSlices.Template.Application.Interfaces;
@@ -9,26 +9,24 @@ using DomainDrivenVerticalSlices.Template.Application.Tests.Helpers;
 using DomainDrivenVerticalSlices.Template.Common.Results;
 using DomainDrivenVerticalSlices.Template.Domain.Entities;
 using DomainDrivenVerticalSlices.Template.Domain.ValueObjects;
-using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 
 public class ListEntity1ByCriteriaQueryHandlerTests
 {
     private readonly Mock<IEntity1Repository> _entity1RepositoryMock;
-    private readonly Mock<IMapper> _mapperMock;
+
     private readonly Mock<ILogger<ListEntity1ByProperty1QueryHandler>> _loggerMock;
     private readonly ListEntity1ByProperty1QueryHandler _handler;
 
     public ListEntity1ByCriteriaQueryHandlerTests()
     {
         _entity1RepositoryMock = new Mock<IEntity1Repository>();
-        _mapperMock = new Mock<IMapper>();
+
         _loggerMock = new Mock<ILogger<ListEntity1ByProperty1QueryHandler>>();
         _handler = new ListEntity1ByProperty1QueryHandler(
             _entity1RepositoryMock.Object,
-            _loggerMock.Object,
-            _mapperMock.Object);
+            _loggerMock.Object);
     }
 
     [Fact]
@@ -38,12 +36,11 @@ public class ListEntity1ByCriteriaQueryHandlerTests
         {
             new ListEntity1ByProperty1QueryHandler(
                 null!, // Entity1Repository
-                _loggerMock.Object,
-                _mapperMock.Object);
+                _loggerMock.Object);
         });
 
-        exception.ParamName.Should().Be("entity1Repository");
-        exception.Message.Should().Contain("entity1Repository");
+        Assert.Equal("entity1Repository", exception.ParamName);
+        Assert.Contains("entity1Repository", exception.Message);
     }
 
     [Fact]
@@ -53,26 +50,10 @@ public class ListEntity1ByCriteriaQueryHandlerTests
         {
             new ListEntity1ByProperty1QueryHandler(
                 _entity1RepositoryMock.Object,
-                null!, // Logger
-                _mapperMock.Object);
+                null!); // logger
         });
-        exception.ParamName.Should().Be("logger");
-        exception.Message.Should().Contain("logger");
-    }
-
-    [Fact]
-    public void Constructor_ThrowsArgumentNullException_WhenMapperIsNull()
-    {
-        var exception = Assert.Throws<ArgumentNullException>(() =>
-        {
-            new ListEntity1ByProperty1QueryHandler(
-                _entity1RepositoryMock.Object,
-                _loggerMock.Object,
-                null!); // Mapper
-        });
-
-        exception.ParamName.Should().Be("mapper");
-        exception.Message.Should().Contain("mapper");
+        Assert.Equal("logger", exception.ParamName);
+        Assert.Contains("logger", exception.Message);
     }
 
     [Fact]
@@ -91,8 +72,6 @@ public class ListEntity1ByCriteriaQueryHandlerTests
 
         _entity1RepositoryMock.Setup(repo => repo.ListAsync(It.IsAny<Expression<Func<Entity1, bool>>>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(entities);
-        _mapperMock.Setup(mapper => mapper.Map<IEnumerable<Entity1Dto>>(entities))
-            .Returns(dtos);
 
         var query = new ListEntity1ByProperty1Query(prop);
 
@@ -100,8 +79,8 @@ public class ListEntity1ByCriteriaQueryHandlerTests
         var result = await _handler.Handle(query, CancellationToken.None);
 
         // Assert
-        result.IsSuccess.Should().BeTrue();
-        result.Value.Should().BeEquivalentTo(dtos);
+        Assert.True(result.IsSuccess);
+        Assert.Equal(dtos, result.Value);
         _entity1RepositoryMock.Verify(r => r.ListAsync(It.IsAny<Expression<Func<Entity1, bool>>>(), CancellationToken.None), Times.Once);
     }
 
@@ -118,8 +97,8 @@ public class ListEntity1ByCriteriaQueryHandlerTests
         var result = await _handler.Handle(query, CancellationToken.None);
 
         // Assert
-        result.Should().BeOfType<Result<IEnumerable<Entity1Dto>>>();
-        result.IsSuccess.Should().BeFalse();
+        Assert.IsType<Result<IEnumerable<Entity1Dto>>>(result);
+        Assert.False(result.IsSuccess);
         _loggerMock.VerifyLogLevelTotalCalls(LogLevel.Error, Times.Once);
         _loggerMock.VerifyLogging("Error listing Entity1 by Property1.", LogLevel.Error, Times.Once());
     }

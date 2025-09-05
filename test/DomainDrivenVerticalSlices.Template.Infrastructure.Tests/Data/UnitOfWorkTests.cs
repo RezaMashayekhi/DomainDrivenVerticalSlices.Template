@@ -1,4 +1,4 @@
-﻿namespace DomainDrivenVerticalSlices.Template.Infrastructure.Tests.Data;
+namespace DomainDrivenVerticalSlices.Template.Infrastructure.Tests.Data;
 
 using DomainDrivenVerticalSlices.Template.Domain.Entities;
 using DomainDrivenVerticalSlices.Template.Domain.ValueObjects;
@@ -43,8 +43,8 @@ public class UnitOfWorkTests : IDisposable
 
         // Assert
         var retrievedEntity = await _context.Entities1.FindAsync(entity.Id);
-        retrievedEntity.Should().NotBeNull();
-        retrievedEntity.Should().Be(entity);
+        Assert.NotNull(retrievedEntity);
+        Assert.Equal(entity, retrievedEntity);
     }
 
     [Fact]
@@ -80,7 +80,7 @@ public class UnitOfWorkTests : IDisposable
 
         // Assert
         var retrievedEntity = await _context.Entities1.FindAsync(entity.Id);
-        retrievedEntity.Should().BeNull();
+        Assert.Null(retrievedEntity);
     }
 
     public void Dispose()

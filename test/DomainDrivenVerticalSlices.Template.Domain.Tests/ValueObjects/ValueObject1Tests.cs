@@ -1,9 +1,8 @@
-namespace DomainDrivenVerticalSlices.Template.Domain.Tests.ValueObjects;
+﻿namespace DomainDrivenVerticalSlices.Template.Domain.Tests.ValueObjects;
 
 using DomainDrivenVerticalSlices.Template.Common.Enums;
 using DomainDrivenVerticalSlices.Template.Common.Errors;
 using DomainDrivenVerticalSlices.Template.Domain.ValueObjects;
-using FluentAssertions;
 
 public class ValueObject1Tests
 {
@@ -19,8 +18,10 @@ public class ValueObject1Tests
         var result = ValueObject1.Create(property1);
 
         // Assert
-        result.IsSuccess.Should().BeFalse();
-        result.Error.Should().BeEquivalentTo(error);
+        Assert.False(result.IsSuccess);
+        Assert.NotNull(result.Error);
+        Assert.Equal(error.ErrorType, result.Error!.ErrorType);
+        Assert.Equal(error.ErrorMessage, result.Error!.ErrorMessage);
     }
 
     [Theory]
@@ -32,8 +33,8 @@ public class ValueObject1Tests
         var result = ValueObject1.Create(property1);
 
         // Assert
-        result.IsSuccess.Should().BeTrue();
-        result.Value.Property1.Should().Be(property1);
+        Assert.True(result.IsSuccess);
+        Assert.Equal(property1, result.Value.Property1);
     }
 
     [Fact]
@@ -44,7 +45,7 @@ public class ValueObject1Tests
         var value2 = ValueObject1.Create("value").Value;
 
         // Assert
-        value1.Should().Be(value2);
+        Assert.Equal(value1, value2);
     }
 
     [Fact]
@@ -55,6 +56,6 @@ public class ValueObject1Tests
         var value2 = ValueObject1.Create("value2").Value;
 
         // Assert
-        value1.Should().NotBe(value2);
+        Assert.NotEqual(value1, value2);
     }
 }

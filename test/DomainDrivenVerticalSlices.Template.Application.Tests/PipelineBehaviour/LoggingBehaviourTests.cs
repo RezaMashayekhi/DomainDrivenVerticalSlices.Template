@@ -1,4 +1,4 @@
-﻿namespace DomainDrivenVerticalSlices.Template.Application.Tests.PipelineBehaviour;
+namespace DomainDrivenVerticalSlices.Template.Application.Tests.PipelineBehaviour;
 
 using DomainDrivenVerticalSlices.Template.Application.PipelineBehaviour;
 using DomainDrivenVerticalSlices.Template.Application.Tests.Helpers;
@@ -31,7 +31,7 @@ public class LoggingBehaviourTests
         var request = new RequestStub("TestValue1", "TestValue2");
 
         handlerMock
-            .Setup(x => x())
+            .Setup(x => x(It.IsAny<CancellationToken>()))
             .ReturnsAsync(Unit.Value);
 
         string handlingMessage = $"Handling {typeof(IRequest<Unit>).Name}";
@@ -62,7 +62,7 @@ public class LoggingBehaviourTests
         var errorResult = Result.Failure(Error.Create(ErrorType.InvalidInput, "Something went wrong."));
 
         handlerMock
-            .Setup(x => x())
+            .Setup(x => x(It.IsAny<CancellationToken>()))
             .ReturnsAsync(errorResult);
 
         string handlingMessage = $"Handling {typeof(IRequest<IResult>).Name}";
@@ -92,7 +92,7 @@ public class LoggingBehaviourTests
         var errorResult = Result.Success();
 
         handlerMock
-            .Setup(x => x())
+            .Setup(x => x(It.IsAny<CancellationToken>()))
             .ReturnsAsync(errorResult);
 
         string handlingMessage = $"Handling {typeof(IRequest<IResult>).Name}";
@@ -121,7 +121,7 @@ public class LoggingBehaviourTests
         var errorResult = Result<Unit>.Failure(Error.Create(ErrorType.InvalidInput, "Something went wrong."));
 
         handlerMock
-            .Setup(x => x())
+            .Setup(x => x(It.IsAny<CancellationToken>()))
             .ReturnsAsync(errorResult);
 
         string handlingMessage = $"Handling {typeof(IRequest<IResult<Unit>>).Name}";
@@ -152,7 +152,7 @@ public class LoggingBehaviourTests
         IResult<ResponseStub> result = Result<ResponseStub>.Success(response);
 
         handlerMock
-            .Setup(x => x())
+            .Setup(x => x(It.IsAny<CancellationToken>()))
             .ReturnsAsync(result);
 
         string handlingMessage = $"Handling {typeof(IRequest<IResult<ResponseStub>>).Name}";
@@ -181,7 +181,7 @@ public class LoggingBehaviourTests
         var nonIResultResponse = Unit.Value;
 
         handlerMock
-            .Setup(x => x())
+            .Setup(x => x(It.IsAny<CancellationToken>()))
             .ReturnsAsync(nonIResultResponse);
 
         string handlingMessage = $"Handling {typeof(IRequest<Unit>).Name}";
@@ -210,7 +210,7 @@ public class LoggingBehaviourTests
         var emptyRequest = new WithSensitiveAndDateTimePropertiesRequestStub("TestValue1", time, "password");
 
         handlerMock
-            .Setup(x => x())
+            .Setup(x => x(It.IsAny<CancellationToken>()))
             .ReturnsAsync(Unit.Value);
 
         string handlingMessage = $"Handling {typeof(IRequest<Unit>).Name}";
@@ -240,7 +240,7 @@ public class LoggingBehaviourTests
         var emptyRequest = new EmptyRequestStub();
 
         handlerMock
-            .Setup(x => x())
+            .Setup(x => x(It.IsAny<CancellationToken>()))
             .ReturnsAsync(Unit.Value);
 
         string handlingMessage = $"Handling {typeof(IRequest<Unit>).Name}";

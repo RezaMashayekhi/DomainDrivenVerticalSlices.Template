@@ -400,5 +400,5 @@ FodyWeavers.xsd
 # Sqlite db template
 templatedb.db
 
-# sonarqube
-.sonarqube
+.github/copilot-instructions.md
+.github/tasks.md

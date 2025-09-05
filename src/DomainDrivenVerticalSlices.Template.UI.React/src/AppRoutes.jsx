@@ -1,3 +1,4 @@
+import React from "react";
 import Entity1List from "./components/Entity1/List/Entity1List";
 import AddEntity1 from "./components/Entity1/Add/AddEntity1";
 import EditEntity1 from "./components/Entity1/Edit/EditEntity1";

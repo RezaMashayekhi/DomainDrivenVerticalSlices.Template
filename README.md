@@ -1,20 +1,18 @@
-# DomainDrivenVerticalSlices.Template
+# DomainD## What's New in 9.1.0
+
+### Major Updates
+
+-   **Enhanced Performance**: Replaced AutoMapper with manual mapping for better performance and more explicit control over object mapping.
+-   **Modern React Setup**: Updated React configuration to use Vite for faster development and modern testing setup.
+-   **Improved Developer Experience**: Updated launch configurations and debugging experience.
+-   **Latest Dependencies**: All package versions updated to their latest compatible versions.
 
 [![Build](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template/actions/workflows/build.yml/badge.svg)](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template/actions/workflows/build.yml)
 [![CodeQL](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template/actions/workflows/codeql.yml/badge.svg)](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template/actions/workflows/codeql.yml)
 [![Nuget](https://img.shields.io/nuget/v/RM.DomainDrivenVerticalSlices.Template?label=NuGet)](https://www.nuget.org/packages/RM.DomainDrivenVerticalSlices.Template)
 [![Nuget](https://img.shields.io/nuget/dt/RM.DomainDrivenVerticalSlices.Template?label=Downloads)](https://www.nuget.org/packages/RM.DomainDrivenVerticalSlices.Template)
 
-This template is designed to jumpstart the development of web APIs following the principles of Domain-Driven Design (DDD) within a vertical slice architecture. Ideal for enterprise applications where separation of concerns and scalability are key, this template simplifies the adoption of DDD and clean architecture principles, ensuring your application remains agile, testable, and easy to understand.
-
-## What’s New in 9.0.1
-
-### Major Updates
-
--   **Upgrade to .NET 9.0**: The template now targets the latest .NET SDK, ensuring compatibility with cutting-edge features.
--   **Centralized Error Handling**: Introduced a helper method in controllers for streamlined error handling, reducing boilerplate in individual controller methods.
--   **Ability to Collect Several Error Message**: Enhanced error interface and class to support collecting multiple error messages before returning results.
--   **Improved Query Error Resilience**: Queries now include `try-catch` blocks when interacting with the database, ensuring robust error handling and consistent application behavior.
+This template is designed to jumpstart the development of web APIs using Domain-Driven Design (DDD) within a vertical slice architecture. It provides a clean starting point where separation of concerns and scalability are built in, making it easier to adopt DDD and clean architecture principles. The result is an application that stays agile, testable, and easy to maintain.
 
 ## Support
 
@@ -29,7 +27,7 @@ To use this template, ensure you have the following prerequisites installed:
 Install the template from NuGet:
 
 ```bash
-dotnet new install RM.DomainDrivenVerticalSlices.Template::9.0.1
+dotnet new install RM.DomainDrivenVerticalSlices.Template::9.1.0
 ```
 
 ### Create a new project based on the template:
@@ -60,7 +58,7 @@ For projects including React UI:
 ```bash
 cd src/YourProjectName.UI.React
 npm install
-npm start
+npm run dev
 ```
 
 **Note:** The `UiType` environment variable is used for development purposes to enable CORS configuration for a React frontend. Users creating new projects don't need to set this variable.
@@ -84,7 +82,7 @@ For detailed information on each project, refer to the README.md files within th
 -   **DDD Foundations**: Leverage DDD principles to design and implement a robust, scalable application.
 -   **Vertical Slices Architecture**: Organize your application into vertical slices for improved maintainability and scalability.
 -   **Pre-configured CI/CD**: GitHub Actions workflows are included for building and testing your application.
--   **Comprehensive Testing**: Unit and integration tests using xUnit, Moq, and FluentAssertions.
+-   **Comprehensive Testing**: Unit and integration tests using xUnit and Moq.
 
 ## License
 

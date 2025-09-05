@@ -1,35 +1,25 @@
 ﻿namespace DomainDrivenVerticalSlices.Template.Application.Tests.Mappings;
 
-using AutoMapper;
-using DomainDrivenVerticalSlices.Template.Application.Dtos;
 using DomainDrivenVerticalSlices.Template.Application.Mappings;
 using DomainDrivenVerticalSlices.Template.Domain.Entities;
 using DomainDrivenVerticalSlices.Template.Domain.ValueObjects;
-using FluentAssertions;
 
 public class MappingProfileTests
 {
     [Fact]
-    public void Should_Map_ApplicationUser_To_ApplicationUserDto()
+    public void Should_Map_Entity1_To_Entity1Dto()
     {
         // Arrange
         var entity1 = Entity1.Create(ValueObject1.Create("Property1").Value).Value;
 
-        var config = new MapperConfiguration(cfg =>
-        {
-            cfg.AddProfile<MappingProfile>();
-        });
-
-        var mapper = config.CreateMapper();
-
         // Act
-        var dto = mapper.Map<Entity1Dto>(entity1);
+        var dto = entity1.MapToDto();
 
         // Assert
-        dto.Should().NotBeNull();
-        dto.Id.Should().Be(entity1.Id);
-        dto.ValueObject1.Should().NotBeNull();
-        dto.ValueObject1.Property1.Should().Be(entity1.ValueObject1.Property1);
+        Assert.NotNull(dto);
+        Assert.Equal(entity1.Id, dto.Id);
+        Assert.NotNull(dto.ValueObject1);
+        Assert.Equal(entity1.ValueObject1.Property1, dto.ValueObject1.Property1);
     }
 
     [Fact]
@@ -43,28 +33,35 @@ public class MappingProfileTests
             Entity1.Create(ValueObject1.Create("Property3").Value).Value,
         };
 
-        var config = new MapperConfiguration(cfg =>
-        {
-            cfg.AddProfile<MappingProfile>();
-        });
-
-        var mapper = config.CreateMapper();
-
         // Act
-        var dtoList = mapper.Map<List<Entity1Dto>>(entity1List);
+        var dtoList = entity1List.MapToDto();
 
         // Assert
-        dtoList.Should().NotBeNull();
-        dtoList.Should().HaveCount(entity1List.Count);
+        Assert.NotNull(dtoList);
+        Assert.Equal(entity1List.Count, dtoList.Count());
 
         for (int i = 0; i < entity1List.Count; i++)
         {
             var entity1 = entity1List[i];
-            var entity1Dto = dtoList[i];
+            var entity1Dto = dtoList.ElementAt(i);
 
-            entity1Dto.Id.Should().Be(entity1.Id);
-            entity1Dto.ValueObject1.Should().NotBeNull();
-            entity1Dto.ValueObject1.Property1.Should().Be(entity1.ValueObject1.Property1);
+            Assert.Equal(entity1.Id, entity1Dto.Id);
+            Assert.NotNull(entity1Dto.ValueObject1);
+            Assert.Equal(entity1.ValueObject1.Property1, entity1Dto.ValueObject1.Property1);
         }
+    }
+
+    [Fact]
+    public void Should_Map_ValueObject1_To_ValueObject1Dto()
+    {
+        // Arrange
+        var valueObject1 = ValueObject1.Create("Property1").Value;
+
+        // Act
+        var dto = valueObject1.MapToDto();
+
+        // Assert
+        Assert.NotNull(dto);
+        Assert.Equal(valueObject1.Property1, dto.Property1);
     }
 }

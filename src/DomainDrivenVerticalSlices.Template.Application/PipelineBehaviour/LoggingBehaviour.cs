@@ -62,9 +62,30 @@ public class LoggingBehaviour<TRequest, TResponse>(
         return response;
     }
 
-    private void LogProperties(object obj)
+    private void LogProperties(object? obj)
     {
+        if (obj == null)
+        {
+            _logger.LogInformation("Current: (null)");
+            return;
+        }
+
+        // Handle IEnumerable collections directly
+        if (obj is System.Collections.IEnumerable enumerable)
+        {
+            int count = 0;
+            foreach (var e in enumerable)
+            {
+                count++;
+            }
+
+            _logger.LogInformation("Count: {Count}", count);
+            return;
+        }
+
+        // Log properties of a regular object
         var properties = obj.GetType().GetProperties();
+
         foreach (var prop in properties)
         {
             // Skip if property is an indexer or requires parameters
@@ -79,7 +100,7 @@ public class LoggingBehaviour<TRequest, TResponse>(
                 continue;
             }
 
-            var propValue = prop.GetValue(obj, null);
+            var propValue = prop.GetValue(obj);
 
             if (propValue is DateTime dateTimeValue)
             {

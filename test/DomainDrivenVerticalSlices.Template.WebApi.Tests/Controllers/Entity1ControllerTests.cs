@@ -35,8 +35,8 @@ public class Entity1ControllerTests
             new Entity1Controller(null!);
         });
 
-        exception.ParamName.Should().Be("mediator");
-        exception.Message.Should().Contain("mediator");
+        Assert.Equal("mediator", exception.ParamName);
+        Assert.Contains("mediator", exception.Message);
     }
 
     [Fact]
@@ -52,8 +52,8 @@ public class Entity1ControllerTests
         var result = await _controller.GetById(Guid.Empty);
 
         // Assert
-        result.Should().BeOfType<BadRequestObjectResult>();
-        ((BadRequestObjectResult)result).Value.Should().Be(error);
+        Assert.IsType<BadRequestObjectResult>(result);
+        Assert.Equal(error, ((BadRequestObjectResult)result).Value);
     }
 
     [Fact]
@@ -70,8 +70,8 @@ public class Entity1ControllerTests
         var result = await _controller.GetById(id);
 
         // Assert
-        result.Should().BeOfType<OkObjectResult>();
-        ((OkObjectResult)result).Value.Should().Be(entity1);
+        Assert.IsType<OkObjectResult>(result);
+        Assert.Equal(entity1, ((OkObjectResult)result).Value);
     }
 
     [Fact]
@@ -88,8 +88,8 @@ public class Entity1ControllerTests
         var result = await _controller.GetById(id);
 
         // Assert
-        result.Should().BeOfType<NotFoundObjectResult>();
-        ((NotFoundObjectResult)result).Value.Should().Be(error);
+        Assert.IsType<NotFoundObjectResult>(result);
+        Assert.Equal(error, ((NotFoundObjectResult)result).Value);
     }
 
     [Fact]
@@ -106,8 +106,8 @@ public class Entity1ControllerTests
         var result = await _controller.GetById(id);
 
         // Assert
-        result.Should().BeOfType<BadRequestObjectResult>();
-        ((BadRequestObjectResult)result).Value.Should().BeEquivalentTo(error);
+        Assert.IsType<BadRequestObjectResult>(result);
+        Assert.Equal(error, ((BadRequestObjectResult)result).Value);
     }
 
     [Fact]
@@ -127,8 +127,8 @@ public class Entity1ControllerTests
         var result = await _controller.GetAll();
 
         // Assert
-        result.Should().BeOfType<OkObjectResult>();
-        ((OkObjectResult)result).Value.Should().BeEquivalentTo(entities);
+        Assert.IsType<OkObjectResult>(result);
+        Assert.Equal(entities, ((OkObjectResult)result).Value);
     }
 
     [Fact]
@@ -144,8 +144,8 @@ public class Entity1ControllerTests
         var result = await _controller.GetAll();
 
         // Assert
-        result.Should().BeOfType<OkObjectResult>();
-        ((OkObjectResult)result).Value.Should().BeEquivalentTo(entities);
+        Assert.IsType<OkObjectResult>(result);
+        Assert.Equal(entities, ((OkObjectResult)result).Value);
     }
 
     [Fact]
@@ -161,8 +161,8 @@ public class Entity1ControllerTests
         var result = await _controller.GetAll();
 
         // Assert
-        result.Should().BeOfType<BadRequestObjectResult>();
-        ((BadRequestObjectResult)result).Value.Should().BeEquivalentTo(error);
+        Assert.IsType<BadRequestObjectResult>(result);
+        Assert.Equal(error, ((BadRequestObjectResult)result).Value);
     }
 
     [Fact]
@@ -182,8 +182,8 @@ public class Entity1ControllerTests
         var result = await _controller.List("TestProperty1");
 
         // Assert
-        result.Should().BeOfType<OkObjectResult>();
-        ((OkObjectResult)result).Value.Should().BeEquivalentTo(entities);
+        Assert.IsType<OkObjectResult>(result);
+        Assert.Equal(entities, ((OkObjectResult)result).Value);
     }
 
     [Fact]
@@ -199,8 +199,8 @@ public class Entity1ControllerTests
         var result = await _controller.List("TestProperty1");
 
         // Assert
-        result.Should().BeOfType<OkObjectResult>();
-        ((OkObjectResult)result).Value.Should().BeEquivalentTo(entities);
+        Assert.IsType<OkObjectResult>(result);
+        Assert.Equal(entities, ((OkObjectResult)result).Value);
     }
 
     [Fact]
@@ -216,8 +216,8 @@ public class Entity1ControllerTests
         var result = await _controller.List("TestProperty1");
 
         // Assert
-        result.Should().BeOfType<BadRequestObjectResult>();
-        ((BadRequestObjectResult)result).Value.Should().BeEquivalentTo(error);
+        Assert.IsType<BadRequestObjectResult>(result);
+        Assert.Equal(error, ((BadRequestObjectResult)result).Value);
     }
 
     [Fact]
@@ -233,8 +233,8 @@ public class Entity1ControllerTests
         var result = await _controller.FindByProperty1("TestQuery");
 
         // Assert
-        result.Should().BeOfType<OkObjectResult>();
-        ((OkObjectResult)result).Value.Should().BeEquivalentTo(entity1);
+        Assert.IsType<OkObjectResult>(result);
+        Assert.Equal(entity1, ((OkObjectResult)result).Value);
     }
 
     [Fact]
@@ -250,8 +250,8 @@ public class Entity1ControllerTests
         var result = await _controller.FindByProperty1("TestQuery");
 
         // Assert
-        result.Should().BeOfType<NotFoundObjectResult>();
-        ((NotFoundObjectResult)result).Value.Should().BeEquivalentTo(error);
+        Assert.IsType<NotFoundObjectResult>(result);
+        Assert.Equal(error, ((NotFoundObjectResult)result).Value);
     }
 
     [Fact]
@@ -267,8 +267,8 @@ public class Entity1ControllerTests
         var result = await _controller.FindByProperty1("TestQuery");
 
         // Assert
-        result.Should().BeOfType<BadRequestObjectResult>();
-        ((BadRequestObjectResult)result).Value.Should().BeEquivalentTo(error);
+        Assert.IsType<BadRequestObjectResult>(result);
+        Assert.Equal(error, ((BadRequestObjectResult)result).Value);
     }
 
     [Fact]
@@ -285,8 +285,8 @@ public class Entity1ControllerTests
         var result = await _controller.Create(command);
 
         // Assert
-        result.Should().BeOfType<CreatedAtActionResult>();
-        ((CreatedAtActionResult)result).Value.Should().BeEquivalentTo(entityDto);
+        Assert.IsType<CreatedAtActionResult>(result);
+        Assert.Equal(entityDto, ((CreatedAtActionResult)result).Value);
     }
 
     [Fact]
@@ -302,8 +302,8 @@ public class Entity1ControllerTests
         var result = await _controller.Create(new CreateEntity1Command(string.Empty));
 
         // Assert
-        result.Should().BeOfType<BadRequestObjectResult>();
-        ((BadRequestObjectResult)result).Value.Should().BeEquivalentTo(error);
+        Assert.IsType<BadRequestObjectResult>(result);
+        Assert.Equal(error, ((BadRequestObjectResult)result).Value);
     }
 
     [Fact]
@@ -319,8 +319,8 @@ public class Entity1ControllerTests
         var result = await _controller.Create(new CreateEntity1Command(string.Empty));
 
         // Assert
-        result.Should().BeOfType<BadRequestObjectResult>();
-        ((BadRequestObjectResult)result).Value.Should().BeEquivalentTo(error);
+        Assert.IsType<BadRequestObjectResult>(result);
+        Assert.Equal(error, ((BadRequestObjectResult)result).Value);
     }
 
     [Fact]
@@ -337,7 +337,7 @@ public class Entity1ControllerTests
         var result = await _controller.Update(entityDto.Id, command);
 
         // Assert
-        result.Should().BeOfType<OkResult>();
+        Assert.IsType<OkResult>(result);
     }
 
     [Fact]
@@ -355,8 +355,8 @@ public class Entity1ControllerTests
         var result = await _controller.Update(id, command);
 
         // Assert
-        result.Should().BeOfType<BadRequestObjectResult>();
-        ((BadRequestObjectResult)result).Value.Should().BeEquivalentTo(error);
+        Assert.IsType<BadRequestObjectResult>(result);
+        Assert.Equal(error, ((BadRequestObjectResult)result).Value);
     }
 
     [Fact]
@@ -374,8 +374,8 @@ public class Entity1ControllerTests
         var result = await _controller.Update(entityDto.Id, command);
 
         // Assert
-        result.Should().BeOfType<BadRequestObjectResult>();
-        ((BadRequestObjectResult)result).Value.Should().BeEquivalentTo(error);
+        Assert.IsType<BadRequestObjectResult>(result);
+        Assert.Equal(error, ((BadRequestObjectResult)result).Value);
     }
 
     [Fact]
@@ -389,8 +389,8 @@ public class Entity1ControllerTests
         var result = await _controller.Update(Guid.NewGuid(), command);
 
         // Assert
-        result.Should().BeOfType<BadRequestObjectResult>();
-        ((BadRequestObjectResult)result).Value.Should().Be("ID mismatch");
+        Assert.IsType<BadRequestObjectResult>(result);
+        Assert.Equal("ID mismatch", ((BadRequestObjectResult)result).Value);
     }
 
     [Fact]
@@ -406,7 +406,7 @@ public class Entity1ControllerTests
         var result = await _controller.Delete(id);
 
         // Assert
-        result.Should().BeOfType<OkResult>();
+        Assert.IsType<OkResult>(result);
     }
 
     [Fact]
@@ -424,8 +424,8 @@ public class Entity1ControllerTests
         var result = await _controller.Delete(id);
 
         // Assert
-        result.Should().BeOfType<BadRequestObjectResult>();
-        ((BadRequestObjectResult)result).Value.Should().BeEquivalentTo(error);
+        Assert.IsType<BadRequestObjectResult>(result);
+        Assert.Equal(error, ((BadRequestObjectResult)result).Value);
     }
 
     [Fact]
@@ -442,8 +442,8 @@ public class Entity1ControllerTests
         var result = await _controller.Delete(id);
 
         // Assert
-        result.Should().BeOfType<BadRequestObjectResult>();
-        ((BadRequestObjectResult)result).Value.Should().BeEquivalentTo(error);
+        Assert.IsType<BadRequestObjectResult>(result);
+        Assert.Equal(error, ((BadRequestObjectResult)result).Value);
     }
 
     [Fact]
@@ -460,7 +460,7 @@ public class Entity1ControllerTests
         var result = await _controller.Delete(id);
 
         // Assert
-        result.Should().BeOfType<NotFoundObjectResult>();
-        ((NotFoundObjectResult)result).Value.Should().BeEquivalentTo(error);
+        Assert.IsType<NotFoundObjectResult>(result);
+        Assert.Equal(error, ((NotFoundObjectResult)result).Value);
     }
 }

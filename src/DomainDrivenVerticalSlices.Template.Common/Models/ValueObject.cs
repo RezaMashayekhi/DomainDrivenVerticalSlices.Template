@@ -3,9 +3,7 @@
 public abstract class ValueObject<T>
     where T : ValueObject<T>
 {
-#pragma warning disable S3875 // Required for DDD value object equality.
     public static bool operator ==(ValueObject<T> a, ValueObject<T> b)
-#pragma warning restore S3875
     {
         if (a is null && b is null)
         {
