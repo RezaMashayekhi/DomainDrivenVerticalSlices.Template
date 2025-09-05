@@ -1,4 +1,4 @@
-﻿namespace DomainDrivenVerticalSlices.Template.Common.Tests.Results;
+namespace DomainDrivenVerticalSlices.Template.Common.Tests.Results;
 
 using DomainDrivenVerticalSlices.Template.Common.Enums;
 using DomainDrivenVerticalSlices.Template.Common.Errors;
@@ -17,7 +17,7 @@ public class ValueResultTests
         var result = Result<int>.Failure(_error);
 
         // Act & Assert
-        result.CheckedError.Should().Be(_error);
+        Assert.Equal(_error, result.CheckedError);
     }
 
     [Fact]
@@ -30,8 +30,8 @@ public class ValueResultTests
         Action act = () => { _ = result.CheckedError; };
 
         // Assert
-        act.Should().Throw<InvalidOperationException>()
-            .WithMessage("Attempted to access CheckedError property when no error is set.");
+        var exception = Assert.Throws<InvalidOperationException>(act);
+        Assert.Contains("Attempted to access CheckedError property when no error is set.", exception.Message);
     }
 
     [Fact]
@@ -41,7 +41,7 @@ public class ValueResultTests
         var result = Result<string>.Failure(_error);
 
         // Act & Assert
-        result.Error.Should().Be(_error);
+        Assert.Equal(_error, result.Error);
     }
 
     [Fact]
@@ -52,10 +52,10 @@ public class ValueResultTests
         Action act = () => { _ = result.Value; };
 
         // Assert
-        result.IsSuccess.Should().BeFalse();
-        result.Error.Should().Be(_error);
-        act.Should().Throw<InvalidDataException>()
-            .WithMessage("Cannot retrieve value from a failed result.");
+        Assert.False(result.IsSuccess);
+        Assert.Equal(_error, result.Error);
+        var exception = Assert.Throws<InvalidDataException>(act);
+        Assert.Contains("Cannot retrieve value from a failed result.", exception.Message);
     }
 
     [Fact]
@@ -65,8 +65,8 @@ public class ValueResultTests
         Action act = () => Result<string>.Failure(null!);
 
         // Assert
-        act.Should().Throw<ArgumentNullException>()
-            .WithMessage("*error*");
+        var exception = Assert.Throws<ArgumentNullException>(act);
+        Assert.Contains("error", exception.Message);
     }
 
     [Fact]
@@ -76,7 +76,7 @@ public class ValueResultTests
         var result = Result<string>.Failure(_error);
 
         // Act & Assert
-        result.IsSuccess.Should().BeFalse();
+        Assert.False(result.IsSuccess);
     }
 
     [Fact]
@@ -86,7 +86,7 @@ public class ValueResultTests
         var result = Result<string>.Success(TestValue);
 
         // Act & Assert
-        result.IsSuccess.Should().BeTrue();
+        Assert.True(result.IsSuccess);
     }
 
     [Fact]
@@ -96,9 +96,9 @@ public class ValueResultTests
         var result = Result<string>.Success(TestValue);
 
         // Assert
-        result.IsSuccess.Should().BeTrue();
-        result.Error.Should().BeNull();
-        result.Value.Should().Be(TestValue);
+        Assert.True(result.IsSuccess);
+        Assert.Null(result.Error);
+        Assert.Equal(TestValue, result.Value);
     }
 
     [Fact]
@@ -108,8 +108,8 @@ public class ValueResultTests
         Action act = () => Result<string>.Success(null!);
 
         // Assert
-        act.Should().Throw<ArgumentNullException>()
-            .WithMessage("*value*");
+        var exception = Assert.Throws<ArgumentNullException>(act);
+        Assert.Contains("value", exception.Message);
     }
 
     [Fact]
@@ -117,8 +117,8 @@ public class ValueResultTests
     {
         Action act = () => Result<int>.Success(default);
 
-        act.Should().Throw<ArgumentException>()
-            .WithMessage("Value cannot be null or empty for a successful result.*");
+        var exception = Assert.Throws<ArgumentException>(act);
+        Assert.Contains("Value cannot be null or empty for a successful result.", exception.Message);
     }
 
     [Fact]
@@ -128,7 +128,7 @@ public class ValueResultTests
         var result = Result<string>.Success(TestValue);
 
         // Act & Assert
-        result.Value.Should().Be(TestValue);
+        Assert.Equal(TestValue, result.Value);
     }
 
     [Fact]
@@ -141,7 +141,7 @@ public class ValueResultTests
         Action act = () => { _ = result.Value; };
 
         // Assert
-        act.Should().Throw<InvalidDataException>()
-            .WithMessage("Cannot retrieve value from a failed result.");
+        var exception = Assert.Throws<InvalidDataException>(act);
+        Assert.Contains("Cannot retrieve value from a failed result.", exception.Message);
     }
 }

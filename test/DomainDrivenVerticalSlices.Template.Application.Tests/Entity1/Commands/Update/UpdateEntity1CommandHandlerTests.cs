@@ -1,4 +1,4 @@
-﻿namespace DomainDrivenVerticalSlices.Template.Application.Tests.Entity1.Commands.Update;
+namespace DomainDrivenVerticalSlices.Template.Application.Tests.Entity1.Commands.Update;
 
 using DomainDrivenVerticalSlices.Template.Application.Dtos;
 using DomainDrivenVerticalSlices.Template.Application.Entity1.Commands.Update;
@@ -7,7 +7,6 @@ using DomainDrivenVerticalSlices.Template.Application.Tests.Helpers;
 using DomainDrivenVerticalSlices.Template.Common.Results;
 using DomainDrivenVerticalSlices.Template.Domain.Entities;
 using DomainDrivenVerticalSlices.Template.Domain.ValueObjects;
-using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -45,8 +44,8 @@ public class UpdateEntity1CommandHandlerTests
             new UpdateEntity1CommandHandler(nullRepository, mockUnitOfWork.Object, mockLogger.Object);
         });
 
-        exception.ParamName.Should().Be("entity1Repository");
-        exception.Message.Should().Contain("entity1Repository");
+        Assert.Equal("entity1Repository", exception.ParamName);
+        Assert.Contains("entity1Repository", exception.Message);
     }
 
     [Fact]
@@ -63,8 +62,8 @@ public class UpdateEntity1CommandHandlerTests
             new UpdateEntity1CommandHandler(mockRepository.Object, nullUnitOfWork, mockLogger.Object);
         });
 
-        exception.ParamName.Should().Be("unitOfWork");
-        exception.Message.Should().Contain("unitOfWork");
+        Assert.Equal("unitOfWork", exception.ParamName);
+        Assert.Contains("unitOfWork", exception.Message);
     }
 
     [Fact]
@@ -81,8 +80,8 @@ public class UpdateEntity1CommandHandlerTests
             new UpdateEntity1CommandHandler(mockRepository.Object, mockUnitOfWork.Object, nullLogger);
         });
 
-        exception.ParamName.Should().Be("logger");
-        exception.Message.Should().Contain("logger");
+        Assert.Equal("logger", exception.ParamName);
+        Assert.Contains("logger", exception.Message);
     }
 
     [Fact]
@@ -100,8 +99,8 @@ public class UpdateEntity1CommandHandlerTests
         var result = await _handler.Handle(request, CancellationToken.None);
 
         // Assert
-        result.Should().BeOfType<Result>();
-        result.IsSuccess.Should().BeTrue();
+        Assert.IsType<Result>(result);
+        Assert.True(result.IsSuccess);
 
         _entity1RepositoryMock.Verify(r => r.UpdateAsync(It.IsAny<Entity1>(), CancellationToken.None), Times.Once);
         _unitOfWorkMock.Verify(u => u.SaveChangesAsync(CancellationToken.None), Times.Once);
@@ -118,8 +117,8 @@ public class UpdateEntity1CommandHandlerTests
         var result = await _handler.Handle(request, CancellationToken.None);
 
         // Assert
-        result.Should().BeOfType<Result>();
-        result.IsSuccess.Should().BeFalse();
+        Assert.IsType<Result>(result);
+        Assert.False(result.IsSuccess);
 
         _loggerMock.VerifyLogLevelTotalCalls(LogLevel.Error, Times.Once);
         _loggerMock.VerifyLogging($"Entity1 with id {entity1Dto.Id} not found.", LogLevel.Error, Times.Once());
@@ -140,8 +139,8 @@ public class UpdateEntity1CommandHandlerTests
         var result = await _handler.Handle(request, CancellationToken.None);
 
         // Assert
-        result.Should().BeOfType<Result>();
-        result.IsSuccess.Should().BeFalse();
+        Assert.IsType<Result>(result);
+        Assert.False(result.IsSuccess);
 
         _loggerMock.VerifyLogLevelTotalCalls(LogLevel.Error, Times.Once);
         _loggerMock.VerifyLogging("An error occurred: property1 cannot be empty.", LogLevel.Error, Times.Once());
@@ -165,8 +164,8 @@ public class UpdateEntity1CommandHandlerTests
         var result = await _handler.Handle(request, CancellationToken.None);
 
         // Assert
-        result.Should().BeOfType<Result>();
-        result.IsSuccess.Should().BeFalse();
+        Assert.IsType<Result>(result);
+        Assert.False(result.IsSuccess);
 
         _loggerMock.VerifyLogLevelTotalCalls(LogLevel.Error, Times.Once);
         _loggerMock.VerifyLogging($"Error updating Entity1 with id {entity1.Id}.", LogLevel.Error, Times.Once());

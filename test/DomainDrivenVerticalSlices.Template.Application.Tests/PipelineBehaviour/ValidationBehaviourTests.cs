@@ -1,9 +1,8 @@
-﻿namespace DomainDrivenVerticalSlices.Template.Application.Tests.PipelineBehaviour;
+namespace DomainDrivenVerticalSlices.Template.Application.Tests.PipelineBehaviour;
 
 using DomainDrivenVerticalSlices.Template.Application.PipelineBehaviour;
 using DomainDrivenVerticalSlices.Template.Common.Enums;
 using DomainDrivenVerticalSlices.Template.Common.Results;
-using FluentAssertions;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
@@ -21,7 +20,7 @@ public class ValidationBehaviourTests
     {
         _request = Mock.Of<IRequest<Result>>();
         _validators = [];
-        _next = new RequestHandlerDelegate<Result>(() =>
+        _next = new RequestHandlerDelegate<Result>((cancellationToken) =>
         {
             _nextCalled = true;
             return Task.FromResult(Result.Success());
@@ -37,8 +36,8 @@ public class ValidationBehaviourTests
             new ValidationBehaviour<IRequest<Result>, Result>(null!);
         });
 
-        exception.ParamName.Should().Be("validators");
-        exception.Message.Should().Contain("validators");
+        Assert.Equal("validators", exception.ParamName);
+        Assert.Contains("validators", exception.Message);
     }
 
     [Fact]
@@ -53,9 +52,9 @@ public class ValidationBehaviourTests
         var result = await _validationBehaviour.Handle(_request, _next, CancellationToken.None);
 
         // Assert
-        result.IsSuccess.Should().BeFalse();
-        result.CheckedError.ErrorType.Should().Be(ErrorType.InvalidInput);
-        result.CheckedError.ErrorMessage.Should().Be(expectedErrorMessage);
+        Assert.False(result.IsSuccess);
+        Assert.Equal(ErrorType.InvalidInput, result.CheckedError.ErrorType);
+        Assert.Equal(expectedErrorMessage, result.CheckedError.ErrorMessage);
 
         validatorMock.Verify(v => v.ValidateAsync(It.IsAny<IValidationContext>(), It.IsAny<CancellationToken>()), Times.Once);
     }
@@ -91,11 +90,11 @@ public class ValidationBehaviourTests
         Assert.Equal(ErrorType.InvalidInput, result.CheckedError.ErrorType);
 
         // Validate that the error messages from all validators are present in the error
-        result.CheckedError.ErrorMessage.Should().Contain("Error Message 1");
-        result.CheckedError.ErrorMessage.Should().Contain("Error Message 2");
-        result.CheckedError.ErrorMessage.Should().Contain("Error Message 3");
-        result.CheckedError.ErrorMessage.Should().Contain("Error Message 4");
-        result.CheckedError.ErrorMessage.Should().Contain("Error Message 5");
+        Assert.Contains("Error Message 1", result.CheckedError.ErrorMessage);
+        Assert.Contains("Error Message 2", result.CheckedError.ErrorMessage);
+        Assert.Contains("Error Message 3", result.CheckedError.ErrorMessage);
+        Assert.Contains("Error Message 4", result.CheckedError.ErrorMessage);
+        Assert.Contains("Error Message 5", result.CheckedError.ErrorMessage);
 
         validatorMock1.Verify(v => v.ValidateAsync(It.IsAny<IValidationContext>(), It.IsAny<CancellationToken>()), Times.Once);
         validatorMock2.Verify(v => v.ValidateAsync(It.IsAny<IValidationContext>(), It.IsAny<CancellationToken>()), Times.Once);
@@ -111,7 +110,7 @@ public class ValidationBehaviourTests
         await _validationBehaviour.Handle(_request, _next, CancellationToken.None);
 
         // Assert
-        _nextCalled.Should().BeTrue();
+        Assert.True(_nextCalled);
     }
 
     [Fact]
@@ -125,9 +124,9 @@ public class ValidationBehaviourTests
         var result = await _validationBehaviour.Handle(_request, _next, CancellationToken.None);
 
         // Assert
-        result.IsSuccess.Should().BeFalse();
-        result.CheckedError.ErrorType.Should().Be(ErrorType.InvalidInput);
-        result.CheckedError.ErrorMessage.Should().Be("Error Message");
+        Assert.False(result.IsSuccess);
+        Assert.Equal(ErrorType.InvalidInput, result.CheckedError.ErrorType);
+        Assert.Equal("Error Message", result.CheckedError.ErrorMessage);
 
         validatorMock.Verify(v => v.ValidateAsync(It.IsAny<IValidationContext>(), It.IsAny<CancellationToken>()), Times.Once);
     }
@@ -142,7 +141,7 @@ public class ValidationBehaviourTests
         await _validationBehaviour.Handle(_request, _next, CancellationToken.None);
 
         // Assert
-        _nextCalled.Should().BeTrue();
+        Assert.True(_nextCalled);
     }
 
     [Fact]
@@ -156,7 +155,7 @@ public class ValidationBehaviourTests
         await _validationBehaviour.Handle(_request, _next, CancellationToken.None);
 
         // Assert
-        _nextCalled.Should().BeFalse();
+        Assert.False(_nextCalled);
 
         validatorMock.Verify(v => v.ValidateAsync(It.IsAny<IValidationContext>(), It.IsAny<CancellationToken>()), Times.Once);
     }
@@ -172,7 +171,7 @@ public class ValidationBehaviourTests
         await _validationBehaviour.Handle(_request, _next, CancellationToken.None);
 
         // Assert
-        _nextCalled.Should().BeTrue();
+        Assert.True(_nextCalled);
 
         validatorMock.Verify(v => v.ValidateAsync(It.IsAny<IValidationContext>(), It.IsAny<CancellationToken>()), Times.Once);
     }

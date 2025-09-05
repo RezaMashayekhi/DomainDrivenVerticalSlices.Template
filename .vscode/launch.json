@@ -26,22 +26,25 @@
             "type": "chrome",
             "request": "launch",
             "name": "Debug React App",
-            "url": "http://localhost:3000",
-            "webRoot": "${workspaceFolder}"
+            "url": "http://localhost:5173",
+            "webRoot": "${workspaceFolder}/src/DomainDrivenVerticalSlices.Template.UI.React"
         },
         {
             "name": "Debug React Unit Tests",
             "type": "node",
             "request": "launch",
-            "runtimeExecutable": "${workspaceFolder}/src/DomainDrivenVerticalSlices.Template.UI.React/node_modules/.bin/react-scripts",
-            "args": ["test", "--runInBand", "--no-cache", "--watchAll=false"],
+            "runtimeExecutable": "npx",
+            "args": [
+                "vitest",
+                "--run",
+                "--no-threads"
+            ],
             "cwd": "${workspaceFolder}/src/DomainDrivenVerticalSlices.Template.UI.React/",
-            "protocol": "inspector",
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen",
-            "env": { "CI": "true" },
-            "disableOptimisticBPs": true
+            "env": {
+                "CI": "true"
+            }
         }
-        
     ]
 }

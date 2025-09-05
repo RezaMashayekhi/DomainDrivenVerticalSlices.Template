@@ -1,4 +1,4 @@
-﻿namespace DomainDrivenVerticalSlices.Template.Common.Tests.Errors;
+namespace DomainDrivenVerticalSlices.Template.Common.Tests.Errors;
 
 using DomainDrivenVerticalSlices.Template.Common.Enums;
 using DomainDrivenVerticalSlices.Template.Common.Errors;
@@ -16,9 +16,9 @@ public class ErrorTests
         var error = Error.Create(errorType, errorMessage);
 
         // Assert
-        error.ErrorType.Should().Be(errorType);
-        error.ErrorMessage.Should().Be(errorMessage);
-        error.ErrorMessages.Should().Contain(errorMessage);
+        Assert.Equal(errorType, error.ErrorType);
+        Assert.Equal(errorMessage, error.ErrorMessage);
+        Assert.Contains(errorMessage, error.ErrorMessages);
     }
 
     [Theory]
@@ -33,9 +33,9 @@ public class ErrorTests
         var error = Error.Create(errorType);
 
         // Assert
-        error.ErrorType.Should().Be(errorType);
-        error.ErrorMessage.Should().Be(expectedErrorMessage);
-        error.ErrorMessages.Should().Contain(expectedErrorMessage);
+        Assert.Equal(errorType, error.ErrorType);
+        Assert.Equal(expectedErrorMessage, error.ErrorMessage);
+        Assert.Contains(expectedErrorMessage, error.ErrorMessages);
     }
 
     [Fact]
@@ -49,9 +49,9 @@ public class ErrorTests
         var error = Error.Create(errorType, errorMessages);
 
         // Assert
-        error.ErrorType.Should().Be(errorType);
-        error.ErrorMessage.Should().Be("Resource not found., Another message.");
-        error.ErrorMessages.Should().BeEquivalentTo(errorMessages);
+        Assert.Equal(errorType, error.ErrorType);
+        Assert.Equal("Resource not found., Another message.", error.ErrorMessage);
+        Assert.Equal(errorMessages, error.ErrorMessages);
     }
 
     [Fact]
@@ -65,8 +65,8 @@ public class ErrorTests
         var error = Error.Create(errorType, errorMessages);
 
         // Assert
-        error.ErrorType.Should().Be(errorType);
-        error.ErrorMessage.Should().Be("Resource not found.");
-        error.ErrorMessages.Should().Contain("Resource not found.");
+        Assert.Equal(errorType, error.ErrorType);
+        Assert.Equal("Resource not found.", error.ErrorMessage);
+        Assert.Contains("Resource not found.", error.ErrorMessages);
     }
 }

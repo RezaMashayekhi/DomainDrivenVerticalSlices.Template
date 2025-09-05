@@ -4,12 +4,12 @@ The Application layer serves as the core of our business logic, orchestrating th
 
 ## Key Components
 
-- **Commands and Queries**: Define the operations that can be performed in the application, such as creating, updating, and retrieving entities.
-- **Events**: Handle application-wide events, facilitating decoupled components interaction.
-- **DTOs (Data Transfer Objects)**: Serve as the data structure for transferring data between the application layer and other layers.
-- **Interfaces**: Define contracts for repository interactions, ensuring abstraction over concrete data access implementations.
-- **Mappings**: Automate the mapping between domain entities and DTOs, simplifying data transformations.
-- **Pipeline Behaviors**: Interceptors that add cross-cutting concerns to MediatR request handling, such as logging and validation.
+-   **Commands and Queries**: Define the operations that can be performed in the application, such as creating, updating, and retrieving entities.
+-   **Events**: Handle application-wide events, facilitating decoupled components interaction.
+-   **DTOs (Data Transfer Objects)**: Serve as the data structure for transferring data between the application layer and other layers.
+-   **Interfaces**: Define contracts for repository interactions, ensuring abstraction over concrete data access implementations.
+-   **Mappings**: Manual mapping extensions between domain entities and DTOs for optimal performance and explicit control.
+-   **Pipeline Behaviors**: Interceptors that add cross-cutting concerns to MediatR request handling, such as logging and validation.
 
 ## Pipeline Behaviours
 
@@ -27,7 +27,7 @@ Customization is straightforward—adjust logging details in `LoggingBehaviour` 
 
 ## Setting Up the Application Layer
 
-The `ApplicationExtensions` class simplifies the setup of the application layer, including the registration of MediatR, AutoMapper, and our custom pipeline behaviors. Here's how to use it in your application startup:
+The `ApplicationExtensions` class simplifies the setup of the application layer, including the registration of MediatR and our custom pipeline behaviors. Here's how to use it in your application startup:
 
 ```csharp
 public void ConfigureServices(IServiceCollection services)

@@ -1,9 +1,8 @@
-﻿namespace DomainDrivenVerticalSlices.Template.Application.Tests.Entity1.Events;
+namespace DomainDrivenVerticalSlices.Template.Application.Tests.Entity1.Events;
 
 using DomainDrivenVerticalSlices.Template.Application.Entity1.Events;
 using DomainDrivenVerticalSlices.Template.Application.Tests.Helpers;
 using DomainDrivenVerticalSlices.Template.Domain.Events;
-using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -17,8 +16,8 @@ public class Entity1CreatedEventHandlerTests
             new Entity1CreatedEventHandler(null!);
         });
 
-        exception.ParamName.Should().Be("logger");
-        exception.Message.Should().Contain("logger");
+        Assert.Equal("logger", exception.ParamName);
+        Assert.Contains("logger", exception.Message);
     }
 
     [Fact]

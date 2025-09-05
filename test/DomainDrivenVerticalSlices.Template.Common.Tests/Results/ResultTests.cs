@@ -1,4 +1,4 @@
-﻿namespace DomainDrivenVerticalSlices.Template.Common.Tests.Results;
+namespace DomainDrivenVerticalSlices.Template.Common.Tests.Results;
 
 using DomainDrivenVerticalSlices.Template.Common.Enums;
 using DomainDrivenVerticalSlices.Template.Common.Errors;
@@ -16,7 +16,7 @@ public class ResultTests
         var result = Result.Failure(_error);
 
         // Act & Assert
-        result.CheckedError.Should().Be(_error);
+        Assert.Equal(_error, result.CheckedError);
     }
 
     [Fact]
@@ -29,8 +29,8 @@ public class ResultTests
         Action act = () => { _ = result.CheckedError; };
 
         // Assert
-        act.Should().Throw<InvalidOperationException>()
-            .WithMessage("Attempted to access CheckedError property when no error is set.");
+        var exception = Assert.Throws<InvalidOperationException>(act);
+        Assert.Contains("Attempted to access CheckedError property when no error is set.", exception.Message);
     }
 
     [Fact]
@@ -40,7 +40,7 @@ public class ResultTests
         var result = Result.Failure(_error);
 
         // Act & Assert
-        result.Error.Should().Be(_error);
+        Assert.Equal(_error, result.Error);
     }
 
     [Fact]
@@ -50,8 +50,8 @@ public class ResultTests
         var result = Result.Failure(_error);
 
         // Assert
-        result.IsSuccess.Should().BeFalse();
-        result.Error.Should().Be(_error);
+        Assert.False(result.IsSuccess);
+        Assert.Equal(_error, result.Error);
     }
 
     [Fact]
@@ -61,8 +61,8 @@ public class ResultTests
         Action act = () => { _ = Result.Failure(null!); };
 
         // Assert
-        act.Should().Throw<ArgumentNullException>()
-            .WithMessage("*error*");
+        var exception = Assert.Throws<ArgumentNullException>(act);
+        Assert.Contains("error", exception.Message);
     }
 
     [Fact]
@@ -72,7 +72,7 @@ public class ResultTests
         var result = Result.Failure(_error);
 
         // Act & Assert
-        result.IsSuccess.Should().BeFalse();
+        Assert.False(result.IsSuccess);
     }
 
     [Fact]
@@ -82,7 +82,7 @@ public class ResultTests
         var result = Result.Success();
 
         // Act & Assert
-        result.IsSuccess.Should().BeTrue();
+        Assert.True(result.IsSuccess);
     }
 
     [Fact]
@@ -92,7 +92,7 @@ public class ResultTests
         var result = Result.Success();
 
         // Assert
-        result.IsSuccess.Should().BeTrue();
-        result.Error.Should().BeNull();
+        Assert.True(result.IsSuccess);
+        Assert.Null(result.Error);
     }
 }

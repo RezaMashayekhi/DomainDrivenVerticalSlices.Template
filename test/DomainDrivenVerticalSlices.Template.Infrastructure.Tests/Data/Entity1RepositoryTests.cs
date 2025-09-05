@@ -1,4 +1,4 @@
-﻿namespace DomainDrivenVerticalSlices.Template.Infrastructure.Tests.Data;
+namespace DomainDrivenVerticalSlices.Template.Infrastructure.Tests.Data;
 
 using DomainDrivenVerticalSlices.Template.Domain.Entities;
 using DomainDrivenVerticalSlices.Template.Domain.ValueObjects;
@@ -32,8 +32,8 @@ public class Entity1RepositoryTests : IDisposable
         await _repository.AddAsync(entity, CancellationToken.None);
         var retrievedEntity = await _repository.GetByIdAsync(entity.Id);
 
-        retrievedEntity.Should().NotBeNull();
-        retrievedEntity.Should().Be(entity);
+        Assert.NotNull(retrievedEntity);
+        Assert.Equal(entity, retrievedEntity);
     }
 
     [Fact]
@@ -48,7 +48,7 @@ public class Entity1RepositoryTests : IDisposable
         var retrievedEntity = await _repository.GetByIdAsync(entity.Id);
 
         // Assert
-        retrievedEntity.Should().BeNull();
+        Assert.Null(retrievedEntity);
     }
 
     [Fact]
@@ -64,8 +64,8 @@ public class Entity1RepositoryTests : IDisposable
         var retrievedEntity = await _repository.FindAsync(e => e.Id == entity.Id, CancellationToken.None);
 
         // Assert
-        retrievedEntity.Should().NotBeNull();
-        retrievedEntity.Should().Be(entity);
+        Assert.NotNull(retrievedEntity);
+        Assert.Equal(entity, retrievedEntity);
     }
 
     [Fact]
@@ -83,11 +83,11 @@ public class Entity1RepositoryTests : IDisposable
         var entities = await _repository.GetAllAsync(CancellationToken.None);
 
         // Assert
-        entities.Should().NotBeNull();
-        entities.Should().HaveCount(2);
+        Assert.NotNull(entities);
+        Assert.Equal(2, entities.Count());
 
-        entities.Should().Contain(entity1);
-        entities.Should().Contain(entity2);
+        Assert.Contains(entity1, entities);
+        Assert.Contains(entity2, entities);
     }
 
     [Fact]
@@ -101,8 +101,8 @@ public class Entity1RepositoryTests : IDisposable
         var retrievedEntity = await _repository.GetByIdAsync(entity.Id, CancellationToken.None);
 
         // Assert
-        retrievedEntity.Should().NotBeNull();
-        retrievedEntity.Should().Be(entity);
+        Assert.NotNull(retrievedEntity);
+        Assert.Equal(entity, retrievedEntity);
     }
 
     [Fact]
@@ -122,11 +122,11 @@ public class Entity1RepositoryTests : IDisposable
         var entities = await _repository.ListAsync(e => e.ValueObject1.Property1.Contains("Property2"), CancellationToken.None);
 
         // Assert
-        entities.Should().NotBeNull();
-        entities.Should().HaveCount(2);
+        Assert.NotNull(entities);
+        Assert.Equal(2, entities.Count());
 
-        entities.Should().Contain(e => e.Id == entity2.Id);
-        entities.Should().Contain(e => e.Id == entity3.Id);
+        Assert.Contains(entities, e => e.Id == entity2.Id);
+        Assert.Contains(entities, e => e.Id == entity3.Id);
     }
 
     [Fact]
@@ -144,8 +144,8 @@ public class Entity1RepositoryTests : IDisposable
         var retrievedEntity = await _context.Entities1.FindAsync(entity.Id);
 
         // Assert
-        retrievedEntity.Should().NotBeNull();
-        retrievedEntity.Should().Be(entity);
+        Assert.NotNull(retrievedEntity);
+        Assert.Equal(entity, retrievedEntity);
     }
 
     public void Dispose()

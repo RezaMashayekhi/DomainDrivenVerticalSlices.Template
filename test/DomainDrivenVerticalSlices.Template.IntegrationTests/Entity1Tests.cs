@@ -1,4 +1,4 @@
-namespace DomainDrivenVerticalSlices.Template.IntegrationTests;
+﻿namespace DomainDrivenVerticalSlices.Template.IntegrationTests;
 
 using System.Net;
 using System.Net.Http;
@@ -49,18 +49,19 @@ public class Entity1Tests : IClassFixture<CustomWebApplicationFactory>
         var response = await _httpClient.GetAsync($"/api/entity1/{entity1Dto!.Id}");
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var responseEntity1Dto = await response.Content.ReadFromJsonAsync<Entity1Dto>();
+        Assert.NotNull(responseEntity1Dto);
 
-        entity1Dto.Should().BeEquivalentTo(responseEntity1Dto);
+        Assert.Equal(entity1Dto, responseEntity1Dto);
 
         // Log Assert
-        _logs.Should().Contain($"Handling {nameof(GetEntity1ByIdQuery)}");
-        _logs.Should().Contain($"Id: {entity1Dto.Id}");
-        _logs.Should().Contain("Handled Result`1");
-        _logs.Should().Contain("Operation completed successfully!");
-        _logs.Should().Contain($"Id: {entity1Dto.Id}");
-        _logs.Should().Contain($"ValueObject1: ValueObject1Dto {{ Property1 = {property1} }}");
+        Assert.Contains($"Handling {nameof(GetEntity1ByIdQuery)}", _logs);
+        Assert.Contains($"Id: {entity1Dto.Id}", _logs);
+        Assert.Contains("Handled Result`1", _logs);
+        Assert.Contains("Operation completed successfully!", _logs);
+        Assert.Contains($"Id: {entity1Dto.Id}", _logs);
+        Assert.Contains($"ValueObject1: ValueObject1Dto {{ Property1 = {property1} }}", _logs);
     }
 
     [Fact]
@@ -73,15 +74,15 @@ public class Entity1Tests : IClassFixture<CustomWebApplicationFactory>
         var response = await _httpClient.GetAsync($"/api/entity1/{id}");
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 
         // Log Assert
-        _logs.Should().Contain($"Handling {nameof(GetEntity1ByIdQuery)}");
-        _logs.Should().Contain($"Id: {id}");
-        _logs.Should().Contain($"Entity1 with id {id} not found.");
-        _logs.Should().Contain("Handled Result`1");
-        _logs.Should().Contain("Operation failed!");
-        _logs.Should().Contain($"Error Type: {ErrorType.NotFound}, ErrorMessage: Entity1 with id {id} not found.");
+        Assert.Contains($"Handling {nameof(GetEntity1ByIdQuery)}", _logs);
+        Assert.Contains($"Id: {id}", _logs);
+        Assert.Contains($"Entity1 with id {id} not found.", _logs);
+        Assert.Contains("Handled Result`1", _logs);
+        Assert.Contains("Operation failed!", _logs);
+        Assert.Contains($"Error Type: {ErrorType.NotFound}, ErrorMessage: Entity1 with id {id} not found.", _logs);
     }
 
     [Fact]
@@ -94,14 +95,14 @@ public class Entity1Tests : IClassFixture<CustomWebApplicationFactory>
         var response = await _httpClient.GetAsync($"/api/entity1/{id}");
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
         // Log Assert
-        _logs.Should().Contain($"Handling {nameof(GetEntity1ByIdQuery)}");
-        _logs.Should().Contain($"Id: {id}");
-        _logs.Should().Contain("Handled Result`1");
-        _logs.Should().Contain("Operation failed!");
-        _logs.Should().Contain($"Error Type: {ErrorType.InvalidInput}, ErrorMessage: 'Id' must not be empty.");
+        Assert.Contains($"Handling {nameof(GetEntity1ByIdQuery)}", _logs);
+        Assert.Contains($"Id: {id}", _logs);
+        Assert.Contains("Handled Result`1", _logs);
+        Assert.Contains("Operation failed!", _logs);
+        Assert.Contains($"Error Type: {ErrorType.InvalidInput}, ErrorMessage: 'Id' must not be empty.", _logs);
     }
 
     [Fact]
@@ -122,18 +123,19 @@ public class Entity1Tests : IClassFixture<CustomWebApplicationFactory>
         var response = await _httpClient.GetAsync("/api/Entity1/all");
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var responseEntity1Dtos = await response.Content.ReadFromJsonAsync<IEnumerable<Entity1Dto>>();
-        responseEntity1Dtos.Should().NotBeNullOrEmpty();
-        responseEntity1Dtos!.Count().Should().Be(2);
-        responseEntity1Dtos.Should().ContainEquivalentOf(entity1Dto1);
-        responseEntity1Dtos.Should().ContainEquivalentOf(entity1Dto2);
+        Assert.NotNull(responseEntity1Dtos);
+        Assert.NotEmpty(responseEntity1Dtos);
+        Assert.Equal(2, responseEntity1Dtos.Count());
+        Assert.Contains(entity1Dto1, responseEntity1Dtos);
+        Assert.Contains(entity1Dto2, responseEntity1Dtos);
 
         // Log Assert
-        _logs.Should().Contain($"Handling {nameof(GetEntity1AllQuery)}");
-        _logs.Should().Contain("Handled Result`1");
-        _logs.Should().Contain("Operation completed successfully!");
-        _logs.Should().Contain($"Count: {responseEntity1Dtos!.Count()}");
+        Assert.Contains($"Handling {nameof(GetEntity1AllQuery)}", _logs);
+        Assert.Contains("Handled Result`1", _logs);
+        Assert.Contains("Operation completed successfully!", _logs);
+        Assert.Contains($"Count: {responseEntity1Dtos!.Count()}", _logs);
     }
 
     [Fact]
@@ -143,15 +145,16 @@ public class Entity1Tests : IClassFixture<CustomWebApplicationFactory>
         var response = await _httpClient.GetAsync("/api/Entity1/all");
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var responseEntity1Dtos = await response.Content.ReadFromJsonAsync<IEnumerable<Entity1Dto>>();
-        responseEntity1Dtos.Should().BeEmpty();
+        Assert.NotNull(responseEntity1Dtos);
+        Assert.Empty(responseEntity1Dtos);
 
         // Log Assert
-        _logs.Should().Contain($"Handling {nameof(GetEntity1AllQuery)}");
-        _logs.Should().Contain("Handled Result`1");
-        _logs.Should().Contain("Operation completed successfully!");
-        _logs.Should().Contain($"Count: {responseEntity1Dtos!.Count()}");
+        Assert.Contains($"Handling {nameof(GetEntity1AllQuery)}", _logs);
+        Assert.Contains("Handled Result`1", _logs);
+        Assert.Contains("Operation completed successfully!", _logs);
+        Assert.Contains($"Count: {responseEntity1Dtos!.Count()}", _logs);
     }
 
     [Fact]
@@ -177,19 +180,20 @@ public class Entity1Tests : IClassFixture<CustomWebApplicationFactory>
         var response = await _httpClient.GetAsync($"/api/Entity1/list?property1={matchingProperty}");
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var responseEntity1Dtos = await response.Content.ReadFromJsonAsync<IEnumerable<Entity1Dto>>();
-        responseEntity1Dtos.Should().NotBeNullOrEmpty();
-        responseEntity1Dtos!.Count().Should().Be(2);
-        responseEntity1Dtos.Should().ContainEquivalentOf(entity1Dto1);
-        responseEntity1Dtos.Should().ContainEquivalentOf(entity1Dto2);
+        Assert.NotNull(responseEntity1Dtos);
+        Assert.NotEmpty(responseEntity1Dtos);
+        Assert.Equal(2, responseEntity1Dtos.Count());
+        Assert.Contains(entity1Dto1, responseEntity1Dtos);
+        Assert.Contains(entity1Dto2, responseEntity1Dtos);
 
         // Log Assert
-        _logs.Should().Contain($"Handling {nameof(ListEntity1ByProperty1Query)}");
-        _logs.Should().Contain($"Property1: {matchingProperty}");
-        _logs.Should().Contain("Handled Result`1");
-        _logs.Should().Contain("Operation completed successfully!");
-        _logs.Should().Contain($"Count: {responseEntity1Dtos!.Count()}");
+        Assert.Contains($"Handling {nameof(ListEntity1ByProperty1Query)}", _logs);
+        Assert.Contains($"Property1: {matchingProperty}", _logs);
+        Assert.Contains("Handled Result`1", _logs);
+        Assert.Contains("Operation completed successfully!", _logs);
+        Assert.Contains($"Count: {responseEntity1Dtos!.Count()}", _logs);
     }
 
     [Fact]
@@ -206,16 +210,17 @@ public class Entity1Tests : IClassFixture<CustomWebApplicationFactory>
         var response = await _httpClient.GetAsync($"/api/Entity1/list?property1={noMatchingProperty}");
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var responseEntity1Dtos = await response.Content.ReadFromJsonAsync<IEnumerable<Entity1Dto>>();
-        responseEntity1Dtos.Should().BeEmpty();
+        Assert.NotNull(responseEntity1Dtos);
+        Assert.Empty(responseEntity1Dtos);
 
         // Log Assert
-        _logs.Should().Contain($"Handling {nameof(ListEntity1ByProperty1Query)}");
-        _logs.Should().Contain($"Property1: {noMatchingProperty}");
-        _logs.Should().Contain("Handled Result`1");
-        _logs.Should().Contain("Operation completed successfully!");
-        _logs.Should().Contain($"Count: {responseEntity1Dtos!.Count()}");
+        Assert.Contains($"Handling {nameof(ListEntity1ByProperty1Query)}", _logs);
+        Assert.Contains($"Property1: {noMatchingProperty}", _logs);
+        Assert.Contains("Handled Result`1", _logs);
+        Assert.Contains("Operation completed successfully!", _logs);
+        Assert.Contains($"Count: {responseEntity1Dtos!.Count()}", _logs);
     }
 
     [Fact]
@@ -235,17 +240,18 @@ public class Entity1Tests : IClassFixture<CustomWebApplicationFactory>
         var response = await _httpClient.GetAsync($"/api/Entity1/find?property1={matchingProperty}");
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var responseEntity1Dto = await response.Content.ReadFromJsonAsync<Entity1Dto>();
-        responseEntity1Dto.Should().BeEquivalentTo(entity1Dto1);
+        Assert.NotNull(responseEntity1Dto);
+        Assert.Equal(entity1Dto1, responseEntity1Dto);
 
         // Log Assert
-        _logs.Should().Contain($"Handling {nameof(FindEntity1ByProperty1Query)}");
-        _logs.Should().Contain($"Property1: {matchingProperty}");
-        _logs.Should().Contain("Handled Result`1");
-        _logs.Should().Contain("Operation completed successfully!");
-        _logs.Should().Contain($"Id: {entity1Dto1!.Id}");
-        _logs.Should().Contain($"ValueObject1: ValueObject1Dto {{ Property1 = {matchingProperty} }}");
+        Assert.Contains($"Handling {nameof(FindEntity1ByProperty1Query)}", _logs);
+        Assert.Contains($"Property1: {matchingProperty}", _logs);
+        Assert.Contains("Handled Result`1", _logs);
+        Assert.Contains("Operation completed successfully!", _logs);
+        Assert.Contains($"Id: {entity1Dto1!.Id}", _logs);
+        Assert.Contains($"ValueObject1: ValueObject1Dto {{ Property1 = {matchingProperty} }}", _logs);
     }
 
     [Fact]
@@ -262,14 +268,14 @@ public class Entity1Tests : IClassFixture<CustomWebApplicationFactory>
         var response = await _httpClient.GetAsync($"/api/Entity1/find?property1={noMatchingProperty}");
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 
         // Log Assert
-        _logs.Should().Contain($"Handling {nameof(FindEntity1ByProperty1Query)}");
-        _logs.Should().Contain($"Property1: {noMatchingProperty}");
-        _logs.Should().Contain("Handled Result`1");
-        _logs.Should().Contain("Operation failed!");
-        _logs.Should().Contain($"Error Type: {ErrorType.NotFound}, ErrorMessage: Entity not found.");
+        Assert.Contains($"Handling {nameof(FindEntity1ByProperty1Query)}", _logs);
+        Assert.Contains($"Property1: {noMatchingProperty}", _logs);
+        Assert.Contains("Handled Result`1", _logs);
+        Assert.Contains("Operation failed!", _logs);
+        Assert.Contains($"Error Type: {ErrorType.NotFound}, ErrorMessage: Entity not found.", _logs);
     }
 
     [Fact]
@@ -283,32 +289,33 @@ public class Entity1Tests : IClassFixture<CustomWebApplicationFactory>
         var response = await _httpClient.PostAsJsonAsync("/api/entity1", command);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.Created);
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
         var entity1Dto = await response.Content.ReadFromJsonAsync<Entity1Dto>();
 
-        response.Headers.Location.Should().NotBeNull();
-        response.Headers.Location.Should().Be($"https://localhost:{httpsPort}/api/Entity1/{entity1Dto!.Id}");
+        Assert.NotNull(response.Headers.Location);
+        Assert.Equal($"https://localhost:{httpsPort}/api/Entity1/{entity1Dto!.Id}", response.Headers.Location.ToString());
 
-        entity1Dto.Should().NotBeNull();
-        entity1Dto.ValueObject1.Property1.Should().Be(property1);
+        Assert.NotNull(entity1Dto);
+        Assert.Equal(property1, entity1Dto!.ValueObject1.Property1);
 
         // Log Assert
-        _logs.Should().Contain($"Handling {nameof(CreateEntity1Command)}");
-        _logs.Should().Contain($"Property1: {property1}");
-        _logs.Should().Contain($"Entity1 created with id {entity1Dto.Id}.");
-        _logs.Should().Contain($"Entity1CreatedEvent: A new Entity1 was created with ID {entity1Dto.Id}.");
-        _logs.Should().Contain("Handled Result`1");
-        _logs.Should().Contain("Operation completed successfully!");
-        _logs.Should().Contain($"Id: {entity1Dto.Id}");
-        _logs.Should().Contain($"ValueObject1: ValueObject1Dto {{ Property1 = {property1} }}");
+        Assert.Contains($"Handling {nameof(CreateEntity1Command)}", _logs);
+        Assert.Contains($"Property1: {property1}", _logs);
+        Assert.Contains($"Entity1 created with id {entity1Dto.Id}.", _logs);
+        Assert.Contains($"Entity1CreatedEvent: A new Entity1 was created with ID {entity1Dto.Id}.", _logs);
+        Assert.Contains("Handled Result`1", _logs);
+        Assert.Contains("Operation completed successfully!", _logs);
+        Assert.Contains($"Id: {entity1Dto.Id}", _logs);
+        Assert.Contains($"ValueObject1: ValueObject1Dto {{ Property1 = {property1} }}", _logs);
 
         // Check if the entity was created in the database
         var getResponse = await _httpClient.GetAsync($"/api/Entity1/{entity1Dto.Id}");
-        getResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        Assert.Equal(HttpStatusCode.OK, getResponse.StatusCode);
 
         var getResponseUserDto = await getResponse.Content.ReadFromJsonAsync<Entity1Dto>();
-        entity1Dto.Should().BeEquivalentTo(getResponseUserDto);
+        Assert.NotNull(getResponseUserDto);
+        Assert.Equal(getResponseUserDto, entity1Dto);
     }
 
     [Fact]
@@ -321,19 +328,19 @@ public class Entity1Tests : IClassFixture<CustomWebApplicationFactory>
         var response = await _httpClient.PostAsJsonAsync("/api/entity1", command);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
         var error = await response.Content.ReadFromJsonAsync<ErrorDto>();
 
-        error.Should().NotBeNull();
-        error!.ErrorType.Should().Be(ErrorType.InvalidInput);
-        error.ErrorMessage.Should().Be("'Property1' must not be empty.");
+        Assert.NotNull(error);
+        Assert.Equal(ErrorType.InvalidInput, error!.ErrorType);
+        Assert.Equal("'Property1' must not be empty.", error.ErrorMessage);
 
         // Log Assert
-        _logs.Should().Contain($"Handling {nameof(CreateEntity1Command)}");
-        _logs.Should().Contain($"Property1: {string.Empty}");
-        _logs.Should().Contain("Operation failed!");
-        _logs.Should().Contain($"Error Type: {error.ErrorType}, ErrorMessage: {error.ErrorMessage}");
+        Assert.Contains($"Handling {nameof(CreateEntity1Command)}", _logs);
+        Assert.Contains($"Property1: {string.Empty}", _logs);
+        Assert.Contains("Operation failed!", _logs);
+        Assert.Contains($"Error Type: {error.ErrorType}, ErrorMessage: {error.ErrorMessage}", _logs);
     }
 
     [Fact]
@@ -353,21 +360,23 @@ public class Entity1Tests : IClassFixture<CustomWebApplicationFactory>
         var response = await _httpClient.PutAsJsonAsync($"/api/entity1/{entity1Dto.Id}", updateCommand);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         // Log Assert
-        _logs.Should().Contain($"Handling {nameof(UpdateEntity1Command)}");
-        _logs.Should().Contain($"Id: {entity1Dto.Id}");
-        _logs.Should().Contain($"Entity1: Entity1Dto {{ Id = {updatedEntity1Dto.Id}, ValueObject1 = ValueObject1Dto {{ Property1 = {updatedEntity1Dto.ValueObject1.Property1} }} }}");
-        _logs.Should().Contain("Handled Result");
-        _logs.Should().Contain("Operation completed successfully!");
+        Assert.Contains($"Handling {nameof(UpdateEntity1Command)}", _logs);
+        Assert.Contains($"Id: {entity1Dto.Id}", _logs);
+        Assert.Contains($"Entity1: Entity1Dto {{ Id = {updatedEntity1Dto.Id}, ValueObject1 = ValueObject1Dto {{ Property1 = {updatedEntity1Dto.ValueObject1.Property1} }} }}", _logs);
+        Assert.Contains("Handled Result", _logs);
+        Assert.Contains("Operation completed successfully!", _logs);
 
         // Check if the entity was updated in the database
         var getResponse = await _httpClient.GetAsync($"/api/Entity1/{entity1Dto.Id}");
-        getResponse.StatusCode.Should().Be(HttpStatusCode.OK);
+        Assert.Equal(HttpStatusCode.OK, getResponse.StatusCode);
 
         var getResponseUserDto = await getResponse.Content.ReadFromJsonAsync<Entity1Dto>();
-        getResponseUserDto!.ValueObject1.Property1.Should().Be(updatedProperty1);
+        Assert.NotNull(getResponseUserDto);
+        Assert.NotNull(getResponseUserDto.ValueObject1);
+        Assert.Equal(updatedProperty1, getResponseUserDto.ValueObject1.Property1);
     }
 
     [Fact]
@@ -386,14 +395,14 @@ public class Entity1Tests : IClassFixture<CustomWebApplicationFactory>
         var response = await _httpClient.PutAsJsonAsync($"/api/entity1/{entity1Dto.Id}", updateCommand);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
         // Log Assert
-        _logs.Should().Contain($"Handling {nameof(UpdateEntity1Command)}");
-        _logs.Should().Contain($"Entity1: Entity1Dto {{ Id = {updatedEntity1Dto.Id}, ValueObject1 = ValueObject1Dto {{ Property1 = {updatedEntity1Dto.ValueObject1.Property1} }} }}");
-        _logs.Should().Contain("Handled Result");
-        _logs.Should().Contain("Operation failed!");
-        _logs.Should().Contain($"Error Type: {ErrorType.InvalidInput}, ErrorMessage: 'Entity1 Value Object1 Property1' must not be empty.");
+        Assert.Contains($"Handling {nameof(UpdateEntity1Command)}", _logs);
+        Assert.Contains($"Entity1: Entity1Dto {{ Id = {updatedEntity1Dto.Id}, ValueObject1 = ValueObject1Dto {{ Property1 = {updatedEntity1Dto.ValueObject1.Property1} }} }}", _logs);
+        Assert.Contains("Handled Result", _logs);
+        Assert.Contains("Operation failed!", _logs);
+        Assert.Contains($"Error Type: {ErrorType.InvalidInput}, ErrorMessage: 'Entity1 Value Object1 Property1' must not be empty.", _logs);
     }
 
     [Fact]
@@ -412,9 +421,9 @@ public class Entity1Tests : IClassFixture<CustomWebApplicationFactory>
         var response = await _httpClient.PutAsJsonAsync($"/api/entity1/{Guid.NewGuid()}", updateCommand);
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var content = await response.Content.ReadAsStringAsync();
-        content.Should().Contain("ID mismatch");
+        Assert.Contains("ID mismatch", content);
     }
 
     [Fact]
@@ -430,17 +439,17 @@ public class Entity1Tests : IClassFixture<CustomWebApplicationFactory>
         var response = await _httpClient.DeleteAsync($"/api/entity1/{entity1Dto!.Id}");
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         // Log Assert
-        _logs.Should().Contain($"Handling {nameof(DeleteEntity1Command)}");
-        _logs.Should().Contain($"Id: {entity1Dto.Id}");
-        _logs.Should().Contain("Handled Result");
-        _logs.Should().Contain("Operation completed successfully!");
+        Assert.Contains($"Handling {nameof(DeleteEntity1Command)}", _logs);
+        Assert.Contains($"Id: {entity1Dto.Id}", _logs);
+        Assert.Contains("Handled Result", _logs);
+        Assert.Contains("Operation completed successfully!", _logs);
 
         // Check if the entity was deleted from the database
         var getResponse = await _httpClient.GetAsync($"/api/Entity1/{entity1Dto.Id}");
-        getResponse.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        Assert.Equal(HttpStatusCode.NotFound, getResponse.StatusCode);
     }
 
     [Fact]
@@ -453,15 +462,15 @@ public class Entity1Tests : IClassFixture<CustomWebApplicationFactory>
         var response = await _httpClient.DeleteAsync($"/api/entity1/{id}");
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
 
         // Log Assert
-        _logs.Should().Contain($"Handling {nameof(DeleteEntity1Command)}");
-        _logs.Should().Contain($"Id: {id}");
-        _logs.Should().Contain($"Entity1 with id {id} not found.");
-        _logs.Should().Contain("Handled Result");
-        _logs.Should().Contain("Operation failed!");
-        _logs.Should().Contain($"Error Type: {ErrorType.NotFound}, ErrorMessage: Entity1 with id {id} not found.");
+        Assert.Contains($"Handling {nameof(DeleteEntity1Command)}", _logs);
+        Assert.Contains($"Id: {id}", _logs);
+        Assert.Contains($"Entity1 with id {id} not found.", _logs);
+        Assert.Contains("Handled Result", _logs);
+        Assert.Contains("Operation failed!", _logs);
+        Assert.Contains($"Error Type: {ErrorType.NotFound}, ErrorMessage: Entity1 with id {id} not found.", _logs);
     }
 
     [Fact]
@@ -474,14 +483,14 @@ public class Entity1Tests : IClassFixture<CustomWebApplicationFactory>
         var response = await _httpClient.DeleteAsync($"/api/entity1/{id}");
 
         // Assert
-        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
         // Log Assert
-        _logs.Should().Contain($"Handling {nameof(DeleteEntity1Command)}");
-        _logs.Should().Contain($"Id: {id}");
-        _logs.Should().Contain("Handled Result");
-        _logs.Should().Contain("Operation failed!");
-        _logs.Should().Contain($"Error Type: {ErrorType.InvalidInput}, ErrorMessage: 'Id' must not be empty.");
+        Assert.Contains($"Handling {nameof(DeleteEntity1Command)}", _logs);
+        Assert.Contains($"Id: {id}", _logs);
+        Assert.Contains("Handled Result", _logs);
+        Assert.Contains("Operation failed!", _logs);
+        Assert.Contains($"Error Type: {ErrorType.InvalidInput}, ErrorMessage: 'Id' must not be empty.", _logs);
     }
 
     private void CleanUpDatabase()

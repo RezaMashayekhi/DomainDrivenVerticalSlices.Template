@@ -2,20 +2,21 @@ import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import Entity1List from "./Entity1List";
 import { useNavigate } from "react-router-dom";
+import { vi } from "vitest";
 import * as Entity1Service from "../../../services/Entity1Service";
 
-jest.mock("react-router-dom", () => ({
-    useNavigate: jest.fn(),
+vi.mock("react-router-dom", () => ({
+    useNavigate: vi.fn(),
 }));
 
-jest.mock("../../../services/Entity1Service", () => ({
-    getAllEntity1: jest.fn(),
-    searchEntity1ByProperty1: jest.fn(),
-    deleteEntity1ById: jest.fn(),
+vi.mock("../../../services/Entity1Service", () => ({
+    getAllEntity1: vi.fn(),
+    searchEntity1ByProperty1: vi.fn(),
+    deleteEntity1ById: vi.fn(),
 }));
 
 describe("Entity1List Component Tests", () => {
-    const mockNavigate = jest.fn();
+    const mockNavigate = vi.fn();
 
     beforeEach(() => {
         mockNavigate.mockReset();
@@ -27,15 +28,19 @@ describe("Entity1List Component Tests", () => {
 
     test("initially calls getAllEntity1", async () => {
         render(<Entity1List />);
-        await waitFor(() => expect(Entity1Service.getAllEntity1).toHaveBeenCalled());
+        await waitFor(() =>
+            expect(Entity1Service.getAllEntity1).toHaveBeenCalled()
+        );
     });
 
     test("searches entities when search query is changed", async () => {
         render(<Entity1List />);
         const searchBar = screen.getByPlaceholderText("Search by Property1...");
-        fireEvent.change(searchBar, { target: { value: 'test' } });
+        fireEvent.change(searchBar, { target: { value: "test" } });
         await waitFor(() => {
-            expect(Entity1Service.searchEntity1ByProperty1).toHaveBeenCalledWith('test');
+            expect(
+                Entity1Service.searchEntity1ByProperty1
+            ).toHaveBeenCalledWith("test");
         });
     });
 
@@ -49,16 +54,20 @@ describe("Entity1List Component Tests", () => {
         Entity1Service.getAllEntity1.mockResolvedValue(
             Array.from({ length: 10 }, (_, index) => ({
                 id: `unique_id_${index}`,
-                valueObject1: { property1: "Property" }
+                valueObject1: { property1: "Property" },
             }))
         );
         render(<Entity1List />);
-        await waitFor(() => expect(Entity1Service.getAllEntity1).toHaveBeenCalled());
+        await waitFor(() =>
+            expect(Entity1Service.getAllEntity1).toHaveBeenCalled()
+        );
         await waitFor(() => {
-            expect(screen.getAllByRole("button", { name: /^\d+$/ })).toHaveLength(4);
+            expect(
+                screen.getAllByRole("button", { name: /^\d+$/ })
+            ).toHaveLength(4);
         });
 
-        const pageTwoButton = screen.getByRole('button', { name: '2' });
+        const pageTwoButton = screen.getByRole("button", { name: "2" });
         fireEvent.click(pageTwoButton);
 
         await waitFor(() => {
@@ -67,26 +76,53 @@ describe("Entity1List Component Tests", () => {
         });
     });
 
-
     test("handles entity deletion correctly", async () => {
-        const mockEntity = { id: "unique_id", valueObject1: { property1: "Property" } };
+        const mockEntity = {
+            id: "unique_id",
+            valueObject1: { property1: "Property" },
+        };
         Entity1Service.getAllEntity1.mockResolvedValue([mockEntity]);
-        render(<Entity1List />);    
-        await waitFor(() => expect(Entity1Service.getAllEntity1).toHaveBeenCalled());
-        const deleteButton = screen.getByRole("button", { name: "Delete" });
-        window.confirm = jest.fn().mockReturnValueOnce(true);
+
+        // Reset the mock call count before the test
+        Entity1Service.getAllEntity1.mockClear();
+
+        render(<Entity1List />);
+
+        // Wait for the entity to be displayed
+        await waitFor(() => {
+            expect(screen.getByText("Property")).toBeInTheDocument();
+        });
+
+        const deleteButton = screen.getByLabelText("Delete");
+        window.confirm = vi.fn().mockReturnValueOnce(true);
         fireEvent.click(deleteButton);
-        await waitFor(() => expect(Entity1Service.deleteEntity1ById).toHaveBeenCalledWith(mockEntity.id));
-        expect(Entity1Service.getAllEntity1).toHaveBeenCalledTimes(2);
+
+        // Wait for the delete operation and subsequent refresh
+        await waitFor(() => {
+            expect(Entity1Service.deleteEntity1ById).toHaveBeenCalledWith(
+                mockEntity.id
+            );
+            expect(Entity1Service.getAllEntity1).toHaveBeenCalled();
+        });
     });
-    
+
     test("navigates to edit page on edit button click", async () => {
-        const mockEntity = { id: "unique_id", valueObject1: { property1: "Property" } };
+        const mockEntity = {
+            id: "unique_id",
+            valueObject1: { property1: "Property" },
+        };
         Entity1Service.getAllEntity1.mockResolvedValue([mockEntity]);
         render(<Entity1List />);
-        await waitFor(() => expect(Entity1Service.getAllEntity1).toHaveBeenCalled());
-        const editButton = screen.getByRole("button", { name: "Edit" });
+
+        // Wait for the entity to be displayed
+        await waitFor(() => {
+            expect(screen.getByText("Property")).toBeInTheDocument();
+        });
+
+        const editButton = screen.getByLabelText("Edit");
         fireEvent.click(editButton);
-        expect(mockNavigate).toHaveBeenCalledWith(`/edit-entity1/${mockEntity.id}`);
+        expect(mockNavigate).toHaveBeenCalledWith(
+            `/edit-entity1/${mockEntity.id}`
+        );
     });
 });

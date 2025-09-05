@@ -1,6 +1,5 @@
 ﻿namespace DomainDrivenVerticalSlices.Template.Application.Tests.Entity1.Queries.GetAll;
 
-using AutoMapper;
 using DomainDrivenVerticalSlices.Template.Application.Dtos;
 using DomainDrivenVerticalSlices.Template.Application.Entity1.Queries.GetAll;
 using DomainDrivenVerticalSlices.Template.Application.Interfaces;
@@ -8,14 +7,12 @@ using DomainDrivenVerticalSlices.Template.Application.Tests.Helpers;
 using DomainDrivenVerticalSlices.Template.Common.Results;
 using DomainDrivenVerticalSlices.Template.Domain.Entities;
 using DomainDrivenVerticalSlices.Template.Domain.ValueObjects;
-using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 
 public class GetEntity1AllQueryHandlerTests
 {
     private readonly Mock<IEntity1Repository> _entity1RepositoryMock;
-    private readonly Mock<IMapper> _mapperMock;
     private readonly Mock<ILogger<GetEntity1AllQueryHandler>> _loggerMock;
 
     private readonly GetEntity1AllQueryHandler _handler;
@@ -23,13 +20,11 @@ public class GetEntity1AllQueryHandlerTests
     public GetEntity1AllQueryHandlerTests()
     {
         _entity1RepositoryMock = new Mock<IEntity1Repository>();
-        _mapperMock = new Mock<IMapper>();
         _loggerMock = new Mock<ILogger<GetEntity1AllQueryHandler>>();
 
         _handler = new GetEntity1AllQueryHandler(
             _entity1RepositoryMock.Object,
-            _loggerMock.Object,
-            _mapperMock.Object);
+            _loggerMock.Object);
     }
 
     [Fact]
@@ -39,12 +34,11 @@ public class GetEntity1AllQueryHandlerTests
         {
             new GetEntity1AllQueryHandler(
                 null!, // Entity1Repository
-                _loggerMock.Object,
-                _mapperMock.Object);
+                _loggerMock.Object);
         });
 
-        exception.ParamName.Should().Be("entity1Repository");
-        exception.Message.Should().Contain("entity1Repository");
+        Assert.Equal("entity1Repository", exception.ParamName);
+        Assert.Contains("entity1Repository", exception.Message);
     }
 
     [Fact]
@@ -54,26 +48,10 @@ public class GetEntity1AllQueryHandlerTests
         {
             new GetEntity1AllQueryHandler(
                 _entity1RepositoryMock.Object,
-                null!, // Logger
-                _mapperMock.Object);
+                null!);
         });
-        exception.ParamName.Should().Be("logger");
-        exception.Message.Should().Contain("logger");
-    }
-
-    [Fact]
-    public void Constructor_ThrowsArgumentNullException_WhenMapperIsNull()
-    {
-        var exception = Assert.Throws<ArgumentNullException>(() =>
-        {
-            new GetEntity1AllQueryHandler(
-                _entity1RepositoryMock.Object,
-                _loggerMock.Object,
-                null!); // Mapper
-        });
-
-        exception.ParamName.Should().Be("mapper");
-        exception.Message.Should().Contain("mapper");
+        Assert.Equal("logger", exception.ParamName);
+        Assert.Contains("logger", exception.Message);
     }
 
     [Fact]
@@ -92,24 +70,14 @@ public class GetEntity1AllQueryHandlerTests
 
         var dtos = new List<Entity1Dto> { entity1Dto, entity2Dto };
 
-        _mapperMock.Setup(m => m.Map<IEnumerable<Entity1Dto>>(
-            It.Is<IEnumerable<Entity1>>(e => e.Contains(entity1) && e.Contains(entity2))))
-            .Returns(dtos);
-
-        _mapperMock.Setup(m => m.Map<Entity1Dto>(It.Is<Entity1>(d => d == entity1)))
-            .Returns(entity1Dto);
-
-        _mapperMock.Setup(m => m.Map<Entity1Dto>(It.Is<Entity1>(d => d == entity2)))
-            .Returns(entity2Dto);
-
         // Act
         var result = await _handler.Handle(request, CancellationToken.None);
 
         // Assert
-        result.Should().BeOfType<Result<IEnumerable<Entity1Dto>>>();
-        result.IsSuccess.Should().BeTrue();
-        result.Value.Count().Should().Be(2);
-        result.Value.Should().BeEquivalentTo(dtos);
+        Assert.IsType<Result<IEnumerable<Entity1Dto>>>(result);
+        Assert.True(result.IsSuccess);
+        Assert.Equal(2, result.Value.Count());
+        Assert.Equal(dtos, result.Value);
 
         _entity1RepositoryMock.Verify(r => r.GetAllAsync(CancellationToken.None), Times.Once);
     }
@@ -123,17 +91,14 @@ public class GetEntity1AllQueryHandlerTests
         _entity1RepositoryMock.Setup(r => r.GetAllAsync(CancellationToken.None))
             .ReturnsAsync([]);
 
-        _mapperMock.Setup(m => m.Map<IEnumerable<Entity1Dto>>(It.IsAny<IEnumerable<Entity1>>()))
-            .Returns([]);
-
         // Act
         var result = await _handler.Handle(request, CancellationToken.None);
 
         // Assert
-        result.Should().BeOfType<Result<IEnumerable<Entity1Dto>>>();
-        result.IsSuccess.Should().BeTrue();
-        result.Value.Should().NotBeNull();
-        result.Value.Should().BeEmpty();
+        Assert.IsType<Result<IEnumerable<Entity1Dto>>>(result);
+        Assert.True(result.IsSuccess);
+        Assert.NotNull(result.Value);
+        Assert.Empty(result.Value);
 
         _entity1RepositoryMock.Verify(r => r.GetAllAsync(CancellationToken.None), Times.Once);
     }
@@ -150,8 +115,8 @@ public class GetEntity1AllQueryHandlerTests
         var result = await _handler.Handle(new GetEntity1AllQuery(), CancellationToken.None);
 
         // Assert
-        result.Should().BeOfType<Result<IEnumerable<Entity1Dto>>>();
-        result.IsSuccess.Should().BeFalse();
+        Assert.IsType<Result<IEnumerable<Entity1Dto>>>(result);
+        Assert.False(result.IsSuccess);
         _loggerMock.VerifyLogLevelTotalCalls(LogLevel.Error, Times.Once);
         _loggerMock.VerifyLogging("Error retrieving all Entity1.", LogLevel.Error, Times.Once());
     }

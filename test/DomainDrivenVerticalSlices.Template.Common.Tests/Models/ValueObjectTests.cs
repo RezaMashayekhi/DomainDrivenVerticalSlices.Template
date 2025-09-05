@@ -1,4 +1,4 @@
-﻿namespace DomainDrivenVerticalSlices.Template.Common.Tests.Models;
+namespace DomainDrivenVerticalSlices.Template.Common.Tests.Models;
 
 using DomainDrivenVerticalSlices.Template.Common.Models;
 
@@ -15,7 +15,7 @@ public class ValueObjectTests
         var result = vo1.Equals(vo2);
 
         // Assert
-        result.Should().BeTrue();
+        Assert.True(result);
     }
 
     [Fact]
@@ -29,7 +29,7 @@ public class ValueObjectTests
         var result = vo1.Equals(vo2);
 
         // Assert
-        result.Should().BeFalse();
+        Assert.False(result);
     }
 
     [Fact]
@@ -43,7 +43,7 @@ public class ValueObjectTests
         var result = obj1.Equals(obj2);
 
         // Assert
-        result.Should().BeFalse();
+        Assert.False(result);
     }
 
     [Fact]
@@ -58,7 +58,7 @@ public class ValueObjectTests
         var hashCode2 = vo2.GetHashCode();
 
         // Assert
-        hashCode1.Should().Be(hashCode2);
+        Assert.Equal(hashCode2, hashCode1);
     }
 
     [Fact]
@@ -73,7 +73,7 @@ public class ValueObjectTests
         var hashCode2 = vo2.GetHashCode();
 
         // Assert
-        hashCode1.Should().NotBe(hashCode2);
+        Assert.NotEqual(hashCode2, hashCode1);
     }
 
     [Fact]
@@ -87,7 +87,7 @@ public class ValueObjectTests
         var result = vo1 == vo2;
 
         // Assert
-        result.Should().BeTrue();
+        Assert.True(result);
     }
 
     [Fact]
@@ -101,7 +101,7 @@ public class ValueObjectTests
         var result = vo1 == vo2;
 
         // Assert
-        result.Should().BeFalse();
+        Assert.False(result);
     }
 
     [Fact]
@@ -115,7 +115,7 @@ public class ValueObjectTests
         var result = obj1 != obj2;
 
         // Assert
-        result.Should().BeFalse();
+        Assert.False(result);
     }
 
     [Fact]
@@ -129,7 +129,7 @@ public class ValueObjectTests
         var result = obj1 != obj2;
 
         // Assert
-        result.Should().BeTrue();
+        Assert.True(result);
     }
 
     [Fact]
@@ -143,7 +143,7 @@ public class ValueObjectTests
         var result = obj1 != obj2;
 
         // Assert
-        result.Should().BeFalse();
+        Assert.False(result);
     }
 
     private class TestValueObject(string property1, int property2) : ValueObject<TestValueObject>

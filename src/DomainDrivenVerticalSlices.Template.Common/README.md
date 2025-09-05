@@ -5,15 +5,18 @@ The `Common` library provides foundational classes and interfaces that are share
 ## Key Components
 
 ### Errors
-- **Error**: A concrete implementation of an error, providing structured error information including types and messages.
-- **IError**: An interface defining the basic structure of an error object.
+
+-   **Error**: A concrete implementation of an error, providing structured error information including types and messages.
+-   **IError**: An interface defining the basic structure of an error object.
 
 ### Models
-- **ValueObject**: An abstract base class for value objects, implementing equality based on the value rather than the reference.
+
+-   **ValueObject**: An abstract base class for value objects, implementing equality based on the value rather than the reference.
 
 ### Results
-- **IResult**: Interface for a result, indicating success or failure of operations.
-- **Result**: A generic and non-generic implementation for conveying the outcome of operations, optionally carrying a value in case of success.
+
+-   **IResult**: Interface for a result, indicating success or failure of operations.
+-   **Result**: A generic and non-generic implementation for conveying the outcome of operations, optionally carrying a value in case of success.
 
 ## Usage
 
@@ -36,7 +39,7 @@ public async Task<Result<Entity1Dto>> Handle(GetEntity1ByIdQuery request, Cancel
         return Result<Entity1Dto>.Failure(Error.Create(ErrorType.NotFound, $"Entity1 with id {request.Id} not found."));
     }
 
-    var entity1Dto = _mapper.Map<Entity1Dto>(entity1);
+    var entity1Dto = entity1.MapToDto();
     return Result<Entity1Dto>.Success(entity1Dto);
 }
 ```

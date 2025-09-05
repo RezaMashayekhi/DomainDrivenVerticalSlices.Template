@@ -1,4 +1,4 @@
-﻿namespace DomainDrivenVerticalSlices.Template.Domain.Tests.Entities;
+namespace DomainDrivenVerticalSlices.Template.Domain.Tests.Entities;
 
 using DomainDrivenVerticalSlices.Template.Common.Results;
 using DomainDrivenVerticalSlices.Template.Domain.Entities;
@@ -17,12 +17,12 @@ public class Entity1Tests
         var result = Entity1.Create(valueObject1);
 
         // Assert
-        result.Should().BeOfType<Result<Entity1>>();
-        result.IsSuccess.Should().BeTrue();
+        Assert.IsType<Result<Entity1>>(result);
+        Assert.True(result.IsSuccess);
 
         var entity1 = result.Value;
-        entity1.Should().BeOfType<Entity1>();
-        entity1.Id.Should().NotBeEmpty();
-        entity1.ValueObject1.Should().Be(valueObject1);
+        Assert.IsType<Entity1>(entity1);
+        Assert.NotEqual(Guid.Empty, entity1.Id);
+        Assert.Equal(valueObject1, entity1.ValueObject1);
     }
 }

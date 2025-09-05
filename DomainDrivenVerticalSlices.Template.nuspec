@@ -3,7 +3,7 @@
     <metadata>
         <id>RM.DomainDrivenVerticalSlices.Template</id>
         <title>ASP.NET Core Domain Driven Vertical Slices</title>
-        <version>9.0.1</version>
+        <version>9.1.0</version>
         <description>
             A comprehensive ASP.NET Core template implementing Domain-Driven Design (DDD) with a focus on Vertical Slice Architecture.
             Designed for building scalable and maintainable web applications, it promotes clean separation of concerns and a modular structure for easy development and testing.
@@ -15,11 +15,11 @@
         <license type="expression">MIT</license>
         <projectUrl>https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template</projectUrl>
         <releaseNotes>
-            Version 9.0.1:
-            - Upgraded to .NET 9.0.
-            - Added centralized error handling via a helper method.
-            - Enhanced error interface to collect multiple errors.
-            - Included try-catch blocks in database queries for robust error handling.
+            Version 9.1.0:
+            - Update nuget packages
+            - Replaced AutoMapper with manual mapping for better performance
+            - Updated React configuration to use Vite and modern testing setup
+            - Updated launch configurations for better debugging experience
         </releaseNotes>
         <packageTypes>
             <packageType name="Template" />
