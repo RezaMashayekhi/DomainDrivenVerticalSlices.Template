@@ -10,7 +10,7 @@ This project uses [Vite](https://vitejs.dev/) as the build tool for a faster and
 
 Before you begin, ensure you have met the following requirements:
 
--   You have installed Node.js and npm. You can download them from [nodejs.org](https://nodejs.org/).
+-   Install [Node.js 20.19+ or 22.12+](https://nodejs.org/) (which brings npm 10+) to match the toolchain used by the .NET 10 template. Earlier 20.x releases can cause build warnings with the SWC-powered Vite plugin.
 
 ### Available Scripts
 
@@ -36,6 +36,10 @@ Builds the app for production to the `dist` folder using Vite's build process.\
 #### `npm run preview`
 
 Locally previews the production build from `dist/`.
+
+#### `npm run lint`
+
+Runs ESLint against all source files and fails if any warnings are detected. This is the same check executed in CI.
 
 ## Current UI Functionality
 
@@ -65,7 +69,9 @@ This React UI is designed to interact with the backend ASP.NET Core API and prov
 
 This project uses environment variables defined in `.env` files for configuration. Ensure you set up the following variables:
 
--   **VITE_API_URL**: The base URL of the backend API.
+-   **VITE_API_BASE_URL**: The base path for the `Entity1` API (defaults to `/api/entity1`). The Vite dev server proxies `/api` to `http://localhost:5246` by default.
+
+Copy `.env.development` to `.env` (or vice versa) and adjust the value when targeting different environments.
 
 ## Deployment
 
