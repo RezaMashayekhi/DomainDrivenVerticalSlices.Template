@@ -1,6 +1,6 @@
 # Domain Driven Vertical Slices Template
 
-## What's New in 10.0.0
+## What's New in 10.0.1
 
 ### Highlights
 
@@ -31,7 +31,7 @@ To use this template, ensure you have the following prerequisites installed:
 Install the template from NuGet:
 
 ```bash
-dotnet new install RM.DomainDrivenVerticalSlices.Template::10.0.0
+dotnet new install RM.DomainDrivenVerticalSlices.Template::10.0.1
 ```
 
 ### Create a new project based on the template:
