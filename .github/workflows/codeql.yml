@@ -26,7 +26,7 @@ jobs:
               if: matrix.language == 'csharp'
               uses: actions/setup-dotnet@v4
               with:
-                  dotnet-version: "9.0.100"
+                  dotnet-version: "10.0.100"
 
             - name: Setup Node.js for JavaScript/TypeScript analysis
               if: matrix.language == 'javascript'

@@ -1,9 +1,12 @@
-# DomainD## What's New in 9.1.0
+# Domain Driven Vertical Slices Template
 
-### Major Updates
+## What's New in 10.0.0
 
+### Highlights
+
+-   **.NET 10 Ready**: Target framework, SDK pinning, and CI workflows now use .NET 10.0.
 -   **Enhanced Performance**: Replaced AutoMapper with manual mapping for better performance and more explicit control over object mapping.
--   **Modern React Setup**: Updated React configuration to use Vite for faster development and modern testing setup.
+-   **Modern React Setup**: Updated React configuration to React 19 + Vite 6 with flat ESLint and refreshed tests.
 -   **Improved Developer Experience**: Updated launch configurations and debugging experience.
 -   **Latest Dependencies**: All package versions updated to their latest compatible versions.
 
@@ -16,18 +19,19 @@ This template is designed to jumpstart the development of web APIs using Domain-
 
 ## Support
 
-If you find this template helpful, consider supporting it by giving it a star. Thanks! ⭐
+If you find this template helpful, consider supporting it by giving it a star. Thanks! :)
 
 ## Getting Started
 
 To use this template, ensure you have the following prerequisites installed:
 
--   [.NET 9.0 SDK](https://dotnet.microsoft.com/download/dotnet/9.0) (latest version)
+-   [.NET 10.0 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) (latest version)
+-   [Node.js 20.19+ or 22.12+](https://nodejs.org/) (required only when generating the optional React UI)
 
 Install the template from NuGet:
 
 ```bash
-dotnet new install RM.DomainDrivenVerticalSlices.Template::9.1.0
+dotnet new install RM.DomainDrivenVerticalSlices.Template::10.0.0
 ```
 
 ### Create a new project based on the template:

@@ -5,6 +5,23 @@ describe("Entity1Service", () => {
     beforeEach(() => {
         global.fetch = vi.fn();
         import.meta.env.VITE_API_BASE_URL = "/api/entity1";
+        vi.spyOn(console, "error").mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+        vi.restoreAllMocks();
+    });
+
+    test("falls back to the default API URL when env var is missing", async () => {
+        delete import.meta.env.VITE_API_BASE_URL;
+        global.fetch.mockResolvedValue({
+            ok: true,
+            json: () => Promise.resolve([]),
+        });
+
+        await Entity1Service.getAllEntity1();
+
+        expect(global.fetch).toHaveBeenCalledWith("/api/entity1/all");
     });
 
     test("getAllEntity1 returns data on success", async () => {
@@ -119,6 +136,12 @@ describe("Entity1Service", () => {
         });
         const response = await Entity1Service.updateEntity1(mockEntity);
         expect(response).toBeFalsy();
+    });
+
+    test("updateEntity1 short-circuits when entity payload is invalid", async () => {
+        const response = await Entity1Service.updateEntity1(null);
+        expect(response).toBeFalsy();
+        expect(global.fetch).not.toHaveBeenCalled();
     });
 
     test("deleteEntity1ById successfully deletes an entity", async () => {
