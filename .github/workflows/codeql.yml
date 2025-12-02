@@ -30,18 +30,18 @@ jobs:
 
             - name: Setup Node.js for JavaScript/TypeScript analysis
               if: matrix.language == 'javascript'
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@v4
               with:
-                  node-version: "16"
+                  node-version: "20.19.0"
 
             - name: Initialize CodeQL
-              uses: github/codeql-action/init@v3
+              uses: github/codeql-action/init@v4
               with:
                   languages: ${{ matrix.language }}
 
             - name: Autobuild for C#
               if: matrix.language == 'csharp'
-              uses: github/codeql-action/autobuild@v2
+              uses: github/codeql-action/autobuild@v4
 
             - name: Install and build JavaScript/TypeScript
               if: matrix.language == 'javascript'
@@ -51,4 +51,4 @@ jobs:
               working-directory: src/DomainDrivenVerticalSlices.Template.UI.React
 
             - name: Perform CodeQL Analysis
-              uses: github/codeql-action/analyze@v2
+              uses: github/codeql-action/analyze@v4
