@@ -1,8 +1,18 @@
 # Common Library
 
-The `Common` library provides foundational classes and interfaces that are shared across different layers of the application. This includes error handling mechanisms, models, and results handling, facilitating a consistent approach to common development needs.
+The `Common` library provides foundational classes and interfaces that are shared across different layers of the application. This includes error handling mechanisms, models, results handling, and the custom mediator implementation, facilitating a consistent approach to common development needs.
 
 ## Key Components
+
+### Mediator
+
+A lightweight custom mediator implementation for handling commands, queries, and notifications without external dependencies:
+
+-   **ICommand<TResponse>** / **ICommandHandler<TCommand, TResponse>**: For write operations that modify state.
+-   **IQuery<TResponse>** / **IQueryHandler<TQuery, TResponse>**: For read operations that retrieve data.
+-   **INotification** / **INotificationHandler<TNotification>**: For domain events and pub/sub scenarios.
+-   **IPipelineBehavior<TRequest, TResponse>**: For cross-cutting concerns like validation and logging.
+-   **IMediator**: The main interface for dispatching requests to handlers.
 
 ### Errors
 

@@ -2,30 +2,30 @@ namespace DomainDrivenVerticalSlices.Template.Application.Tests.PipelineBehaviou
 
 using DomainDrivenVerticalSlices.Template.Application.PipelineBehaviour;
 using DomainDrivenVerticalSlices.Template.Common.Enums;
+using DomainDrivenVerticalSlices.Template.Common.Mediator;
 using DomainDrivenVerticalSlices.Template.Common.Results;
 using FluentValidation;
 using FluentValidation.Results;
-using MediatR;
 using Moq;
 
 public class ValidationBehaviourTests
 {
     private readonly RequestHandlerDelegate<Result> _next;
-    private readonly IRequest<Result> _request;
-    private readonly ValidationBehaviour<IRequest<Result>, Result> _validationBehaviour;
-    private readonly List<IValidator<IRequest<Result>>> _validators;
+    private readonly ICommand<Result> _request;
+    private readonly ValidationBehaviour<ICommand<Result>, Result> _validationBehaviour;
+    private readonly List<IValidator<ICommand<Result>>> _validators;
     private bool _nextCalled;
 
     public ValidationBehaviourTests()
     {
-        _request = Mock.Of<IRequest<Result>>();
+        _request = Mock.Of<ICommand<Result>>();
         _validators = [];
-        _next = new RequestHandlerDelegate<Result>((cancellationToken) =>
+        _next = () =>
         {
             _nextCalled = true;
             return Task.FromResult(Result.Success());
-        });
-        _validationBehaviour = new ValidationBehaviour<IRequest<Result>, Result>(_validators);
+        };
+        _validationBehaviour = new ValidationBehaviour<ICommand<Result>, Result>(_validators);
     }
 
     [Fact]
@@ -33,7 +33,7 @@ public class ValidationBehaviourTests
     {
         var exception = Assert.Throws<ArgumentNullException>(() =>
         {
-            new ValidationBehaviour<IRequest<Result>, Result>(null!);
+            new ValidationBehaviour<ICommand<Result>, Result>(null!);
         });
 
         Assert.Equal("validators", exception.ParamName);
@@ -176,9 +176,9 @@ public class ValidationBehaviourTests
         validatorMock.Verify(v => v.ValidateAsync(It.IsAny<IValidationContext>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 
-    private static Mock<IValidator<IRequest<Result>>> CreateValidatorMock(IEnumerable<ValidationFailure> failures)
+    private static Mock<IValidator<ICommand<Result>>> CreateValidatorMock(IEnumerable<ValidationFailure> failures)
     {
-        var validatorMock = new Mock<IValidator<IRequest<Result>>>();
+        var validatorMock = new Mock<IValidator<ICommand<Result>>>();
         validatorMock
             .Setup(v => v.ValidateAsync(It.IsAny<IValidationContext>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new ValidationResult(failures));

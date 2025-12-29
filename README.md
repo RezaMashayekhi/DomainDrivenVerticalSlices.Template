@@ -1,14 +1,13 @@
 # Domain Driven Vertical Slices Template
 
-## What's New in 10.0.1
+## What's New in 10.1.0
 
 ### Highlights
 
--   **.NET 10 Ready**: Target framework, SDK pinning, and CI workflows now use .NET 10.0.
--   **Enhanced Performance**: Replaced AutoMapper with manual mapping for better performance and more explicit control over object mapping.
--   **Modern React Setup**: Updated React configuration to React 19 + Vite 6 with flat ESLint and refreshed tests.
--   **Improved Developer Experience**: Updated launch configurations and debugging experience.
--   **Latest Dependencies**: All package versions updated to their latest compatible versions.
+-   **Custom Lightweight Mediator**: Replaced MediatR with a zero-dependency custom mediator implementation for better performance and control.
+-   **Modern Solution Format**: Migrated from `.sln` to `.slnx` (XML-based solution format introduced in .NET 9).
+-   **Streamlined Pipeline Behaviors**: Improved validation and logging behaviors with cleaner generic constraints.
+-   **Reduced Dependencies**: Removed MediatR and MediatR.Contracts package dependencies.
 
 [![Build](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template/actions/workflows/build.yml/badge.svg)](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template/actions/workflows/build.yml)
 [![CodeQL](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template/actions/workflows/codeql.yml/badge.svg)](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template/actions/workflows/codeql.yml)
@@ -19,7 +18,7 @@ This template is designed to jumpstart the development of web APIs using Domain-
 
 ## Support
 
-If you find this template helpful, consider supporting it by giving it a star. Thanks! :)
+If you find this template helpful, consider supporting it by giving it a star. Thanks! ⭐
 
 ## Getting Started
 
@@ -31,7 +30,7 @@ To use this template, ensure you have the following prerequisites installed:
 Install the template from NuGet:
 
 ```bash
-dotnet new install RM.DomainDrivenVerticalSlices.Template::10.0.1
+dotnet new install RM.DomainDrivenVerticalSlices.Template::10.1.0
 ```
 
 ### Create a new project based on the template:

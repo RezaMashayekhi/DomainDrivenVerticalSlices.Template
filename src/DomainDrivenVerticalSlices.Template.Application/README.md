@@ -9,7 +9,7 @@ The Application layer serves as the core of our business logic, orchestrating th
 -   **DTOs (Data Transfer Objects)**: Serve as the data structure for transferring data between the application layer and other layers.
 -   **Interfaces**: Define contracts for repository interactions, ensuring abstraction over concrete data access implementations.
 -   **Mappings**: Manual mapping extensions between domain entities and DTOs for optimal performance and explicit control.
--   **Pipeline Behaviors**: Interceptors that add cross-cutting concerns to MediatR request handling, such as logging and validation.
+-   **Pipeline Behaviors**: Interceptors that add cross-cutting concerns to mediator request handling, such as logging and validation.
 
 ## Pipeline Behaviours
 
@@ -27,7 +27,7 @@ Customization is straightforward—adjust logging details in `LoggingBehaviour` 
 
 ## Setting Up the Application Layer
 
-The `ApplicationExtensions` class simplifies the setup of the application layer, including the registration of MediatR and our custom pipeline behaviors. Here's how to use it in your application startup:
+The `ApplicationExtensions` class simplifies the setup of the application layer, including the registration of the custom mediator, handlers, validators, and pipeline behaviors. Here's how to use it in your application startup:
 
 ```csharp
 public void ConfigureServices(IServiceCollection services)

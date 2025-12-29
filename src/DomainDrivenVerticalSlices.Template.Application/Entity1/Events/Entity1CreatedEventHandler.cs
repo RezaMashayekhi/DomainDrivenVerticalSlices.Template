@@ -1,7 +1,7 @@
 ﻿namespace DomainDrivenVerticalSlices.Template.Application.Entity1.Events;
 
+using DomainDrivenVerticalSlices.Template.Common.Mediator;
 using DomainDrivenVerticalSlices.Template.Domain.Events;
-using MediatR;
 using Microsoft.Extensions.Logging;
 
 public class Entity1CreatedEventHandler(ILogger<Entity1CreatedEventHandler> logger) : INotificationHandler<Entity1CreatedEvent>

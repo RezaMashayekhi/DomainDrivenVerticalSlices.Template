@@ -2,9 +2,9 @@
 
 using DomainDrivenVerticalSlices.Template.Common.Enums;
 using DomainDrivenVerticalSlices.Template.Common.Errors;
+using DomainDrivenVerticalSlices.Template.Common.Mediator;
 using DomainDrivenVerticalSlices.Template.Common.Results;
 using FluentValidation;
-using MediatR;
 
 public class ValidationBehaviour<TRequest, TResponse>(IEnumerable<IValidator<TRequest>> validators)
     : IPipelineBehavior<TRequest, TResponse>
@@ -24,18 +24,23 @@ public class ValidationBehaviour<TRequest, TResponse>(IEnumerable<IValidator<TRe
             {
                 var error = Error.Create(ErrorType.InvalidInput, failures);
 
-                if (typeof(IResult).IsAssignableFrom(typeof(TResponse)))
+                // Check if TResponse is a Result type and create appropriate failure
+                if (typeof(TResponse).IsGenericType && typeof(TResponse).GetGenericTypeDefinition() == typeof(Result<>))
                 {
-                    var method = typeof(TResponse)
-                        .GetMethod("Failure");
-                    if (method != null)
+                    var valueType = typeof(TResponse).GetGenericArguments()[0];
+                    var failureMethod = typeof(Result<>).MakeGenericType(valueType).GetMethod("Failure", [typeof(Error)]);
+                    if (failureMethod != null)
                     {
-                        var result = method.Invoke(null, new object[] { error });
+                        var result = failureMethod.Invoke(null, [error]);
                         if (result != null)
                         {
                             return (TResponse)result;
                         }
                     }
+                }
+                else if (typeof(TResponse) == typeof(Result))
+                {
+                    return (TResponse)(object)Result.Failure(error);
                 }
 
                 throw new InvalidOperationException($"Cannot create error response for type {typeof(TResponse)}.");

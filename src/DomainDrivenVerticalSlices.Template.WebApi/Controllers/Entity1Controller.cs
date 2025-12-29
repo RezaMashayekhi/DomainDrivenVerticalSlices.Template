@@ -10,15 +10,15 @@ using DomainDrivenVerticalSlices.Template.Application.Entity1.Queries.GetById;
 using DomainDrivenVerticalSlices.Template.Application.Entity1.Queries.ListByProperty1;
 using DomainDrivenVerticalSlices.Template.Common.Enums;
 using DomainDrivenVerticalSlices.Template.Common.Errors;
+using DomainDrivenVerticalSlices.Template.Common.Mediator;
 using DomainDrivenVerticalSlices.Template.Common.Results;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("api/[controller]")]
 [ApiController]
-public class Entity1Controller(IMediator mediator) : ControllerBase
+public class Entity1Controller(ISender mediator) : ControllerBase
 {
-    private readonly IMediator _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+    private readonly ISender _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(Entity1Dto), StatusCodes.Status200OK)]

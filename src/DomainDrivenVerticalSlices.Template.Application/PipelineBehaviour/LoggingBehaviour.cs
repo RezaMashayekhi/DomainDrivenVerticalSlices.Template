@@ -1,23 +1,26 @@
 ﻿namespace DomainDrivenVerticalSlices.Template.Application.PipelineBehaviour;
 
+using DomainDrivenVerticalSlices.Template.Common.Mediator;
 using DomainDrivenVerticalSlices.Template.Common.Results;
-using MediatR;
 using Microsoft.Extensions.Logging;
 
 public class LoggingBehaviour<TRequest, TResponse>(
-    ILogger<LoggingBehaviour<TRequest,
-        TResponse>> logger) : IPipelineBehavior<TRequest, TResponse>
+    ILogger<LoggingBehaviour<TRequest, TResponse>> logger) : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>
 {
     // The following HashSet is used to keep track of property names that should be excluded from logging.
     private readonly HashSet<string> _ignoreProps =
     [
-
         // Items can be added to this list based on command/query properties.
         // Example: nameof(CreateEntity1Command.Property1),
 
         // Additionally, items can also be excluded manually.
         "Password",
+        "Email",
+        "CreditCard",
+        "Token",
+        "ApiKey",
+        "Secret",
     ];
 
     private readonly ILogger<LoggingBehaviour<TRequest, TResponse>> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -38,24 +41,25 @@ public class LoggingBehaviour<TRequest, TResponse>(
             {
                 _logger.LogInformation("Operation completed successfully!");
 
-                var responseType = response.GetType();
-                if (responseType.IsGenericType &&
-                    responseType.GetGenericTypeDefinition().IsAssignableFrom(typeof(Result<>).GetGenericTypeDefinition()))
+                // Try to log value from Result<T> without using dynamic
+                var responseType = typeof(TResponse);
+                if (responseType.IsGenericType && responseType.GetGenericTypeDefinition() == typeof(Result<>))
                 {
-                    dynamic dynamicResult = response;
-
-                    var valueResult = dynamicResult.Value;
-
-                    if (valueResult != null)
+                    var valueProperty = responseType.GetProperty("Value");
+                    if (valueProperty != null)
                     {
-                        LogProperties(valueResult);
+                        var valueResult = valueProperty.GetValue(response);
+                        if (valueResult != null)
+                        {
+                            LogProperties(valueResult);
+                        }
                     }
                 }
             }
             else
             {
-                _logger.LogInformation("Operation failed!");
-                _logger.LogInformation("Error Type: {ErrorType}, ErrorMessage: {ErrorMessage}", result.CheckedError.ErrorType, result.CheckedError.ErrorMessage);
+                _logger.LogWarning("Operation failed!");
+                _logger.LogWarning("Error Type: {ErrorType}, ErrorMessage: {ErrorMessage}", result.CheckedError.ErrorType, result.CheckedError.ErrorMessage);
             }
         }
 
