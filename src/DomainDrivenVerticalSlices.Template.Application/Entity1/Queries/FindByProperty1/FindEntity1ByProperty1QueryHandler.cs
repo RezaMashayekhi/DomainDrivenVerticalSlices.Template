@@ -5,13 +5,13 @@ using DomainDrivenVerticalSlices.Template.Application.Interfaces;
 using DomainDrivenVerticalSlices.Template.Application.Mappings;
 using DomainDrivenVerticalSlices.Template.Common.Enums;
 using DomainDrivenVerticalSlices.Template.Common.Errors;
+using DomainDrivenVerticalSlices.Template.Common.Mediator;
 using DomainDrivenVerticalSlices.Template.Common.Results;
-using MediatR;
 using Microsoft.Extensions.Logging;
 
 public class FindEntity1ByProperty1QueryHandler(
     IEntity1Repository entity1Repository,
-    ILogger<FindEntity1ByProperty1QueryHandler> logger) : IRequestHandler<FindEntity1ByProperty1Query, Result<Entity1Dto>>
+    ILogger<FindEntity1ByProperty1QueryHandler> logger) : IQueryHandler<FindEntity1ByProperty1Query, Result<Entity1Dto>>
 {
     private readonly IEntity1Repository _entity1Repository = entity1Repository ?? throw new ArgumentNullException(nameof(entity1Repository));
     private readonly ILogger<FindEntity1ByProperty1QueryHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));

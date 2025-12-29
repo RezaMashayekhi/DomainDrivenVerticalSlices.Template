@@ -1,0 +1,25 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="global.json" />
+  </Folder>
+  <Folder Name="/src/">
+    <File Path="src/Directory.Build.props" />
+    <Project Path="src/DomainDrivenVerticalSlices.Template.Common/DomainDrivenVerticalSlices.Template.Common.csproj" />
+    <Project Path="src/DomainDrivenVerticalSlices.Template.Domain/DomainDrivenVerticalSlices.Template.Domain.csproj" />
+    <Project Path="src/DomainDrivenVerticalSlices.Template.Application/DomainDrivenVerticalSlices.Template.Application.csproj" />
+    <Project Path="src/DomainDrivenVerticalSlices.Template.Infrastructure/DomainDrivenVerticalSlices.Template.Infrastructure.csproj" />
+    <Project Path="src/DomainDrivenVerticalSlices.Template.WebApi/DomainDrivenVerticalSlices.Template.WebApi.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <File Path="test/Directory.Build.props" />
+    <Project Path="test/DomainDrivenVerticalSlices.Template.Common.Tests/DomainDrivenVerticalSlices.Template.Common.Tests.csproj" />
+    <Project Path="test/DomainDrivenVerticalSlices.Template.Domain.Tests/DomainDrivenVerticalSlices.Template.Domain.Tests.csproj" />
+    <Project Path="test/DomainDrivenVerticalSlices.Template.Application.Tests/DomainDrivenVerticalSlices.Template.Application.Tests.csproj" />
+    <Project Path="test/DomainDrivenVerticalSlices.Template.Infrastructure.Tests/DomainDrivenVerticalSlices.Template.Infrastructure.Tests.csproj" />
+    <Project Path="test/DomainDrivenVerticalSlices.Template.WebApi.Tests/DomainDrivenVerticalSlices.Template.WebApi.Tests.csproj" />
+    <Project Path="test/DomainDrivenVerticalSlices.Template.IntegrationTests/DomainDrivenVerticalSlices.Template.IntegrationTests.csproj" />
+  </Folder>
+</Solution>

@@ -32,14 +32,13 @@ public abstract class ValueObject<T>
 
     public override int GetHashCode()
     {
-        return GetEqualityComponents()
-            .Aggregate(1, (current, obj) =>
-            {
-                unchecked
-                {
-                    return (current * 23) + (obj?.GetHashCode() ?? 0);
-                }
-            });
+        HashCode hashCode = default;
+        foreach (var component in GetEqualityComponents())
+        {
+            hashCode.Add(component);
+        }
+
+        return hashCode.ToHashCode();
     }
 
     protected abstract IEnumerable<object> GetEqualityComponents();

@@ -5,21 +5,21 @@ using DomainDrivenVerticalSlices.Template.Application.Interfaces;
 using DomainDrivenVerticalSlices.Template.Application.Mappings;
 using DomainDrivenVerticalSlices.Template.Common.Enums;
 using DomainDrivenVerticalSlices.Template.Common.Errors;
+using DomainDrivenVerticalSlices.Template.Common.Mediator;
 using DomainDrivenVerticalSlices.Template.Common.Results;
 using DomainDrivenVerticalSlices.Template.Domain.Entities;
 using DomainDrivenVerticalSlices.Template.Domain.Events;
 using DomainDrivenVerticalSlices.Template.Domain.ValueObjects;
-using MediatR;
 using Microsoft.Extensions.Logging;
 
 public class CreateEntity1CommandHandler(
     IEntity1Repository entity1Repository,
     IUnitOfWork unitOfWork,
     ILogger<CreateEntity1CommandHandler> logger,
-    IPublisher publisher) : IRequestHandler<CreateEntity1Command, Result<Entity1Dto>>
+    IPublisher publisher) : ICommandHandler<CreateEntity1Command, Result<Entity1Dto>>
 {
     private readonly IEntity1Repository _entity1Repository = entity1Repository ?? throw new ArgumentNullException(nameof(entity1Repository));
-    private readonly IUnitOfWork unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+    private readonly IUnitOfWork _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     private readonly ILogger<CreateEntity1CommandHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     private readonly IPublisher _publisher = publisher ?? throw new ArgumentNullException(nameof(publisher));
 
@@ -42,7 +42,7 @@ public class CreateEntity1CommandHandler(
         try
         {
             var entity1 = await _entity1Repository.AddAsync(entity1Result.Value, cancellationToken);
-            await unitOfWork.SaveChangesAsync(cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             await _publisher.Publish(new Entity1CreatedEvent(entity1.Id), cancellationToken);
 

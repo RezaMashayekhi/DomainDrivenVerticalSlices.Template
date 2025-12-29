@@ -3,17 +3,17 @@
 using DomainDrivenVerticalSlices.Template.Application.Interfaces;
 using DomainDrivenVerticalSlices.Template.Common.Enums;
 using DomainDrivenVerticalSlices.Template.Common.Errors;
+using DomainDrivenVerticalSlices.Template.Common.Mediator;
 using DomainDrivenVerticalSlices.Template.Common.Results;
-using MediatR;
 using Microsoft.Extensions.Logging;
 
 public class DeleteEntity1CommandHandler(
     IEntity1Repository entity1Repository,
     IUnitOfWork unitOfWork,
-    ILogger<DeleteEntity1CommandHandler> logger) : IRequestHandler<DeleteEntity1Command, Result>
+    ILogger<DeleteEntity1CommandHandler> logger) : ICommandHandler<DeleteEntity1Command, Result>
 {
     private readonly IEntity1Repository _entity1Repository = entity1Repository ?? throw new ArgumentNullException(nameof(entity1Repository));
-    private readonly IUnitOfWork unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+    private readonly IUnitOfWork _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     private readonly ILogger<DeleteEntity1CommandHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
     public async Task<Result> Handle(DeleteEntity1Command request, CancellationToken cancellationToken)
@@ -28,7 +28,7 @@ public class DeleteEntity1CommandHandler(
         try
         {
             await _entity1Repository.DeleteAsync(entity1, cancellationToken);
-            await unitOfWork.SaveChangesAsync(cancellationToken);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
             return Result.Success();
         }
         catch (Exception ex)
