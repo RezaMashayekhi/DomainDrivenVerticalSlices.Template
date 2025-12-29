@@ -29,7 +29,7 @@ The `WebApi` project serves as the entry point to the application, exposing the 
 To add new endpoints or modify existing ones:
 
 1. Create new controllers or update existing ones in the `Controllers` directory.
-2. Utilize `MediatR` for handling business logic, ensuring a clean separation of concerns.
+2. Utilize the custom mediator for handling business logic, ensuring a clean separation of concerns.
 3. Register any new services or dependencies in `ServiceExtensions.cs`.
 
 For detailed configuration changes, refer to `ConfigurationsManager.cs` and environment-specific `appsettings` files.

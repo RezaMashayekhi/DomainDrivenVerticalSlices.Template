@@ -15,10 +15,10 @@ public class Entity1Repository(AppDbContext context) : IEntity1Repository
         return entity;
     }
 
-    public async Task DeleteAsync(Entity1 entity, CancellationToken cancellationToken = default)
+    public Task DeleteAsync(Entity1 entity, CancellationToken cancellationToken = default)
     {
         _context.Entities1.Remove(entity);
-        await Task.CompletedTask;
+        return Task.CompletedTask;
     }
 
     public async Task<Entity1?> FindAsync(Expression<Func<Entity1, bool>> predicate, CancellationToken cancellationToken = default)
@@ -42,9 +42,9 @@ public class Entity1Repository(AppDbContext context) : IEntity1Repository
         return await _context.Entities1.Where(predicate).ToListAsync(cancellationToken);
     }
 
-    public async Task UpdateAsync(Entity1 entity, CancellationToken cancellationToken = default)
+    public Task UpdateAsync(Entity1 entity, CancellationToken cancellationToken = default)
     {
         _context.Entities1.Update(entity);
-        await Task.CompletedTask;
+        return Task.CompletedTask;
     }
 }

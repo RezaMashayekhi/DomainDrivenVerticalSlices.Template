@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/DomainDrivenVerticalSlices.Template.sln",
+                "${workspaceFolder}/DomainDrivenVerticalSlices.Template.slnx",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary;ForceNoAlign"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/DomainDrivenVerticalSlices.Template.sln",
+                "${workspaceFolder}/DomainDrivenVerticalSlices.Template.slnx",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary;ForceNoAlign"
             ],
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/DomainDrivenVerticalSlices.Template.sln"
+                "${workspaceFolder}/src/DomainDrivenVerticalSlices.Template.WebApi/DomainDrivenVerticalSlices.Template.WebApi.csproj"
             ],
             "problemMatcher": "$msCompile"
         }

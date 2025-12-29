@@ -10,20 +10,20 @@ using DomainDrivenVerticalSlices.Template.Application.Entity1.Queries.GetById;
 using DomainDrivenVerticalSlices.Template.Application.Entity1.Queries.ListByProperty1;
 using DomainDrivenVerticalSlices.Template.Common.Enums;
 using DomainDrivenVerticalSlices.Template.Common.Errors;
+using DomainDrivenVerticalSlices.Template.Common.Mediator;
 using DomainDrivenVerticalSlices.Template.Common.Results;
 using DomainDrivenVerticalSlices.Template.WebApi.Controllers;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
 public class Entity1ControllerTests
 {
     private readonly Entity1Controller _controller;
-    private readonly Mock<IMediator> _mediatorMock;
+    private readonly Mock<ISender> _mediatorMock;
 
     public Entity1ControllerTests()
     {
-        _mediatorMock = new Mock<IMediator>();
+        _mediatorMock = new Mock<ISender>();
         _controller = new Entity1Controller(_mediatorMock.Object);
     }
 

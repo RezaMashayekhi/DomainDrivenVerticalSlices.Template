@@ -4,11 +4,11 @@ using DomainDrivenVerticalSlices.Template.Application.Dtos;
 using DomainDrivenVerticalSlices.Template.Application.Entity1.Commands.Create;
 using DomainDrivenVerticalSlices.Template.Application.Interfaces;
 using DomainDrivenVerticalSlices.Template.Application.Tests.Helpers;
+using DomainDrivenVerticalSlices.Template.Common.Mediator;
 using DomainDrivenVerticalSlices.Template.Common.Results;
 using DomainDrivenVerticalSlices.Template.Domain.Entities;
 using DomainDrivenVerticalSlices.Template.Domain.Events;
 using DomainDrivenVerticalSlices.Template.Domain.ValueObjects;
-using MediatR;
 using Microsoft.Extensions.Logging;
 using Moq;
 

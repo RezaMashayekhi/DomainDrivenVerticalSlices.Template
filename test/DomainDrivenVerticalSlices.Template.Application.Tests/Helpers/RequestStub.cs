@@ -1,10 +1,10 @@
 ﻿namespace DomainDrivenVerticalSlices.Template.Application.Tests.Helpers;
 
+using DomainDrivenVerticalSlices.Template.Common.Mediator;
 using DomainDrivenVerticalSlices.Template.Common.Results;
-using MediatR;
 
 #pragma warning disable SA1402 // File may only contain a single type
-public class RequestStub(string testProp1, string testProp2) : IRequest<Unit>
+public class RequestStub(string testProp1, string testProp2) : ICommand<Unit>
 {
     public string TestProp1 { get; set; } = testProp1;
 
@@ -14,7 +14,7 @@ public class RequestStub(string testProp1, string testProp2) : IRequest<Unit>
 public class WithSensitiveAndDateTimePropertiesRequestStub(
     string testProp1,
     DateTime testProp2,
-    string password) : IRequest<Unit>
+    string password) : ICommand<Unit>
 {
     public string TestProp1 { get; set; } = testProp1;
 
@@ -23,15 +23,15 @@ public class WithSensitiveAndDateTimePropertiesRequestStub(
     public string Password { get; set; } = password;
 }
 
-public class EmptyRequestStub : IRequest<Unit>
+public class EmptyRequestStub : ICommand<Unit>
 {
 }
 
-public class ResultRequestStub : IRequest<IResult>
+public class ResultRequestStub : ICommand<IResult>
 {
 }
 
-public class ValueResultRequestStub<T> : IRequest<IResult<T>>
+public class ValueResultRequestStub<T> : ICommand<IResult<T>>
 #pragma warning restore SA1402 // File may only contain a single type
 {
 }
