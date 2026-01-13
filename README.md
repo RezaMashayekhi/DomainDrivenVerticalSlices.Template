@@ -1,5 +1,18 @@
 # Domain Driven Vertical Slices Template
 
+[![Build](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template/actions/workflows/build.yml/badge.svg)](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template/actions/workflows/build.yml)
+[![CodeQL](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template/actions/workflows/codeql.yml/badge.svg)](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template/actions/workflows/codeql.yml)
+[![Nuget](https://img.shields.io/nuget/v/RM.DomainDrivenVerticalSlices.Template?label=NuGet)](https://www.nuget.org/packages/RM.DomainDrivenVerticalSlices.Template)
+[![Nuget](https://img.shields.io/nuget/dt/RM.DomainDrivenVerticalSlices.Template?label=Downloads)](https://www.nuget.org/packages/RM.DomainDrivenVerticalSlices.Template)
+
+## What's New in 10.1.1
+
+### Security Update
+
+-   **CVE-2026-22029**: Updated `react-router-dom` to 6.30.3 to address XSS via Open Redirects vulnerability.
+-   **@remix-run/router**: Updated to 1.23.2 (security patch).
+-   See [GitHub Advisory GHSA-vr9x-66qf-gqgr](https://github.com/advisories/GHSA-vr9x-66qf-gqgr) for details.
+
 ## What's New in 10.1.0
 
 ### Highlights
@@ -8,11 +21,6 @@
 -   **Modern Solution Format**: Migrated from `.sln` to `.slnx` (XML-based solution format introduced in .NET 9).
 -   **Streamlined Pipeline Behaviors**: Improved validation and logging behaviors with cleaner generic constraints.
 -   **Reduced Dependencies**: Removed MediatR and MediatR.Contracts package dependencies.
-
-[![Build](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template/actions/workflows/build.yml/badge.svg)](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template/actions/workflows/build.yml)
-[![CodeQL](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template/actions/workflows/codeql.yml/badge.svg)](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template/actions/workflows/codeql.yml)
-[![Nuget](https://img.shields.io/nuget/v/RM.DomainDrivenVerticalSlices.Template?label=NuGet)](https://www.nuget.org/packages/RM.DomainDrivenVerticalSlices.Template)
-[![Nuget](https://img.shields.io/nuget/dt/RM.DomainDrivenVerticalSlices.Template?label=Downloads)](https://www.nuget.org/packages/RM.DomainDrivenVerticalSlices.Template)
 
 This template is designed to jumpstart the development of web APIs using Domain-Driven Design (DDD) within a vertical slice architecture. It provides a clean starting point where separation of concerns and scalability are built in, making it easier to adopt DDD and clean architecture principles. The result is an application that stays agile, testable, and easy to maintain.
 
@@ -30,7 +38,7 @@ To use this template, ensure you have the following prerequisites installed:
 Install the template from NuGet:
 
 ```bash
-dotnet new install RM.DomainDrivenVerticalSlices.Template::10.1.0
+dotnet new install RM.DomainDrivenVerticalSlices.Template::10.1.1
 ```
 
 ### Create a new project based on the template:
