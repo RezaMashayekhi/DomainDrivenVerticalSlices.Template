@@ -5,6 +5,10 @@
 		<Nullable>enable</Nullable>
 		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+		<!-- Enable NuGet package lock files for reproducible builds -->
+		<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+		<!-- Use locked mode in CI to ensure exact versions -->
+		<RestoreLockedMode Condition="'$(CI)' == 'true'">true</RestoreLockedMode>
 	</PropertyGroup>
 	
 	<ItemGroup>
