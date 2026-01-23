@@ -1,7 +1,0 @@
-.circle-plus-icon:hover circle {
-    fill: #5a6e7f;
-}
-
-.circle-plus-icon circle {
-    transition: fill 0.3s ease;
-}

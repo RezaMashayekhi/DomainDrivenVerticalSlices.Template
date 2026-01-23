@@ -1,13 +1,56 @@
+@import "tailwindcss";
+
+/* Enable class-based dark mode for Tailwind v4 */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Custom CSS Variables for theming */
+:root {
+    --color-primary-light: #7A77B9;
+    --color-primary-dark: #3C3F58;
+    --color-background-light: #F2C76E;
+    --color-background-dark: #707793;
+    --color-background-darker-light: #BD9DEA;
+    --color-background-darker-dark: #3BBA9C;
+    --color-form-background-light: #EBE8E7;
+    --color-form-background-dark: #43455C;
+    --color-input-background-light: #F0F0EB;
+    --color-input-background-dark: #374151;
+}
+
+/* Tailwind v4 theme configuration */
+@theme {
+    --color-primary-light: var(--color-primary-light);
+    --color-primary-dark: var(--color-primary-dark);
+    --color-background-light: var(--color-background-light);
+    --color-background-dark: var(--color-background-dark);
+    --color-background-darker-light: var(--color-background-darker-light);
+    --color-background-darker-dark: var(--color-background-darker-dark);
+    --color-form-bg-light: var(--color-form-background-light);
+    --color-form-bg-dark: var(--color-form-background-dark);
+    --color-input-bg-light: var(--color-input-background-light);
+    --color-input-bg-dark: var(--color-input-background-dark);
+}
+
+/* Base styles */
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        "Roboto",
+        "Oxygen",
+        "Ubuntu",
+        "Cantarell",
+        "Fira Sans",
+        "Droid Sans",
+        "Helvetica Neue",
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+        monospace;
 }

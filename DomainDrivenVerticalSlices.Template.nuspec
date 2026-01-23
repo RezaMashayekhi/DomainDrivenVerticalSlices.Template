@@ -3,7 +3,7 @@
     <metadata>
         <id>RM.DomainDrivenVerticalSlices.Template</id>
         <title>ASP.NET Core Domain Driven Vertical Slices</title>
-        <version>10.1.1</version>
+        <version>10.2.1</version>
         <description>
             A comprehensive ASP.NET Core template implementing Domain-Driven Design (DDD) with a focus on Vertical Slice Architecture.
             Designed for building scalable and maintainable web applications, it promotes clean separation of concerns and a modular structure for easy development and testing.
@@ -15,10 +15,16 @@
         <license type="expression">MIT</license>
         <projectUrl>https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template</projectUrl>
         <releaseNotes>
-            Version 10.1.1 (Security Release):
+            Version 10.2.1:
             - SECURITY: Updated react-router-dom to 6.30.3 to address CVE-2026-22029 (XSS via Open Redirects)
-            - Updated @remix-run/router to 1.23.2 (security patch)
-            - See: https://github.com/advisories/GHSA-vr9x-66qf-gqgr
+            - Migrated React UI to Tailwind CSS v4 for modern utility-first styling
+            - Added dark mode support with ThemeContext and localStorage persistence
+            - Integrated Headless UI for accessible modal components (MIT licensed)
+            - Added Heroicons for consistent iconography (MIT licensed)
+            - Consolidated Add/Edit forms into unified Entity1Form component
+            - Added MSW (Mock Service Worker) for realistic API mocking in tests (MIT licensed)
+            - Enhanced UX with confirmation modals for delete, cancel, and save operations
+            - All UI dependencies are MIT licensed for open-source compatibility
         </releaseNotes>
         <packageTypes>
             <packageType name="Template" />

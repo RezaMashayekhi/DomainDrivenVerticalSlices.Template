@@ -2,6 +2,9 @@
 
 # dependencies
 /node_modules
+
+# vite cache
+/.vite
 /.pnp
 .pnp.js
 

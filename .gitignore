@@ -403,4 +403,5 @@ templatedb.db
 .github/copilot-instructions.md
 .github/tasks.md
 src/DomainDrivenVerticalSlices.Template.UI.React/dist/
+.vite/
 nuget.exe

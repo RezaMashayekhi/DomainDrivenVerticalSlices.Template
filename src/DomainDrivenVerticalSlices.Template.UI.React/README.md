@@ -45,25 +45,60 @@ Runs ESLint against all source files and fails if any warnings are detected. Thi
 
 This React UI is designed to interact with the backend ASP.NET Core API and provides the following features for managing `Entity1`:
 
--   **List of Entities**: Displays a list of all `Entity1` instances fetched from the backend API.
--   **Add Entity**: Provides a form to add a new instance of `Entity1`.
+-   **List of Entities**: Displays a list of all `Entity1` instances fetched from the backend API with pagination.
+-   **Add Entity**: Provides a form to add a new instance of `Entity1` with confirmation modals.
 -   **Edit Entity**: Allows users to edit an existing instance of `Entity1`.
--   **Delete Entity**: Enables users to delete an instance of `Entity1` from the list.
+-   **Delete Entity**: Enables users to delete an instance of `Entity1` with confirmation modal.
+-   **Dark Mode**: Toggle between light and dark themes with localStorage persistence.
+-   **Search**: Filter entities by property value.
 
 ### Components Overview
 
--   **CirclePlusIcon**: A reusable icon component used across the application.
--   **Entity1**:
-    -   **AddEntity1**: Component for adding a new `Entity1`.
-    -   **EditEntity1**: Component for editing an existing `Entity1`.
-    -   **Entity1Form**: Form component used by both Add and Edit components.
-    -   **Entity1List**: Displays a list of `Entity1` instances.
-    -   **Entity1ListItem**: Represents a single item in the `Entity1` list.
--   **Footer**: A footer component for the application.
+-   **Layout Components** (`src/layout/`):
+
+    -   **Layout**: Main wrapper component with navigation and footer.
+    -   **NavMenu**: Navigation bar with dark mode toggle.
+    -   **Footer**: Application footer.
+    -   **PageNotFound**: 404 error page.
+
+-   **Modal Components** (`src/components/modals/`):
+
+    -   **DeleteModal**: Confirmation dialog for delete actions.
+    -   **CancelModal**: Confirmation dialog for discarding changes.
+    -   **SaveModal**: Success confirmation after save operations.
+    -   **ErrorModal**: Error message display.
+
+-   **Common Components** (`src/components/common/`):
+
+    -   **Button**: Reusable button with variants (filled, outlined, text, danger).
+
+-   **Entity1 Components** (`src/components/Entity1/`):
+
+    -   **Entity1Form**: Unified form for adding and editing entities.
+    -   **Entity1List**: Displays a paginated list of entities with search.
+    -   **Entity1ListItem**: Represents a single item in the list.
+
+-   **Context** (`src/context/`):
+    -   **ThemeContext**: Global dark mode state management with localStorage persistence.
 
 ### Services
 
 -   **Entity1Service.js**: Contains functions to interact with the backend API for `Entity1`.
+
+### Testing
+
+-   **MSW (Mock Service Worker)**: API mocking for tests (`src/mocks/`).
+-   **Test Utilities**: Custom render functions with providers (`src/utils/test-utils.jsx`).
+
+### Styling
+
+This project uses **Tailwind CSS v4** for styling with:
+
+-   Utility-first CSS classes
+-   Dark mode support via class-based toggling
+-   CSS variables for theming
+-   **@headlessui/react** for accessible modal components
+-   **@heroicons/react** for SVG icons
 
 ## Environment Variables
 
