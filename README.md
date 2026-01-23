@@ -5,22 +5,22 @@
 [![Nuget](https://img.shields.io/nuget/v/RM.DomainDrivenVerticalSlices.Template?label=NuGet)](https://www.nuget.org/packages/RM.DomainDrivenVerticalSlices.Template)
 [![Nuget](https://img.shields.io/nuget/dt/RM.DomainDrivenVerticalSlices.Template?label=Downloads)](https://www.nuget.org/packages/RM.DomainDrivenVerticalSlices.Template)
 
-## What's New in 10.1.1
+## What's New in 10.2.1
 
-### Security Update
+### UI Improvements
 
--   **CVE-2026-22029**: Updated `react-router-dom` to 6.30.3 to address XSS via Open Redirects vulnerability.
--   **@remix-run/router**: Updated to 1.23.2 (security patch).
--   See [GitHub Advisory GHSA-vr9x-66qf-gqgr](https://github.com/advisories/GHSA-vr9x-66qf-gqgr) for details.
+- **Modern React UI**: Migrated to Tailwind CSS v4, Headless UI, and Heroicons for a polished, accessible interface.
+- **Dark Mode Support**: Toggle between light and dark themes with localStorage persistence.
+- **Enhanced UX**: Added modal confirmations for delete, cancel, and save operations.
+- **MSW Testing**: Integrated Mock Service Worker for realistic API mocking in tests.
+- **Unified Form**: Consolidated Add/Edit entity forms into a single reusable component.
+- **Context-based State**: Implemented ThemeContext for global dark mode management.
 
-## What's New in 10.1.0
+### Screenshots
 
-### Highlights
-
--   **Custom Lightweight Mediator**: Replaced MediatR with a zero-dependency custom mediator implementation for better performance and control.
--   **Modern Solution Format**: Migrated from `.sln` to `.slnx` (XML-based solution format introduced in .NET 9).
--   **Streamlined Pipeline Behaviors**: Improved validation and logging behaviors with cleaner generic constraints.
--   **Reduced Dependencies**: Removed MediatR and MediatR.Contracts package dependencies.
+| Light Mode                                     | Dark Mode                                    |
+| ---------------------------------------------- | -------------------------------------------- |
+| ![Light Mode](docs/screenshots/light-mode.png) | ![Dark Mode](docs/screenshots/dark-mode.png) |
 
 This template is designed to jumpstart the development of web APIs using Domain-Driven Design (DDD) within a vertical slice architecture. It provides a clean starting point where separation of concerns and scalability are built in, making it easier to adopt DDD and clean architecture principles. The result is an application that stays agile, testable, and easy to maintain.
 
@@ -32,13 +32,13 @@ If you find this template helpful, consider supporting it by giving it a star. T
 
 To use this template, ensure you have the following prerequisites installed:
 
--   [.NET 10.0 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) (latest version)
--   [Node.js 20.19+ or 22.12+](https://nodejs.org/) (required only when generating the optional React UI)
+- [.NET 10.0 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) (latest version)
+- [Node.js 20.19+ or 22.12+](https://nodejs.org/) (required only when generating the optional React UI)
 
 Install the template from NuGet:
 
 ```bash
-dotnet new install RM.DomainDrivenVerticalSlices.Template::10.1.1
+dotnet new install RM.DomainDrivenVerticalSlices.Template::10.2.1
 ```
 
 ### Create a new project based on the template:
@@ -78,22 +78,22 @@ npm run dev
 
 The template is organized into several projects, each with a specific role:
 
--   **Application**: Contains the application logic, including DTOs, commands, queries, and event handlers.
--   **Domain**: Houses the domain entities, value objects, and domain events.
--   **Infrastructure**: Implements the application's infrastructure concerns, such as database access, file storage, etc.
--   **WebApi**: The entry point to the application, responsible for hosting the web API.
--   **Common**: Shared resources across the application, including error handling and result modeling.
--   **UI.React**: Contains the React frontend code (if included).
--   **Tests**: A suite of unit and integration tests to ensure your codebase remains reliable and maintainable.
+- **Application**: Contains the application logic, including DTOs, commands, queries, and event handlers.
+- **Domain**: Houses the domain entities, value objects, and domain events.
+- **Infrastructure**: Implements the application's infrastructure concerns, such as database access, file storage, etc.
+- **WebApi**: The entry point to the application, responsible for hosting the web API.
+- **Common**: Shared resources across the application, including error handling and result modeling.
+- **UI.React**: Contains the React frontend code (if included).
+- **Tests**: A suite of unit and integration tests to ensure your codebase remains reliable and maintainable.
 
 For detailed information on each project, refer to the README.md files within their respective directories.
 
 ## Features
 
--   **DDD Foundations**: Leverage DDD principles to design and implement a robust, scalable application.
--   **Vertical Slices Architecture**: Organize your application into vertical slices for improved maintainability and scalability.
--   **Pre-configured CI/CD**: GitHub Actions workflows are included for building and testing your application.
--   **Comprehensive Testing**: Unit and integration tests using xUnit and Moq.
+- **DDD Foundations**: Leverage DDD principles to design and implement a robust, scalable application.
+- **Vertical Slices Architecture**: Organize your application into vertical slices for improved maintainability and scalability.
+- **Pre-configured CI/CD**: GitHub Actions workflows are included for building and testing your application.
+- **Comprehensive Testing**: Unit and integration tests using xUnit and Moq.
 
 ## License
 
@@ -103,15 +103,14 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 This template supports optional integration with a React frontend. For developers who are modifying the template or testing features specific to React, it is crucial to set the `UiType` environment variable accordingly:
 
--   **Setting the Environment Variable:**
-
-    -   **For Windows:**
+- **Setting the Environment Variable:**
+    - **For Windows:**
 
         ```bash
         set UiType=React  # Use 'None' for WebAPI only setups
         ```
 
-        -   **Setting Permanent Environment Variables**:
+        - **Setting Permanent Environment Variables**:
 
             ```bash
             setx UiType React  # Sets 'UiType' permanently for the current user
@@ -120,7 +119,7 @@ This template supports optional integration with a React frontend. For developer
 
             Note: `setx` changes will only affect new command prompt sessions, not the current session.
 
-    -   **For Linux/macOS:**
+    - **For Linux/macOS:**
 
         ```bash
         export UiType=React  # Use 'None' for WebAPI only setups
@@ -134,16 +133,16 @@ This setting enables CORS configurations necessary for communication between the
 
 We welcome contributions from the community and are pleased to have you join us. If you would like to contribute to the project, refer to the following guidelines:
 
--   **Fork and Clone**: Fork the project on GitHub, clone your fork locally and configure the upstream repo.
+- **Fork and Clone**: Fork the project on GitHub, clone your fork locally and configure the upstream repo.
 
--   **Branching**: Preferably, create a new branch for each feature or fix.
+- **Branching**: Preferably, create a new branch for each feature or fix.
 
--   **Code Style**: Follow the coding style used throughout the project, including indentation and comments.
+- **Code Style**: Follow the coding style used throughout the project, including indentation and comments.
 
--   **Submitting Changes**: Submit a pull request detailing the changes proposed.
+- **Submitting Changes**: Submit a pull request detailing the changes proposed.
 
--   **Reporting Bugs**: Use the GitHub Issues track to report bugs. Please ensure your description is clear and has sufficient instructions to be able to reproduce the issue.
+- **Reporting Bugs**: Use the GitHub Issues track to report bugs. Please ensure your description is clear and has sufficient instructions to be able to reproduce the issue.
 
--   **Feature Requests**: Use GitHub Issues to submit feature requests, clearly explaining the rationale and potential use case.
+- **Feature Requests**: Use GitHub Issues to submit feature requests, clearly explaining the rationale and potential use case.
 
 For more details, see the guidelines for contributing in the project documentation.
