@@ -84,7 +84,7 @@ const request = async (path, options, { expectResponseBody = true } = {}) => {
 
 const safeRequest = async (
     path,
-    { options, fallbackValue, logMessage, expectResponseBody = true } = {},
+    { options, fallbackValue, logMessage, expectResponseBody = true } = {}
 ) => {
     try {
         return await request(path, options, { expectResponseBody });
