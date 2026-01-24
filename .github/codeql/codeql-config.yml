@@ -1,0 +1,30 @@
+name: "CodeQL Configuration"
+
+# Paths to exclude from analysis
+# Excludes test files that may contain syntax CodeQL cannot parse (e.g., import.meta.env)
+paths-ignore:
+  # JavaScript test files
+  - "**/*.test.js"
+  - "**/*.test.jsx"
+  - "**/*.spec.js"
+  - "**/*.spec.jsx"
+  # TypeScript test files (for future compatibility)
+  - "**/*.test.ts"
+  - "**/*.test.tsx"
+  - "**/*.spec.ts"
+  - "**/*.spec.tsx"
+  # Test setup and utilities
+  - "**/setupTests.js"
+  - "**/setupTests.ts"
+  - "**/test-utils.jsx"
+  - "**/test-utils.tsx"
+  - "**/test-utils.js"
+  - "**/test-utils.ts"
+  # Mock files and directories
+  - "**/mocks/**"
+  - "**/__mocks__/**"
+  # Build outputs and dependencies
+  - "**/node_modules/**"
+  - "**/coverage/**"
+  - "**/dist/**"
+  - "**/build/**"

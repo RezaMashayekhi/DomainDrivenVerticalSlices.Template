@@ -89,7 +89,7 @@ const safeRequest = async (
     try {
         return await request(path, options, { expectResponseBody });
     } catch (error) {
-        console.error(logMessage, error);
+        console.error("%s %o", logMessage, error);
         return fallbackValue;
     }
 };
