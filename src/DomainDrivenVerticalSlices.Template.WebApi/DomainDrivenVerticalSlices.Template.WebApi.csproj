@@ -24,6 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\DomainDrivenVerticalSlices.Template.Application\DomainDrivenVerticalSlices.Template.Application.csproj" />
     <ProjectReference Include="..\DomainDrivenVerticalSlices.Template.Infrastructure\DomainDrivenVerticalSlices.Template.Infrastructure.csproj" />
+    <ProjectReference Include="..\DomainDrivenVerticalSlices.Template.ServiceDefaults\DomainDrivenVerticalSlices.Template.ServiceDefaults.csproj" />
   </ItemGroup>
 
 </Project>
