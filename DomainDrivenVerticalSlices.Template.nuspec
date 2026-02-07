@@ -3,33 +3,61 @@
     <metadata>
         <id>RM.DomainDrivenVerticalSlices.Template</id>
         <title>ASP.NET Core Domain Driven Vertical Slices</title>
-        <version>10.2.1</version>
+        <version>10.3.0</version>
         <description>
-            A comprehensive ASP.NET Core template implementing Domain-Driven Design (DDD) with a focus on Vertical Slice Architecture.
-            Designed for building scalable and maintainable web applications, it promotes clean separation of concerns and a modular structure for easy development and testing.
-            This template also supports creating projects with React UI integrated.
-            Ideal for developers looking to adopt DDD principles in their ASP.NET Core projects.
+            A comprehensive ASP.NET Core template implementing Domain-Driven Design (DDD) with Vertical Slice Architecture.
+            
+            Features include:
+            • .NET Aspire 13.1 integration for orchestrated development and observability
+            • BaseEntity/BaseAuditableEntity with domain events and automatic audit tracking
+            • EF Core interceptors for domain event dispatch and audit field population
+            • Performance and exception logging pipeline behaviors
+            • Minimal API endpoints alongside traditional controllers
+            • Testcontainers support for integration testing
+            • Optional React 19 UI with Vite 6, Tailwind CSS v4, and dark mode
+            
+            Ideal for developers looking to adopt DDD principles with modern .NET tooling.
         </description>
         <authors>Reza Mashayekhi</authors>
         <language>en-US</language>
         <license type="expression">MIT</license>
         <projectUrl>https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template</projectUrl>
         <releaseNotes>
-            Version 10.2.1:
-            - SECURITY: Updated react-router-dom to 6.30.3 to address CVE-2026-22029 (XSS via Open Redirects)
-            - Migrated React UI to Tailwind CSS v4 for modern utility-first styling
-            - Added dark mode support with ThemeContext and localStorage persistence
-            - Integrated Headless UI for accessible modal components (MIT licensed)
-            - Added Heroicons for consistent iconography (MIT licensed)
-            - Consolidated Add/Edit forms into unified Entity1Form component
-            - Added MSW (Mock Service Worker) for realistic API mocking in tests (MIT licensed)
-            - Enhanced UX with confirmation modals for delete, cancel, and save operations
-            - All UI dependencies are MIT licensed for open-source compatibility
+Version 10.3.0:
+
+.NET Aspire Integration:
+- Added Aspire 13.1 AppHost for orchestrated application startup
+- Added ServiceDefaults with OpenTelemetry, health checks, service discovery, and resilience
+- React UI automatically integrated via AddViteApp() when UiType=React
+
+Domain &amp; Infrastructure:
+- Added BaseEntity with domain event collection
+- Added BaseAuditableEntity with automatic audit fields (CreatedAt/By, ModifiedAt/By)
+- Added AuditableEntityInterceptor for automatic audit field population
+- Added DispatchDomainEventsInterceptor for domain event dispatch on save
+- Added IUser/CurrentUser abstraction for user context
+
+Application Layer:
+- Added PerformanceBehaviour for slow request warnings
+- Added UnhandledExceptionBehaviour for centralized exception logging
+
+Web API:
+- Added Entity1Endpoints minimal API alternative to controllers
+- Added EndpointGroupBase infrastructure for endpoint organization
+
+Testing:
+- Added TestcontainersWebApplicationFactory for realistic integration tests
+- Added MSW (Mock Service Worker) for React API mocking tests
+
+UI Improvements:
+- Migrated to Tailwind CSS v4 with dark mode support
+- Added Headless UI modals and Heroicons
+- Consolidated Add/Edit forms into unified Entity1Form component
         </releaseNotes>
         <packageTypes>
             <packageType name="Template" />
         </packageTypes>
-        <tags>Web, ASP.NET, Clean Architecture, Domain-Driven-Design, DDD, Vertical Slice Architecture, React, React UI</tags>
+        <tags>Web ASP.NET Clean-Architecture Domain-Driven-Design DDD Vertical-Slice-Architecture Aspire OpenTelemetry React Vite</tags>
         <icon>./content/icon.png</icon>
         <readme>README.md</readme>
         <repository type="git" url="https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template.git" />

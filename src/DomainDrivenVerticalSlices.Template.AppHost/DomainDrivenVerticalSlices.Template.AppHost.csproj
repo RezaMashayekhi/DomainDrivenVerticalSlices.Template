@@ -1,0 +1,37 @@
+<Project Sdk="Aspire.AppHost.Sdk/13.1.0">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <IsAspireHost>true</IsAspireHost>
+    <UserSecretsId>ddvs-template-aspire-host</UserSecretsId>
+    <!-- Exclude from test run - AppHost is a runtime orchestrator, not a test project -->
+    <IsTestProject>false</IsTestProject>
+    <!-- Aspire SDK injects platform-specific packages (Dashboard.Sdk, Orchestration) that differ between
+         Windows and Linux. A single lock file cannot satisfy both, so disable locked mode for this project. -->
+    <RestoreLockedMode>false</RestoreLockedMode>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(UiType)' == 'React'">
+    <DefineConstants>$(DefineConstants);INCLUDE_REACT</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.AppHost" />
+  </ItemGroup>
+
+  <!--#if (INCLUDE_REACT)-->
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.JavaScript" />
+  </ItemGroup>
+  <!--#endif-->
+
+  <ItemGroup>
+    <ProjectReference Include="..\DomainDrivenVerticalSlices.Template.WebApi\DomainDrivenVerticalSlices.Template.WebApi.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- ServiceDefaults is a shared project, not a runnable service -->
+    <ProjectReference Include="..\DomainDrivenVerticalSlices.Template.ServiceDefaults\DomainDrivenVerticalSlices.Template.ServiceDefaults.csproj" IsAspireProjectResource="false" />
+  </ItemGroup>
+
+</Project>

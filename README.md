@@ -5,66 +5,114 @@
 [![Nuget](https://img.shields.io/nuget/v/RM.DomainDrivenVerticalSlices.Template?label=NuGet)](https://www.nuget.org/packages/RM.DomainDrivenVerticalSlices.Template)
 [![Nuget](https://img.shields.io/nuget/dt/RM.DomainDrivenVerticalSlices.Template?label=Downloads)](https://www.nuget.org/packages/RM.DomainDrivenVerticalSlices.Template)
 
-## What's New in 10.2.1
+An ASP.NET Core template implementing **Domain-Driven Design (DDD)** with **Vertical Slice Architecture**. Built for scalability, maintainability, and clean separation of concerns — with optional React UI, .NET Aspire orchestration, and comprehensive testing infrastructure.
+
+## Like This Template? ⭐
+
+If you find this template helpful, please give it a star on GitHub!
+
+---
+
+## What's New in 10.3.0
+
+### .NET Aspire Integration
+
+- **Aspire AppHost**: Orchestrate your entire application with a single command using .NET Aspire 13.1
+- **Service Defaults**: Pre-configured OpenTelemetry, health checks, service discovery, and resilience patterns
+- **React + Vite Support**: Automatic Vite dev server integration via `AddViteApp()` when using React UI
+- **Dynamic Service Discovery**: Aspire injects service URLs automatically — no hardcoded ports needed
+
+### Domain & Infrastructure Enhancements
+
+- **BaseEntity & BaseAuditableEntity**: Rich base classes with domain event support and automatic audit tracking (Created/Modified timestamps and user info)
+- **EF Core Interceptors**: Auto-dispatch domain events and populate audit fields via `SaveChangesAsync` interceptors
+- **IUser/CurrentUser**: Clean abstraction for accessing current user context across layers
+
+### Application Layer Improvements
+
+- **Performance Behavior**: Logs warnings for slow-running requests (configurable threshold)
+- **Unhandled Exception Behavior**: Centralized exception logging in the mediator pipeline
+
+### Web API Modernization
+
+- **Minimal API Endpoints**: `Entity1Endpoints` as a modern alternative to controllers with `EndpointGroupBase` infrastructure
+- **Flexible Routing**: Choose between traditional controllers or minimal API endpoints
+
+### Testing Infrastructure
+
+- **Testcontainers Support**: `TestcontainersWebApplicationFactory` for integration tests against real SQLite databases in Docker
+- **MSW Integration**: Mock Service Worker for realistic API mocking in React tests
 
 ### UI Improvements
 
-- **Modern React UI**: Migrated to Tailwind CSS v4, Headless UI, and Heroicons for a polished, accessible interface.
-- **Dark Mode Support**: Toggle between light and dark themes with localStorage persistence.
-- **Enhanced UX**: Added modal confirmations for delete, cancel, and save operations.
-- **MSW Testing**: Integrated Mock Service Worker for realistic API mocking in tests.
-- **Unified Form**: Consolidated Add/Edit entity forms into a single reusable component.
-- **Context-based State**: Implemented ThemeContext for global dark mode management.
+- **Modern React UI**: Tailwind CSS v4, Headless UI, and Heroicons for a polished, accessible interface
+- **Dark Mode Support**: Toggle between light and dark themes with localStorage persistence
+- **Enhanced UX**: Modal confirmations for delete, cancel, and save operations
 
 ### Screenshots
 
-| Light Mode                                     | Dark Mode                                    |
-| ---------------------------------------------- | -------------------------------------------- |
+> **Note**: Screenshots are best viewed on [GitHub](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template). If viewing on NuGet.org, please visit the repository for the full visual experience.
+
+|                   Light Mode                   |                  Dark Mode                   |
+| :--------------------------------------------: | :------------------------------------------: |
 | ![Light Mode](docs/screenshots/light-mode.png) | ![Dark Mode](docs/screenshots/dark-mode.png) |
-
-This template is designed to jumpstart the development of web APIs using Domain-Driven Design (DDD) within a vertical slice architecture. It provides a clean starting point where separation of concerns and scalability are built in, making it easier to adopt DDD and clean architecture principles. The result is an application that stays agile, testable, and easy to maintain.
-
-## Support
-
-If you find this template helpful, consider supporting it by giving it a star. Thanks! ⭐
 
 ## Getting Started
 
-To use this template, ensure you have the following prerequisites installed:
+### Prerequisites
 
-- [.NET 10.0 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) (latest version)
-- [Node.js 20.19+ or 22.12+](https://nodejs.org/) (required only when generating the optional React UI)
+- [.NET 10.0 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) (10.0.102 or later)
+- [Node.js 20.19+ or 22.12+](https://nodejs.org/) (required only for React UI)
+- [Docker](https://www.docker.com/) (optional, for Testcontainers integration tests)
+
+### Installation
 
 Install the template from NuGet:
 
 ```bash
-dotnet new install RM.DomainDrivenVerticalSlices.Template::10.2.1
+dotnet new install RM.DomainDrivenVerticalSlices.Template::10.3.0
 ```
 
-### Create a new project based on the template:
+### Create a New Project
 
-#### WebAPI Only
+**WebAPI Only:**
 
 ```bash
 dotnet new ddvs -n YourProjectName --UiType None
 ```
 
-#### WebAPI with React UI
+**WebAPI with React UI:**
 
 ```bash
 dotnet new ddvs -n YourProjectName --UiType React
 ```
 
-## Usage
+## Running the Application
 
-To get started, navigate to the root directory of your generated project and start the WebApi project:
+### Option 1: Using .NET Aspire (Recommended)
+
+The template includes a pre-configured Aspire AppHost for orchestrating all services:
+
+```bash
+cd src/YourProjectName.AppHost
+dotnet run
+```
+
+This starts the Aspire dashboard where you can monitor and access:
+
+- **WebAPI**: Your backend API with health checks and OpenTelemetry
+- **React UI** (if included): Vite dev server automatically integrated
+
+### Option 2: Running Services Individually
+
+**Start the WebAPI:**
 
 ```bash
 cd src/YourProjectName.WebApi
 dotnet run
 ```
 
-For projects including React UI:
+**Start the React UI (if included):**
 
 ```bash
 cd src/YourProjectName.UI.React
@@ -72,77 +120,139 @@ npm install
 npm run dev
 ```
 
-**Note:** The `UiType` environment variable is used for development purposes to enable CORS configuration for a React frontend. Users creating new projects don't need to set this variable.
-
 ## Template Structure
 
-The template is organized into several projects, each with a specific role:
+```
+YourProjectName/
+├── src/
+│   ├── YourProjectName.AppHost/          # .NET Aspire orchestration host
+│   ├── YourProjectName.ServiceDefaults/  # Shared Aspire service configuration
+│   ├── YourProjectName.WebApi/           # ASP.NET Core Web API
+│   ├── YourProjectName.Application/      # Business logic, commands, queries
+│   ├── YourProjectName.Domain/           # Entities, value objects, domain events
+│   ├── YourProjectName.Infrastructure/   # Data access, repositories, EF Core
+│   ├── YourProjectName.Common/           # Shared utilities, Result pattern, Mediator
+│   └── YourProjectName.UI.React/         # React frontend (if included)
+└── test/
+    ├── YourProjectName.IntegrationTests/ # Integration tests with Testcontainers
+    ├── YourProjectName.Application.Tests/
+    ├── YourProjectName.Domain.Tests/
+    ├── YourProjectName.Infrastructure.Tests/
+    ├── YourProjectName.WebApi.Tests/
+    └── YourProjectName.Common.Tests/
+```
 
-- **Application**: Contains the application logic, including DTOs, commands, queries, and event handlers.
-- **Domain**: Houses the domain entities, value objects, and domain events.
-- **Infrastructure**: Implements the application's infrastructure concerns, such as database access, file storage, etc.
-- **WebApi**: The entry point to the application, responsible for hosting the web API.
-- **Common**: Shared resources across the application, including error handling and result modeling.
-- **UI.React**: Contains the React frontend code (if included).
-- **Tests**: A suite of unit and integration tests to ensure your codebase remains reliable and maintainable.
+### Project Descriptions
 
-For detailed information on each project, refer to the README.md files within their respective directories.
+| Project             | Description                                                                            |
+| ------------------- | -------------------------------------------------------------------------------------- |
+| **AppHost**         | .NET Aspire orchestration — starts and monitors all services from a single entry point |
+| **ServiceDefaults** | OpenTelemetry, health checks, service discovery, and HTTP resilience configuration     |
+| **WebApi**          | REST API with controllers and/or minimal API endpoints                                 |
+| **Application**     | Commands, queries, DTOs, validators, and pipeline behaviors                            |
+| **Domain**          | Entities (with `BaseEntity`/`BaseAuditableEntity`), value objects, and domain events   |
+| **Infrastructure**  | EF Core `DbContext`, repositories, migrations, and interceptors                        |
+| **Common**          | Custom mediator, Result pattern, Error types, and ValueObject base class               |
+| **UI.React**        | React 19 + Vite 6 + Tailwind CSS v4 frontend with dark mode support                    |
 
-## Features
+## Key Features
 
-- **DDD Foundations**: Leverage DDD principles to design and implement a robust, scalable application.
-- **Vertical Slices Architecture**: Organize your application into vertical slices for improved maintainability and scalability.
-- **Pre-configured CI/CD**: GitHub Actions workflows are included for building and testing your application.
-- **Comprehensive Testing**: Unit and integration tests using xUnit and Moq.
+### Architecture
+
+- **Vertical Slice Architecture**: Features organized by business capability, not technical layers
+- **Domain-Driven Design**: Rich domain model with entities, value objects, and domain events
+- **CQRS Pattern**: Commands and queries separated via custom lightweight mediator
+- **Result Pattern**: No exceptions for business logic — explicit success/failure handling
+
+### .NET Aspire Integration
+
+- **Orchestrated Startup**: Single command launches entire application stack
+- **OpenTelemetry**: Distributed tracing, metrics, and logging out of the box
+- **Health Checks**: Built-in `/health` and `/alive` endpoints
+- **Service Discovery**: Services find each other automatically
+- **HTTP Resilience**: Retry policies and circuit breakers pre-configured
+
+### Testing
+
+- **Unit Tests**: xUnit + Moq for isolated testing
+- **Integration Tests**: Two options included:
+    - `CustomWebApplicationFactory` — In-memory SQLite database
+    - `TestcontainersWebApplicationFactory` — Real SQLite in Docker container
+- **React Tests**: Vitest + MSW for component and API mocking tests
+
+### Domain Infrastructure
+
+- **BaseEntity**: Domain event collection and identity
+- **BaseAuditableEntity**: Automatic `CreatedAt`, `CreatedBy`, `ModifiedAt`, `ModifiedBy`
+- **EF Core Interceptors**: Auto-populate audit fields and dispatch domain events on save<br> - **IUser Abstraction**: Clean access to current user context
+
+### Pipeline Behaviors
+
+- **ValidationBehaviour**: FluentValidation integration — validates before handler execution
+- **LoggingBehaviour**: Request/response logging with timing
+- **PerformanceBehaviour**: Warns when requests exceed threshold (default: 500ms)
+- **UnhandledExceptionBehaviour**: Centralized exception logging
 
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
 
 ## Development Notes
 
-This template supports optional integration with a React frontend. For developers who are modifying the template or testing features specific to React, it is crucial to set the `UiType` environment variable accordingly:
+This template supports optional integration with a React frontend. For developers who are **modifying the template** or testing features specific to React, it is crucial to set the `UiType` environment variable accordingly:
 
-- **Setting the Environment Variable:**
-    - **For Windows:**
+### Setting the Environment Variable
 
-        ```bash
-        set UiType=React  # Use 'None' for WebAPI only setups
-        ```
+**For Windows:**
 
-        - **Setting Permanent Environment Variables**:
+```bash
+set UiType=React  # Use 'None' for WebAPI only setups
+```
 
-            ```bash
-            setx UiType React  # Sets 'UiType' permanently for the current user
-            setx UiType React /M  # Sets 'UiType' permanently system-wide
-            ```
+**Setting Permanent Environment Variables (Windows):**
 
-            Note: `setx` changes will only affect new command prompt sessions, not the current session.
+```bash
+setx UiType React      # Sets 'UiType' permanently for the current user
+setx UiType React /M   # Sets 'UiType' permanently system-wide (requires admin)
+```
 
-    - **For Linux/macOS:**
+> **Note:** `setx` changes will only affect new command prompt sessions, not the current session.
 
-        ```bash
-        export UiType=React  # Use 'None' for WebAPI only setups
-        ```
+**For Linux/macOS:**
+
+```bash
+export UiType=React  # Use 'None' for WebAPI only setups
+```
 
 This setting enables CORS configurations necessary for communication between the React frontend and the backend during development.
 
-**Important Note:** The `UiType` environment variable is specifically for development and testing within the template's context. Users creating new projects from this template do not need to set this variable unless they are also testing or developing enhancements to the template itself.
+> **Important:** The `UiType` environment variable is specifically for development and testing within the template's context. Users creating new projects from this template do not need to set this variable — the template engine handles it automatically based on the `--UiType` parameter.
+
+### Running Tests
+
+```bash
+# Run all tests
+dotnet test
+
+# Run with coverage
+dotnet test --collect:"XPlat Code Coverage"
+```
 
 ## Contributing
 
-We welcome contributions from the community and are pleased to have you join us. If you would like to contribute to the project, refer to the following guidelines:
+We welcome contributions! Here's how you can help:
 
-- **Fork and Clone**: Fork the project on GitHub, clone your fork locally and configure the upstream repo.
+1. **Fork & Clone**: Fork the repository and clone locally
+2. **Branch**: Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. **Commit**: Make your changes with clear commit messages
+4. **Test**: Ensure all tests pass (`dotnet test`)
+5. **PR**: Submit a pull request
 
-- **Branching**: Preferably, create a new branch for each feature or fix.
+### Guidelines
 
-- **Code Style**: Follow the coding style used throughout the project, including indentation and comments.
+- Follow the existing code style and patterns
+- Add tests for new functionality
+- Update documentation as needed
+- Use [conventional commits](https://www.conventionalcommits.org/) for commit messages
 
-- **Submitting Changes**: Submit a pull request detailing the changes proposed.
-
-- **Reporting Bugs**: Use the GitHub Issues track to report bugs. Please ensure your description is clear and has sufficient instructions to be able to reproduce the issue.
-
-- **Feature Requests**: Use GitHub Issues to submit feature requests, clearly explaining the rationale and potential use case.
-
-For more details, see the guidelines for contributing in the project documentation.
+**Bug Reports & Feature Requests**: Use [GitHub Issues](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template/issues)

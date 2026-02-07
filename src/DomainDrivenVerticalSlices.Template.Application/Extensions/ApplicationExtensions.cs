@@ -18,7 +18,9 @@ public static class ApplicationExtensions
         services.AddScoped<ISender>(sp => sp.GetRequiredService<IMediator>());
         services.AddScoped<IPublisher>(sp => sp.GetRequiredService<IMediator>());
 
-        // Register pipeline behaviors (order matters: logging first, then validation)
+        // Register pipeline behaviors (order matters: exception handling first, then performance, logging, and validation last)
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceBehaviour<,>));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<,>));
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 

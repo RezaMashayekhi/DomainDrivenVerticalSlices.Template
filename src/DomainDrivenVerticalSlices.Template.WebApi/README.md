@@ -1,35 +1,61 @@
 # Web API
 
-The `WebApi` project serves as the entry point to the application, exposing the core functionalities of the domain through HTTP endpoints. It's built on ASP.NET Core and follows RESTful principles to provide a clear and intuitive interface for client applications.
+The `WebApi` project serves as the entry point to the application, exposing the core functionalities of the domain through HTTP endpoints. It's built on ASP.NET Core and provides both traditional controllers and modern minimal API endpoints.
 
 ## Key Components
 
-### Configurations
-
-- **ConfigurationsManager.cs**: Manages application configurations, facilitating the setup of different environments like development, production, etc.
-
 ### Controllers
 
-- **Entity1Controller.cs**: Demonstrates how to implement an API controller with CRUD operations for `Entity1`.
+- **Entity1Controller.cs**: Traditional MVC-style API controller with CRUD operations for `Entity1`.
+
+### Minimal API Endpoints
+
+- **Entity1Endpoints.cs**: Modern minimal API implementation using `EndpointGroupBase` pattern — a cleaner alternative to controllers for simple CRUD operations.
+- **EndpointGroupBase**: Abstract base class for organizing minimal API endpoint groups.
+- **EndpointRouteBuilderExtensions**: Infrastructure for auto-discovering and mapping endpoint groups.
+
+### Infrastructure
+
+- **CurrentUser.cs**: Implementation of `IUser` interface, providing access to the current user's identity for audit fields.
+- **WebApplicationExtensions.cs**: Extensions for mapping minimal API endpoint groups.
 
 ### Extensions
 
-- **AppExtensions.cs**: Contains middleware configurations for the application.
+- **AppExtensions.cs**: Middleware configurations including CORS, HTTPS redirection, and endpoint mapping.
 - **LoggerExtensions.cs**: Configures logging throughout the application lifecycle.
-- **ServiceExtensions.cs**: Centralizes service registration and DI container setup.
+- **ServiceExtensions.cs**: Centralizes service registration, including `CurrentUser` for the `IUser` abstraction.
+
+## Choosing Between Controllers and Minimal APIs
+
+The template includes both patterns — choose based on your needs:
+
+| Aspect       | Controllers                  | Minimal APIs               |
+| ------------ | ---------------------------- | -------------------------- |
+| Best for     | Complex APIs, existing teams | Simple CRUD, microservices |
+| Features     | Full MVC pipeline, filters   | Lightweight, fast startup  |
+| Organization | By resource/controller       | By endpoint group          |
+
+Both approaches use the same mediator pattern for business logic.
 
 ## Setup and Running
 
 1. Ensure you have the .NET SDK and runtime installed.
-2. Navigate to the project directory and run `dotnet restore` to install dependencies.
-3. Use `dotnet run` to start the application. By default, it listens on `https://localhost:5246` and `http://localhost:5245`.
+2. Navigate to the project directory and run `dotnet restore`.
+3. Use `dotnet run` to start the application. Default ports: `https://localhost:7194` and `http://localhost:5246`.
+
+Or use .NET Aspire from the `AppHost` project for orchestrated startup.
 
 ## Extending the Web API
 
-To add new endpoints or modify existing ones:
+To add new endpoints:
 
-1. Create new controllers or update existing ones in the `Controllers` directory.
-2. Utilize the custom mediator for handling business logic, ensuring a clean separation of concerns.
-3. Register any new services or dependencies in `ServiceExtensions.cs`.
+**Using Controllers:**
 
-For detailed configuration changes, refer to `ConfigurationsManager.cs` and environment-specific `appsettings` files.
+1. Create a new controller in the `Controllers` directory.
+2. Inject `IMediator` and dispatch commands/queries.
+
+**Using Minimal APIs:**
+
+1. Create a new class inheriting from `EndpointGroupBase`.
+2. Override `Map()` to define routes.
+3. Endpoints are auto-discovered and registered.

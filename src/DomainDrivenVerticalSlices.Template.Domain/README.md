@@ -4,23 +4,54 @@ The Domain layer is at the heart of the application, encapsulating the business 
 
 ## Key Components
 
+### Base Classes
+
+- **BaseEntity**: Abstract base class providing identity and domain event collection. All entities can raise domain events that are dispatched after persistence.
+- **BaseAuditableEntity**: Extends `BaseEntity` with automatic audit tracking — `CreatedAt`, `CreatedBy`, `ModifiedAt`, and `ModifiedBy` fields are populated automatically via EF Core interceptors.
+
 ### Entities
-Entities are the primary objects within the domain, each with a unique identifier. Examples include `Entity1`, which represents a core domain concept.
+
+Entities are the primary objects within the domain, each with a unique identifier. `Entity1` demonstrates a domain entity inheriting from `BaseAuditableEntity` for full audit support.
 
 ### Events
-Events signify important changes or actions within the domain. For instance, `Entity1CreatedEvent` indicates the creation of `Entity1`.
+
+Domain events signify important changes or actions within the domain. For instance, `Entity1CreatedEvent` indicates the creation of `Entity1`. Events are collected on the entity and dispatched after successful persistence.
 
 ### Value Objects
-Value Objects are objects that do not have a unique identifier and are used to describe aspects of the domain. An example is `ValueObject1`, which could represent a quantity, a monetary value, or any other attribute that is important within the domain.
+
+Value Objects are objects that do not have a unique identifier and are used to describe aspects of the domain. `ValueObject1` demonstrates how to create immutable value objects with factory methods and validation.
+
+## BaseEntity Pattern
+
+```csharp
+public abstract class BaseEntity
+{
+    public Guid Id { get; protected set; }
+
+    private readonly List<INotification> _domainEvents = [];
+    public IReadOnlyCollection<INotification> DomainEvents => _domainEvents.AsReadOnly();
+
+    public void AddDomainEvent(INotification domainEvent) => _domainEvents.Add(domainEvent);
+    public void ClearDomainEvents() => _domainEvents.Clear();
+}
+```
+
+## BaseAuditableEntity Pattern
+
+```csharp
+public abstract class BaseAuditableEntity : BaseEntity
+{
+    public DateTimeOffset CreatedAt { get; set; }
+    public string? CreatedBy { get; set; }
+    public DateTimeOffset? ModifiedAt { get; set; }
+    public string? ModifiedBy { get; set; }
+}
+```
 
 ## Working with the Domain
 
-The Domain layer is structured to be isolated from infrastructure concerns, focusing solely on representing and enforcing business rules. When extending the domain:
+When extending the domain:
 
-1. **Entities** should be extended or added to model new concepts or behaviors needed by the application.
-2. **Events** should be created to represent new significant occurrences that domain entities can trigger.
-3. **Value Objects** should be utilized to encapsulate and enforce invariants for attributes shared among entities.
-
-## Extending the Domain
-
-To add a new entity, event, or value object to the domain, follow the established patterns found within each category. Ensure that new additions are accompanied by appropriate unit tests to maintain the integrity and correctness of the domain model.
+1. **Entities** should inherit from `BaseEntity` or `BaseAuditableEntity` depending on audit requirements
+2. **Domain Events** should be raised via `AddDomainEvent()` to signal important state changes
+3. **Value Objects** should use factory methods with `Result<T>` for validation

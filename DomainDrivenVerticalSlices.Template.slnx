@@ -12,6 +12,8 @@
     <Project Path="src/DomainDrivenVerticalSlices.Template.Application/DomainDrivenVerticalSlices.Template.Application.csproj" />
     <Project Path="src/DomainDrivenVerticalSlices.Template.Infrastructure/DomainDrivenVerticalSlices.Template.Infrastructure.csproj" />
     <Project Path="src/DomainDrivenVerticalSlices.Template.WebApi/DomainDrivenVerticalSlices.Template.WebApi.csproj" />
+    <Project Path="src/DomainDrivenVerticalSlices.Template.ServiceDefaults/DomainDrivenVerticalSlices.Template.ServiceDefaults.csproj" />
+    <Project Path="src/DomainDrivenVerticalSlices.Template.AppHost/DomainDrivenVerticalSlices.Template.AppHost.csproj" />
   </Folder>
   <Folder Name="/test/">
     <File Path="test/Directory.Build.props" />

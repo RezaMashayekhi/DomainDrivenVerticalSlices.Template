@@ -1,29 +1,57 @@
 # Integration Tests
 
-The Integration Tests project for `DomainDrivenVerticalSlices.Template` aims to validate the application's behavior as a whole, ensuring that all layers (Web API, Application, Domain, and Infrastructure) work together seamlessly. These tests simulate real-world scenarios as closely as possible, providing confidence in the application's functionality and stability.
+The Integration Tests project validates the application's behavior as a whole, ensuring that all layers (Web API, Application, Domain, and Infrastructure) work together seamlessly. These tests simulate real-world scenarios as closely as possible.
+
+## Test Factories
+
+### CustomWebApplicationFactory
+
+A custom factory for bootstrapping the application in a test environment with an **in-memory SQLite database**. Ideal for fast, isolated tests.
+
+### TestcontainersWebApplicationFactory
+
+An alternative factory using **Testcontainers** to run tests against a real SQLite database in a Docker container. Provides more realistic testing conditions:
+
+```csharp
+public class Entity1TestsWithContainers : IClassFixture<TestcontainersWebApplicationFactory>
+{
+    private readonly HttpClient _client;
+
+    public Entity1TestsWithContainers(TestcontainersWebApplicationFactory factory)
+    {
+        _client = factory.CreateClient();
+    }
+}
+```
+
+**Prerequisites**: Docker must be running for Testcontainers tests.
 
 ## Key Components
 
 ### Helpers
-- **ErrorDto**: Represents the structure of error responses for verifying error handling in integration scenarios.
-- **ListLogger** and **ListLoggerProvider**: Utilities for capturing log output during test execution, enabling assertions on logging behavior.
 
-### CustomWebApplicationFactory
-A custom factory for bootstrapping the application in a test environment, allowing for tests to run against an in-memory database and simplified service configuration.
+- **ErrorDto**: Represents the structure of error responses for verifying error handling.
+- **ListLogger** and **ListLoggerProvider**: Utilities for capturing log output during test execution.
 
 ### Entity1Tests
-Examples of comprehensive tests for `Entity1`, covering common CRUD operations and ensuring correct responses and system states.
+
+Comprehensive tests for `Entity1`, covering common CRUD operations and ensuring correct responses and system states.
 
 ## Setup and Execution
 
-1. Ensure local settings, such as connection strings in `appsettings.integrationtest.json`, are correctly configured for the test environment.
-2. Use the `CustomWebApplicationFactory` to create instances of the test server and client as needed for your tests.
-3. Run the tests using the .NET CLI with `dotnet test` or through your preferred IDE's test runner.
+1. Configure connection strings in `appsettings.integrationtest.json` if needed.
+2. For Testcontainers tests, ensure Docker is running.
+3. Run tests using:
 
-## Writing New Tests
+```bash
+dotnet test
+```
 
-When adding new features or modifying existing functionalities, accompany your changes with integration tests that:
+## Choosing a Test Factory
 
-1. Reflect the real-world usage of your APIs.
-2. Cover both success and error pathways.
-3. Utilize the `ListLogger` to assert important log messages and error handling.
+| Factory                               | Database                 | Speed  | Realism | Docker Required |
+| ------------------------------------- | ------------------------ | ------ | ------- | --------------- |
+| `CustomWebApplicationFactory`         | In-memory SQLite         | Fast   | Good    | No              |
+| `TestcontainersWebApplicationFactory` | Real SQLite in container | Slower | High    | Yes             |
+
+Use `CustomWebApplicationFactory` for CI pipelines where speed matters, and `TestcontainersWebApplicationFactory` when you need to test database-specific behavior.
