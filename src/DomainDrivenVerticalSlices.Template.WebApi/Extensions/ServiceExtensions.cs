@@ -30,7 +30,14 @@ public static class ServiceExtensions
                 Description = "Traditional MVC Controllers at /api/Entity1",
             });
 #endif
-#if INCLUDE_MINIMAL_API
+#if INCLUDE_MINIMAL_API && INCLUDE_CONTROLLERS
+            options.SwaggerDoc("v2", new()
+            {
+                Title = "Entity1 API",
+                Version = "v2",
+                Description = "Minimal API endpoints at /api/v2/Entity1",
+            });
+#elif INCLUDE_MINIMAL_API
             options.SwaggerDoc("v1", new()
             {
                 Title = "Entity1 API",
