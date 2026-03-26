@@ -26,7 +26,7 @@ public class Entity1EndpointsTests
     }
 
     [Fact]
-    public async Task GetById_ReturnInvalidInput_WhenUserIdIsInvalid()
+    public async Task GetById_ReturnInvalidInput_WhenEntity1IdIsInvalid()
     {
         // Arrange
         var error = Error.Create(ErrorType.InvalidInput, "Id must not be empty.");
@@ -224,7 +224,7 @@ public class Entity1EndpointsTests
     }
 
     [Fact]
-    public async Task FindByProperty1_ReturnsNotFound_WhenNoEntityNotFound()
+    public async Task FindByProperty1_ReturnsNotFound_WhenEntityIsNotFound()
     {
         // Arrange
         var error = Error.Create(ErrorType.NotFound, "Entity1 not found.");

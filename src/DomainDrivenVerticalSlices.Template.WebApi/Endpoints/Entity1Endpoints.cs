@@ -26,7 +26,7 @@ public class Entity1Endpoints : EndpointGroupBase
     public override void Map(RouteGroupBuilder group)
     {
         group.MapGet(GetAll, "all");
-        group.MapGet(GetById, "{id:guid}");
+        group.MapGet(GetById, "{id:guid}").WithName("GetById");
         group.MapGet(List, "list");
         group.MapGet(Find, "find");
         group.MapPost(Create);

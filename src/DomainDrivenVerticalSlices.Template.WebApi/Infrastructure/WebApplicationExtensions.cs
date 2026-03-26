@@ -39,14 +39,21 @@ public static class WebApplicationExtensions
     /// <param name="group">The endpoint group.</param>
     /// <returns>The route group builder.</returns>
     /// <remarks>
-    /// Uses /api/ prefix for clean REST-style routes.
+    /// In generated MinimalApi-only projects, uses /api/ prefix for clean REST-style routes.
+    /// When both API styles coexist (source template), uses /api/v2/ to avoid route conflicts.
     /// </remarks>
     private static RouteGroupBuilder MapGroup(this WebApplication app, EndpointGroupBase group)
     {
         var groupName = group.GroupName ?? group.GetType().Name;
 
+#if INCLUDE_CONTROLLERS
+        return app
+            .MapGroup($"/api/v2/{groupName}")
+            .WithTags(groupName);
+#else
         return app
             .MapGroup($"/api/{groupName}")
             .WithTags(groupName);
+#endif
     }
 }
