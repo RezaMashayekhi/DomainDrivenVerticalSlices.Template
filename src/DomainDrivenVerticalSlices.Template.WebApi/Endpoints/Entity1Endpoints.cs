@@ -143,5 +143,5 @@ public class Entity1Endpoints : EndpointGroupBase
             ? TypedResults.NotFound((Error)result.CheckedError)
             : TypedResults.BadRequest((Error)result.CheckedError);
     }
-#pragma warning restore SA1204// Static elements should appear before instance elements
+#pragma warning restore SA1204 // Static elements should appear before instance elements
 }
