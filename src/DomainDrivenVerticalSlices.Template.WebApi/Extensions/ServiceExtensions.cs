@@ -13,35 +13,31 @@ public static class ServiceExtensions
         // Add Aspire service defaults (OpenTelemetry, health checks, resilience)
         builder.AddServiceDefaults();
 
+#if INCLUDE_CONTROLLERS
         builder.Services.AddControllers();
+#endif
+#if INCLUDE_MINIMAL_API
+        builder.Services.AddAuthorization();
+#endif
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(options =>
         {
+#if INCLUDE_CONTROLLERS
             options.SwaggerDoc("v1", new()
             {
-                Title = "Entity1 API - Controllers",
+                Title = "Entity1 API",
                 Version = "v1",
                 Description = "Traditional MVC Controllers at /api/Entity1",
             });
-
-            options.SwaggerDoc("v2", new()
+#endif
+#if INCLUDE_MINIMAL_API
+            options.SwaggerDoc("v1", new()
             {
-                Title = "Entity1 API - Minimal APIs",
-                Version = "v2",
-                Description = "Modern Minimal API endpoints at /api/v2/Entity1",
+                Title = "Entity1 API",
+                Version = "v1",
+                Description = "Minimal API endpoints at /api/Entity1",
             });
-
-            // Assign endpoints to the correct Swagger doc based on group name
-            options.DocInclusionPredicate((docName, api) =>
-            {
-                if (docName == "v2")
-                {
-                    return api.GroupName == "v2";
-                }
-
-                // "v1" doc gets everything without a group name (i.e., controllers)
-                return api.GroupName is null;
-            });
+#endif
         });
 
         // Register HttpContextAccessor and CurrentUser for audit trail

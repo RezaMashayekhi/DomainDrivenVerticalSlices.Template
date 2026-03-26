@@ -1,16 +1,18 @@
 name: Publish NuGet
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - "DomainDrivenVerticalSlices.Template.nuspec"
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type "publish" to confirm NuGet package publish'
+        required: true
+        type: string
 
 jobs:
   publish:
     name: Publish to NuGet.org
     runs-on: ubuntu-latest
+    if: github.event.inputs.confirm == 'publish'
 
     steps:
       - uses: actions/checkout@v3

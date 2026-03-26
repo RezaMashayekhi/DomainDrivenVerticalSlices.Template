@@ -1,14 +1,14 @@
 # Web API
 
-The `WebApi` project serves as the entry point to the application, exposing the core functionalities of the domain through HTTP endpoints. It's built on ASP.NET Core and provides both traditional controllers and modern minimal API endpoints.
+The `WebApi` project serves as the entry point to the application, exposing the core functionalities of the domain through HTTP endpoints. It's built on ASP.NET Core and provides either traditional controllers or modern minimal API endpoints, depending on the `--ApiType` template parameter.
 
 ## Key Components
 
-### Controllers
+### Controllers (when `--ApiType Controller`)
 
 - **Entity1Controller.cs**: Traditional MVC-style API controller with CRUD operations for `Entity1`.
 
-### Minimal API Endpoints
+### Minimal API Endpoints (when `--ApiType MinimalApi`)
 
 - **Entity1Endpoints.cs**: Modern minimal API implementation using `EndpointGroupBase` pattern — a cleaner alternative to controllers for simple CRUD operations.
 - **EndpointGroupBase**: Abstract base class for organizing minimal API endpoint groups.
@@ -17,7 +17,7 @@ The `WebApi` project serves as the entry point to the application, exposing the 
 ### Infrastructure
 
 - **CurrentUser.cs**: Implementation of `IUser` interface, providing access to the current user's identity for audit fields.
-- **WebApplicationExtensions.cs**: Extensions for mapping minimal API endpoint groups.
+- **WebApplicationExtensions.cs**: Extensions for mapping minimal API endpoint groups (MinimalApi only).
 
 ### Extensions
 
@@ -25,9 +25,14 @@ The `WebApi` project serves as the entry point to the application, exposing the 
 - **LoggerExtensions.cs**: Configures logging throughout the application lifecycle.
 - **ServiceExtensions.cs**: Centralizes service registration, including `CurrentUser` for the `IUser` abstraction.
 
-## Choosing Between Controllers and Minimal APIs
+## Controllers vs Minimal APIs
 
-The template includes both patterns — choose based on your needs:
+Choose your API style when creating the project:
+
+```bash
+dotnet new ddvs -n MyProject                      # Controller (default)
+dotnet new ddvs -n MyProject --ApiType MinimalApi  # Minimal API
+```
 
 | Aspect       | Controllers                  | Minimal APIs               |
 | ------------ | ---------------------------- | -------------------------- |
@@ -35,7 +40,7 @@ The template includes both patterns — choose based on your needs:
 | Features     | Full MVC pipeline, filters   | Lightweight, fast startup  |
 | Organization | By resource/controller       | By endpoint group          |
 
-Both approaches use the same mediator pattern for business logic.
+Both approaches use the same mediator pattern for business logic and route to `/api/{Entity}`.
 
 ## Setup and Running
 

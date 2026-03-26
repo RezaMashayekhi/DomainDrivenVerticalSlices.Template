@@ -4,8 +4,20 @@
     <InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="$(AssemblyName.Replace('.WebApi', '.WebApi.Tests'))" />
+  </ItemGroup>
+
   <PropertyGroup Condition="'$(UiType)' == 'React'">
     <DefineConstants>$(DefineConstants);INCLUDE_REACT</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(ApiType)' == 'Controller' Or '$(ApiType)' == ''">
+    <DefineConstants>$(DefineConstants);INCLUDE_CONTROLLERS</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(ApiType)' == 'MinimalApi'">
+    <DefineConstants>$(DefineConstants);INCLUDE_MINIMAL_API</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

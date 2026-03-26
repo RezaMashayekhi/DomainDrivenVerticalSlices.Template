@@ -47,6 +47,30 @@
         "INCLUDE_API_ONLY": {
             "type": "computed",
             "value": "(UiType == \"None\")"
+        },
+        "ApiType": {
+            "type": "parameter",
+            "datatype": "choice",
+            "choices": [
+                {
+                    "choice": "Controller",
+                    "description": "Traditional MVC Controllers"
+                },
+                {
+                    "choice": "MinimalApi",
+                    "description": "Modern Minimal API endpoints"
+                }
+            ],
+            "defaultValue": "Controller",
+            "description": "Specify the API style to use"
+        },
+        "INCLUDE_CONTROLLERS": {
+            "type": "computed",
+            "value": "(ApiType == \"Controller\")"
+        },
+        "INCLUDE_MINIMAL_API": {
+            "type": "computed",
+            "value": "(ApiType == \"MinimalApi\")"
         }
     },
     "sources": [
@@ -63,6 +87,23 @@
                     "condition": "(INCLUDE_API_ONLY)",
                     "exclude": [
                         "src/DomainDrivenVerticalSlices.Template.UI.React/**"
+                    ]
+                },
+                {
+                    "condition": "(INCLUDE_CONTROLLERS)",
+                    "exclude": [
+                        "src/DomainDrivenVerticalSlices.Template.WebApi/Endpoints/**",
+                        "src/DomainDrivenVerticalSlices.Template.WebApi/Infrastructure/EndpointGroupBase.cs",
+                        "src/DomainDrivenVerticalSlices.Template.WebApi/Infrastructure/EndpointRouteBuilderExtensions.cs",
+                        "src/DomainDrivenVerticalSlices.Template.WebApi/Infrastructure/WebApplicationExtensions.cs",
+                        "test/DomainDrivenVerticalSlices.Template.WebApi.Tests/Endpoints/**"
+                    ]
+                },
+                {
+                    "condition": "(INCLUDE_MINIMAL_API)",
+                    "exclude": [
+                        "src/DomainDrivenVerticalSlices.Template.WebApi/Controllers/**",
+                        "test/DomainDrivenVerticalSlices.Template.WebApi.Tests/Controllers/**"
                     ]
                 }
             ]
