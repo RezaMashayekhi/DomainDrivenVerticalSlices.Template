@@ -341,8 +341,8 @@ public class Entity1EndpointsTests
         var result = await Entity1Endpoints.Update(id, command, _mediatorMock.Object, CancellationToken.None);
 
         // Assert
-        var badRequest = Assert.IsType<BadRequest<string>>(result.Result);
-        Assert.Equal(error.ErrorMessage, badRequest.Value);
+        var badRequest = Assert.IsType<BadRequest<Error>>(result.Result);
+        Assert.Equal(error, badRequest.Value);
     }
 
     [Fact]
@@ -360,8 +360,8 @@ public class Entity1EndpointsTests
         var result = await Entity1Endpoints.Update(entityDto.Id, command, _mediatorMock.Object, CancellationToken.None);
 
         // Assert
-        var badRequest = Assert.IsType<BadRequest<string>>(result.Result);
-        Assert.Equal(error.ErrorMessage, badRequest.Value);
+        var badRequest = Assert.IsType<BadRequest<Error>>(result.Result);
+        Assert.Equal(error, badRequest.Value);
     }
 
     [Fact]
@@ -375,8 +375,8 @@ public class Entity1EndpointsTests
         var result = await Entity1Endpoints.Update(Guid.NewGuid(), command, _mediatorMock.Object, CancellationToken.None);
 
         // Assert
-        var badRequest = Assert.IsType<BadRequest<string>>(result.Result);
-        Assert.Equal("ID mismatch", badRequest.Value);
+        var badRequest = Assert.IsType<BadRequest<Error>>(result.Result);
+        Assert.Equal(ErrorType.InvalidInput, badRequest.Value!.ErrorType);
     }
 
     [Fact]

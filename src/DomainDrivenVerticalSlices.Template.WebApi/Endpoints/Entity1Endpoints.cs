@@ -104,7 +104,7 @@ public class Entity1Endpoints : EndpointGroupBase
             : TypedResults.BadRequest((Error)result.CheckedError);
     }
 
-    internal static async Task<Results<Ok, NotFound<Error>, BadRequest<string>>> Update(
+    internal static async Task<Results<Ok, NotFound<Error>, BadRequest<Error>>> Update(
         Guid id,
         UpdateEntity1Command command,
         ISender mediator,
@@ -112,7 +112,7 @@ public class Entity1Endpoints : EndpointGroupBase
     {
         if (id != command.Entity1.Id)
         {
-            return TypedResults.BadRequest("ID mismatch");
+            return TypedResults.BadRequest(Error.Create(Common.Enums.ErrorType.InvalidInput, "ID mismatch"));
         }
 
         var result = await mediator.Send(command, cancellationToken);
@@ -124,7 +124,7 @@ public class Entity1Endpoints : EndpointGroupBase
 
         return result.CheckedError.ErrorType == Common.Enums.ErrorType.NotFound
             ? TypedResults.NotFound((Error)result.CheckedError)
-            : TypedResults.BadRequest(result.CheckedError.ErrorMessage);
+            : TypedResults.BadRequest((Error)result.CheckedError);
     }
 
     internal static async Task<Results<Ok, NotFound<Error>, BadRequest<Error>>> Delete(

@@ -16,35 +16,15 @@ public static class ServiceExtensions
 #if INCLUDE_CONTROLLERS
         builder.Services.AddControllers();
 #endif
-#if INCLUDE_MINIMAL_API
         builder.Services.AddAuthorization();
-#endif
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(options =>
         {
-#if INCLUDE_CONTROLLERS
             options.SwaggerDoc("v1", new()
             {
                 Title = "Entity1 API",
                 Version = "v1",
-                Description = "Traditional MVC Controllers at /api/Entity1",
             });
-#endif
-#if INCLUDE_MINIMAL_API && INCLUDE_CONTROLLERS
-            options.SwaggerDoc("v2", new()
-            {
-                Title = "Entity1 API",
-                Version = "v2",
-                Description = "Minimal API endpoints at /api/v2/Entity1",
-            });
-#elif INCLUDE_MINIMAL_API
-            options.SwaggerDoc("v1", new()
-            {
-                Title = "Entity1 API",
-                Version = "v1",
-                Description = "Minimal API endpoints at /api/Entity1",
-            });
-#endif
         });
 
         // Register HttpContextAccessor and CurrentUser for audit trail
