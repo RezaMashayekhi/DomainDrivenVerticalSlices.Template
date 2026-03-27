@@ -8,7 +8,7 @@
             A comprehensive ASP.NET Core template implementing Domain-Driven Design (DDD) with Vertical Slice Architecture.
             
             Features include:
-            • .NET Aspire 13.1 integration for orchestrated development and observability
+            • .NET Aspire 13.2 integration for orchestrated development and observability
             • BaseEntity/BaseAuditableEntity with domain events and automatic audit tracking
             • EF Core interceptors for domain event dispatch and audit field population
             • Performance and exception logging pipeline behaviors
@@ -33,9 +33,6 @@ API Style Customization:
 Security:
 - Fixed minimatch ReDoS vulnerability (CVE-2026-27903) in React UI dependencies
 - Updated transitive dependencies (ajv, flatted, rollup) to resolve additional vulnerabilities
-
-NuGet Publishing:
-- Changed publish workflow to manual dispatch for better release control
 
 Version 10.3.0:
 
