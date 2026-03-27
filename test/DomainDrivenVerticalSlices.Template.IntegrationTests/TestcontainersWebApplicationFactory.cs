@@ -37,7 +37,7 @@ public class TestcontainersWebApplicationFactory : WebApplicationFactory<Program
         {
             // Create a lightweight Alpine container with SQLite
             // For SQL Server or PostgreSQL, you would use their respective container images
-            _dbContainer = new ContainerBuilder()
+            _dbContainer = new ContainerBuilder("alpine:latest")
                 .WithImage("alpine:latest")
                 .WithCommand("sleep", "infinity")
                 .WithWaitStrategy(Wait.ForUnixContainer().UntilCommandIsCompleted("echo", "ready"))

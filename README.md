@@ -9,45 +9,58 @@ An ASP.NET Core template implementing **Domain-Driven Design (DDD)** with **Vert
 
 ## Like This Template? ⭐
 
-If you find this template helpful, please give it a star on GitHub!
+If you find this template helpful, please [give it a star on GitHub](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template)! Your support helps others discover this template.
 
 ---
 
-## What's New in 10.3.0
+## What's New in 10.4.0
 
-### .NET Aspire Integration
+### API Style Customization
+
+- **Choose Your API Style**: Select between traditional MVC controllers (`--ApiType Controller`, default) or modern Minimal API endpoints (`--ApiType MinimalApi`) when creating a project
+- **Clean Routes**: Both styles use consistent `/api/{Entity}` routes
+- **Full Test Coverage**: Endpoint unit tests included for both API styles
+
+### Security Fixes
+
+- **minimatch**: Fixed ReDoS vulnerability (CVE-2026-27903) in React UI dependencies
+- **Transitive Dependencies**: Updated ajv, flatted, and rollup to resolve additional vulnerabilities
+
+## Recent Enhancements
+
+<details>
+<summary><strong>Key Features Introduced in 10.3.0</strong></summary>
+
+#### .NET Aspire Integration
 
 - **Aspire AppHost**: Orchestrate your entire application with a single command using .NET Aspire 13.1
 - **Service Defaults**: Pre-configured OpenTelemetry, health checks, service discovery, and resilience patterns
 - **React + Vite Support**: Automatic Vite dev server integration via `AddViteApp()` when using React UI
 - **Dynamic Service Discovery**: Aspire injects service URLs automatically — no hardcoded ports needed
 
-### Domain & Infrastructure Enhancements
+#### Domain & Infrastructure Enhancements
 
 - **BaseEntity & BaseAuditableEntity**: Rich base classes with domain event support and automatic audit tracking (Created/Modified timestamps and user info)
 - **EF Core Interceptors**: Auto-dispatch domain events and populate audit fields via `SaveChangesAsync` interceptors
 - **IUser/CurrentUser**: Clean abstraction for accessing current user context across layers
 
-### Application Layer Improvements
+#### Application Layer Improvements
 
 - **Performance Behavior**: Logs warnings for slow-running requests (configurable threshold)
 - **Unhandled Exception Behavior**: Centralized exception logging in the mediator pipeline
 
-### Web API Modernization
-
-- **Minimal API Endpoints**: `Entity1Endpoints` as a modern alternative to controllers with `EndpointGroupBase` infrastructure
-- **Flexible Routing**: Choose between traditional controllers or minimal API endpoints
-
-### Testing Infrastructure
+#### Testing Infrastructure
 
 - **Testcontainers Support**: `TestcontainersWebApplicationFactory` for integration tests against real SQLite databases in Docker
 - **MSW Integration**: Mock Service Worker for realistic API mocking in React tests
 
-### UI Improvements
+#### UI Improvements
 
 - **Modern React UI**: Tailwind CSS v4, Headless UI, and Heroicons for a polished, accessible interface
 - **Dark Mode Support**: Toggle between light and dark themes with localStorage persistence
 - **Enhanced UX**: Modal confirmations for delete, cancel, and save operations
+
+</details>
 
 ### Screenshots
 
@@ -70,21 +83,33 @@ If you find this template helpful, please give it a star on GitHub!
 Install the template from NuGet:
 
 ```bash
-dotnet new install RM.DomainDrivenVerticalSlices.Template::10.3.0
+dotnet new install RM.DomainDrivenVerticalSlices.Template::10.4.0
 ```
 
 ### Create a New Project
 
-**WebAPI Only:**
+**WebAPI Only (Controller API — default):**
 
 ```bash
-dotnet new ddvs -n YourProjectName --UiType None
+dotnet new ddvs -n YourProjectName
+```
+
+**WebAPI with Minimal API endpoints:**
+
+```bash
+dotnet new ddvs -n YourProjectName --ApiType MinimalApi
 ```
 
 **WebAPI with React UI:**
 
 ```bash
 dotnet new ddvs -n YourProjectName --UiType React
+```
+
+**Combine options:**
+
+```bash
+dotnet new ddvs -n YourProjectName --ApiType MinimalApi --UiType React
 ```
 
 ## Running the Application
@@ -148,7 +173,7 @@ YourProjectName/
 | ------------------- | -------------------------------------------------------------------------------------- |
 | **AppHost**         | .NET Aspire orchestration — starts and monitors all services from a single entry point |
 | **ServiceDefaults** | OpenTelemetry, health checks, service discovery, and HTTP resilience configuration     |
-| **WebApi**          | REST API with controllers and/or minimal API endpoints                                 |
+| **WebApi**          | REST API with controllers or minimal API endpoints (configurable via `--ApiType`)      |
 | **Application**     | Commands, queries, DTOs, validators, and pipeline behaviors                            |
 | **Domain**          | Entities (with `BaseEntity`/`BaseAuditableEntity`), value objects, and domain events   |
 | **Infrastructure**  | EF Core `DbContext`, repositories, migrations, and interceptors                        |
@@ -199,21 +224,22 @@ Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
 
 ## Development Notes
 
-This template supports optional integration with a React frontend. For developers who are **modifying the template** or testing features specific to React, it is crucial to set the `UiType` environment variable accordingly:
+This template supports optional configurations for the API style and React frontend. For developers who are **modifying the template** or testing features specific to a configuration, it is crucial to set the environment variables accordingly:
 
-### Setting the Environment Variable
+### Setting the Environment Variables
 
 **For Windows:**
 
 ```bash
-set UiType=React  # Use 'None' for WebAPI only setups
+set UiType=React       # Use 'None' for WebAPI only setups (default)
+set ApiType=MinimalApi  # Use 'Controller' for traditional MVC controllers (default)
 ```
 
 **Setting Permanent Environment Variables (Windows):**
 
 ```bash
-setx UiType React      # Sets 'UiType' permanently for the current user
-setx UiType React /M   # Sets 'UiType' permanently system-wide (requires admin)
+setx UiType React         # Sets 'UiType' permanently for the current user
+setx ApiType MinimalApi    # Sets 'ApiType' permanently for the current user
 ```
 
 > **Note:** `setx` changes will only affect new command prompt sessions, not the current session.
@@ -221,12 +247,13 @@ setx UiType React /M   # Sets 'UiType' permanently system-wide (requires admin)
 **For Linux/macOS:**
 
 ```bash
-export UiType=React  # Use 'None' for WebAPI only setups
+export UiType=React       # Use 'None' for WebAPI only setups (default)
+export ApiType=MinimalApi  # Use 'Controller' for traditional MVC controllers (default)
 ```
 
-This setting enables CORS configurations necessary for communication between the React frontend and the backend during development.
+These settings enable the appropriate API style and CORS configurations necessary for communication between the React frontend and the backend during development.
 
-> **Important:** The `UiType` environment variable is specifically for development and testing within the template's context. Users creating new projects from this template do not need to set this variable — the template engine handles it automatically based on the `--UiType` parameter.
+> **Important:** These environment variables are specifically for development and testing within the template's context. Users creating new projects from this template do not need to set them — the template engine handles it automatically based on the `--ApiType` and `--UiType` parameters.
 
 ### Running Tests
 

@@ -2,7 +2,9 @@
 
 using DomainDrivenVerticalSlices.Template.Infrastructure;
 using DomainDrivenVerticalSlices.Template.ServiceDefaults;
+#if INCLUDE_MINIMAL_API
 using DomainDrivenVerticalSlices.Template.WebApi.Infrastructure;
+#endif
 
 public static class AppExtensions
 {
@@ -16,8 +18,7 @@ public static class AppExtensions
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Controllers (v1)");
-                options.SwaggerEndpoint("/swagger/v2/swagger.json", "Minimal APIs (v2)");
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Entity1 API (v1)");
             });
 
             var connectionString = config.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("No connection string named 'DefaultConnection' found in the configuration.");
@@ -31,11 +32,12 @@ public static class AppExtensions
         app.UseHttpsRedirection();
         app.UseAuthorization();
 
-        // Map traditional controllers
+#if INCLUDE_CONTROLLERS
         app.MapControllers();
-
-        // Map Minimal API endpoints (alternative to controllers)
+#endif
+#if INCLUDE_MINIMAL_API
         app.MapEndpoints();
+#endif
 
         return app;
     }
