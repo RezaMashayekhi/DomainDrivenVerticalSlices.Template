@@ -3,7 +3,7 @@
     <metadata>
         <id>RM.DomainDrivenVerticalSlices.Template</id>
         <title>ASP.NET Core Domain Driven Vertical Slices</title>
-        <version>10.4.0</version>
+        <version>10.5.0</version>
         <description>
             A comprehensive ASP.NET Core template implementing Domain-Driven Design (DDD) with Vertical Slice Architecture.
             
@@ -23,6 +23,27 @@
         <license type="expression">MIT</license>
         <projectUrl>https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template</projectUrl>
         <releaseNotes>
+Version 10.5.0:
+
+Security:
+- Fixed three OpenTelemetry DoS vulnerabilities (GHSA-g94r-2vxg-569j / CVE-2026-40894,
+  GHSA-q834-8qmm-v933 / CVE-2026-40182, GHSA-mr8r-92fq-pj8p / CVE-2026-40891):
+  upgraded OpenTelemetry.Exporter.OpenTelemetryProtocol + Extensions.Hosting to 1.15.3;
+  pinned transitive OpenTelemetry.Api to 1.15.3 via CentralPackageTransitivePinning
+- Fixed two Vite dev-server vulnerabilities (GHSA-p9ff-h696-f583 / CVE-2026-39363,
+  GHSA-4w7w-66w2-5vf9 / CVE-2026-39365) by upgrading Vite to 6.4.2
+- Fixed PostCSS XSS vulnerability (GHSA-qx2v-qp2m-jg93) by upgrading PostCSS to 8.5.12
+
+Dependencies:
+- Upgraded EF Core 10.0.5 → 10.0.7
+- Upgraded Aspire 13.2.0 → 13.2.4
+- Upgraded Microsoft.Extensions.Http.Resilience + ServiceDiscovery 10.4.0 → 10.5.0
+- Upgraded Microsoft.NET.Test.Sdk 18.3.0 → 18.5.1
+- Upgraded coverlet.collector + coverlet.msbuild 8.0.1 → 10.0.0
+
+Build:
+- Enabled NuGet Transitive Pinning for deterministic transitive dependency resolution
+
 Version 10.4.0:
 
 API Style Customization:
