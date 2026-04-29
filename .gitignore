@@ -406,3 +406,4 @@ templatedb.db
 src/DomainDrivenVerticalSlices.Template.UI.React/dist/
 .vite/
 nuget.exe
+.worktrees/
