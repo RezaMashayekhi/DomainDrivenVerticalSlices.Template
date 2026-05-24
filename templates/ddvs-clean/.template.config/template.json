@@ -9,9 +9,9 @@
         "Domain Driven Design",
         "Vertical Slice Architecture"
     ],
-    "identity": "RM.DomainDrivenVerticalSlices.Template",
-    "name": "Domain Driven Vertical Slices Template",
-    "shortName": "ddvs",
+    "identity": "RM.DomainDrivenVerticalSlices.Template.Clean",
+    "name": "Domain Driven Vertical Slices - Clean Architecture",
+    "shortName": "ddvs-clean",
     "tags": {
         "language": "C#",
         "type": "project"
@@ -75,7 +75,7 @@
     },
     "sources": [
         {
-            "source": "./",
+            "source": "../../",
             "target": "./",
             "exclude": [
                 "**/*.lock.json",

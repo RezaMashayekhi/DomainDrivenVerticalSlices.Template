@@ -13,6 +13,49 @@ If you find this template helpful, please [give it a star on GitHub](https://git
 
 ---
 
+## What's New in 10.6.0
+
+### Modular Monolith Template
+
+- **New `ddvs-modular` template**: LLM-friendly modular monolith with vertical slices organized by business capability.
+- **Compatibility preserved**: `ddvs` keeps the existing Clean Architecture behavior, and `ddvs-clean` is now an explicit short name for that template style.
+- **API-first modular release**: The first modular template uses Minimal APIs, SQLite, and optional Aspire support. React UI, controller support, and database-provider selection are deferred for future modular releases.
+- **Generated guidance**: Modular projects include architecture docs and Copilot instruction files for consistent AI-assisted development.
+
+## Available Templates
+
+This package contains multiple templates.
+
+### ddvs
+
+Backward-compatible Clean Architecture template with separate WebApi, Application, Domain, Infrastructure, Common, AppHost, and ServiceDefaults projects.
+
+```bash
+dotnet new ddvs -n MyApplication
+```
+
+### ddvs-clean
+
+Explicit Clean Architecture short name for the existing template behavior.
+
+```bash
+dotnet new ddvs-clean -n MyApplication
+```
+
+### ddvs-modular
+
+LLM-friendly modular monolith with vertical slices organized by business module. The `10.6.0` modular release is API-only Minimal API with SQLite and Aspire enabled by default.
+
+```bash
+dotnet new ddvs-modular -n MyApplication
+```
+
+To omit Aspire projects:
+
+```bash
+dotnet new ddvs-modular -n MyApplication --UseAspire false
+```
+
 ## What's New in 10.4.0
 
 ### API Style Customization
@@ -83,7 +126,7 @@ If you find this template helpful, please [give it a star on GitHub](https://git
 Install the template from NuGet:
 
 ```bash
-dotnet new install RM.DomainDrivenVerticalSlices.Template::10.4.0
+dotnet new install RM.DomainDrivenVerticalSlices.Template@10.6.0
 ```
 
 ### Create a New Project
