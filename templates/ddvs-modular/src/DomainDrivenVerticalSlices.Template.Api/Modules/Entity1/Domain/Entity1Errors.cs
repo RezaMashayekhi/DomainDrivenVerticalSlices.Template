@@ -15,14 +15,14 @@ internal static class Entity1Errors
     {
         return Error.Conflict(
             "Entity1.Property1AlreadyExists",
-            $"An Entity1 with property1 '{property1}' already exists.");
+            $"An Entity1 with Property1 '{property1}' already exists.");
     }
 
     public static Error Property1Required()
     {
         return Error.Validation(new Dictionary<string, string[]>
         {
-            ["Property1"] = ["property1 cannot be empty."],
+            ["Property1"] = ["Property1 cannot be empty."],
         });
     }
 

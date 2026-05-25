@@ -45,7 +45,8 @@ Use predictable names:
 - Add or update tests for every behavior change.
 - Use unit tests for domain behavior.
 - Use integration tests for API + database behavior.
-- Prefer Testcontainers for database integration tests.
+- Use the template's file-based SQLite integration test pattern by default.
+- Consider Testcontainers when adding provider-specific database or external dependency tests.
 - Add architecture tests for dependency rules.
 
 ## Style

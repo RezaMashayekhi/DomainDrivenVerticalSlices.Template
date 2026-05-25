@@ -41,4 +41,24 @@ public sealed class UpdateEntity1HandlerTests
         Assert.True(result.IsFailure);
         Assert.Equal(ErrorType.NotFound, result.Error.Type);
     }
+
+    [Fact]
+    public async Task HandleAsync_WithNullProperty1_ReturnsValidationFailure()
+    {
+        await using TestDbContextScope scope = await TestDbContextScope.CreateAsync();
+        Entity1 entity1 = Entity1.Create(ValueObject1.Create("value-one").Value).Value;
+        scope.DbContext.Entities1.Add(entity1);
+        await scope.DbContext.SaveChangesAsync();
+
+        UpdateEntity1Handler handler = new(scope.DbContext);
+
+        Result<UpdateEntity1Response> result = await handler.HandleAsync(
+            entity1.Id,
+            new UpdateEntity1Request(null!),
+            CancellationToken.None);
+
+        Assert.True(result.IsFailure);
+        Assert.Equal(ErrorType.Validation, result.Error.Type);
+        Assert.Contains("Property1", result.Error.ValidationErrors!.Keys);
+    }
 }

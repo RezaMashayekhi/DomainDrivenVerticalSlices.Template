@@ -22,17 +22,6 @@ internal sealed class UpdateEntity1Handler(AppDbContext dbContext)
             return Result<UpdateEntity1Response>.Failure(Entity1Errors.NotFound(id));
         }
 
-        bool property1AlreadyExists = await dbContext.Entities1
-            .AnyAsync(entity1 =>
-                entity1.Id != id &&
-                entity1.ValueObject1.Property1 == request.Property1.Trim(),
-                cancellationToken);
-
-        if (property1AlreadyExists)
-        {
-            return Result<UpdateEntity1Response>.Failure(Entity1Errors.Property1AlreadyExists(request.Property1));
-        }
-
         Result<ValueObject1> valueObject1Result = ValueObject1.Create(request.Property1);
 
         if (valueObject1Result.IsFailure)
@@ -40,7 +29,20 @@ internal sealed class UpdateEntity1Handler(AppDbContext dbContext)
             return Result<UpdateEntity1Response>.Failure(valueObject1Result.Error);
         }
 
-        Result updateResult = entity1.Update(valueObject1Result.Value);
+        ValueObject1 valueObject1 = valueObject1Result.Value;
+
+        bool property1AlreadyExists = await dbContext.Entities1
+            .AnyAsync(entity1 =>
+                entity1.Id != id &&
+                entity1.ValueObject1.Property1 == valueObject1.Property1,
+                cancellationToken);
+
+        if (property1AlreadyExists)
+        {
+            return Result<UpdateEntity1Response>.Failure(Entity1Errors.Property1AlreadyExists(valueObject1.Property1));
+        }
+
+        Result updateResult = entity1.Update(valueObject1);
 
         if (updateResult.IsFailure)
         {

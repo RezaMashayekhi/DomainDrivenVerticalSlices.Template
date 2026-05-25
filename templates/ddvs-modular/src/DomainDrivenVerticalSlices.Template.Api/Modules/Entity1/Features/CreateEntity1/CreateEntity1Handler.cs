@@ -12,14 +12,6 @@ internal sealed class CreateEntity1Handler(AppDbContext dbContext)
         CreateEntity1Request request,
         CancellationToken cancellationToken)
     {
-        bool property1AlreadyExists = await dbContext.Entities1
-            .AnyAsync(entity1 => entity1.ValueObject1.Property1 == request.Property1.Trim(), cancellationToken);
-
-        if (property1AlreadyExists)
-        {
-            return Result<CreateEntity1Response>.Failure(Entity1Errors.Property1AlreadyExists(request.Property1));
-        }
-
         Result<ValueObject1> valueObject1Result = ValueObject1.Create(request.Property1);
 
         if (valueObject1Result.IsFailure)
@@ -27,7 +19,17 @@ internal sealed class CreateEntity1Handler(AppDbContext dbContext)
             return Result<CreateEntity1Response>.Failure(valueObject1Result.Error);
         }
 
-        Result<Entity1> entity1Result = Entity1.Create(valueObject1Result.Value);
+        ValueObject1 valueObject1 = valueObject1Result.Value;
+
+        bool property1AlreadyExists = await dbContext.Entities1
+            .AnyAsync(entity1 => entity1.ValueObject1.Property1 == valueObject1.Property1, cancellationToken);
+
+        if (property1AlreadyExists)
+        {
+            return Result<CreateEntity1Response>.Failure(Entity1Errors.Property1AlreadyExists(valueObject1.Property1));
+        }
+
+        Result<Entity1> entity1Result = Entity1.Create(valueObject1);
 
         if (entity1Result.IsFailure)
         {

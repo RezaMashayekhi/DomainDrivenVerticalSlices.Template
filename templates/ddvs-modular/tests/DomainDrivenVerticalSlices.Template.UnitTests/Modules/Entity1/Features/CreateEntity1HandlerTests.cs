@@ -37,4 +37,19 @@ public sealed class CreateEntity1HandlerTests
         Assert.True(result.IsFailure);
         Assert.Equal(ErrorType.Conflict, result.Error.Type);
     }
+
+    [Fact]
+    public async Task HandleAsync_WithNullProperty1_ReturnsValidationFailure()
+    {
+        await using TestDbContextScope scope = await TestDbContextScope.CreateAsync();
+        CreateEntity1Handler handler = new(scope.DbContext);
+
+        Result<CreateEntity1Response> result = await handler.HandleAsync(
+            new CreateEntity1Request(null!),
+            CancellationToken.None);
+
+        Assert.True(result.IsFailure);
+        Assert.Equal(ErrorType.Validation, result.Error.Type);
+        Assert.Contains("Property1", result.Error.ValidationErrors!.Keys);
+    }
 }
