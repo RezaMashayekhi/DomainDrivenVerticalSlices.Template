@@ -1,0 +1,19 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="global.json" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/DomainDrivenVerticalSlices.Template.Api/DomainDrivenVerticalSlices.Template.Api.csproj" />
+    <!--#if (USE_ASPIRE) -->
+    <Project Path="src/DomainDrivenVerticalSlices.Template.ServiceDefaults/DomainDrivenVerticalSlices.Template.ServiceDefaults.csproj" />
+    <Project Path="src/DomainDrivenVerticalSlices.Template.AppHost/DomainDrivenVerticalSlices.Template.AppHost.csproj" />
+    <!--#endif -->
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/DomainDrivenVerticalSlices.Template.UnitTests/DomainDrivenVerticalSlices.Template.UnitTests.csproj" />
+    <Project Path="tests/DomainDrivenVerticalSlices.Template.IntegrationTests/DomainDrivenVerticalSlices.Template.IntegrationTests.csproj" />
+    <Project Path="tests/DomainDrivenVerticalSlices.Template.ArchitectureTests/DomainDrivenVerticalSlices.Template.ArchitectureTests.csproj" />
+  </Folder>
+</Solution>

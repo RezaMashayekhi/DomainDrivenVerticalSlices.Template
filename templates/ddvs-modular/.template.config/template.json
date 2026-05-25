@@ -1,0 +1,72 @@
+{
+    "$schema": "http://json.schemastore.org/template",
+    "author": "Reza Mashayekhi",
+    "classifications": [
+        "Web",
+        "Web API",
+        "API",
+        "Service",
+        "ASP.NET Core",
+        "Minimal API",
+        "DDD",
+        "Vertical Slice",
+        "Modular Monolith",
+        "Clean Architecture",
+        "Entity Framework Core",
+        "SQLite",
+        "Aspire",
+        "Testing",
+        "LLM-Friendly"
+    ],
+    "identity": "RM.DomainDrivenVerticalSlices.Template.Modular",
+    "name": "Domain Driven Vertical Slices - Modular Monolith",
+    "shortName": "ddvs-modular",
+    "tags": {
+        "language": "C#",
+        "type": "project"
+    },
+    "sourceName": "DomainDrivenVerticalSlices.Template",
+    "preferNameDirectory": true,
+    "symbols": {
+        "projectName": {
+            "type": "parameter",
+            "dataType": "string",
+            "replaces": "DomainDrivenVerticalSlices.Template"
+        },
+        "UseAspire": {
+            "type": "parameter",
+            "datatype": "bool",
+            "defaultValue": "true",
+            "description": "Include .NET Aspire AppHost and ServiceDefaults projects"
+        },
+        "USE_ASPIRE": {
+            "type": "computed",
+            "value": "(UseAspire)"
+        },
+        "EXCLUDE_ASPIRE": {
+            "type": "computed",
+            "value": "(!UseAspire)"
+        }
+    },
+    "sources": [
+        {
+            "source": "./",
+            "target": "./",
+            "exclude": [
+                ".template.config/**",
+                "**/bin/**",
+                "**/obj/**",
+                "**/*.lock.json"
+            ],
+            "modifiers": [
+                {
+                    "condition": "(EXCLUDE_ASPIRE)",
+                    "exclude": [
+                        "src/DomainDrivenVerticalSlices.Template.AppHost/**",
+                        "src/DomainDrivenVerticalSlices.Template.ServiceDefaults/**"
+                    ]
+                }
+            ]
+        }
+    ]
+}

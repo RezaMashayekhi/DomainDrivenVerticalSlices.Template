@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="$(AssemblyName.Replace('.Api', '.UnitTests'))" />
+    <InternalsVisibleTo Include="$(AssemblyName.Replace('.Api', '.IntegrationTests'))" />
+    <InternalsVisibleTo Include="$(AssemblyName.Replace('.Api', '.ArchitectureTests'))" />
+  </ItemGroup>
+
+  <!--#if (USE_ASPIRE) -->
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);USE_ASPIRE</DefineConstants>
+  </PropertyGroup>
+  <!--#endif -->
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
+    <PackageReference Include="Swashbuckle.AspNetCore" />
+  </ItemGroup>
+
+  <!--#if (USE_ASPIRE) -->
+  <ItemGroup>
+    <ProjectReference Include="..\DomainDrivenVerticalSlices.Template.ServiceDefaults\DomainDrivenVerticalSlices.Template.ServiceDefaults.csproj" />
+  </ItemGroup>
+  <!--#endif -->
+
+</Project>

@@ -26,7 +26,12 @@ jobs:
             - name: Setup .NET
               uses: actions/setup-dotnet@v4
               with:
-                  dotnet-version: "10.0.100"
+                  dotnet-version: "10.0.x"
+
+            - uses: nuget/setup-nuget@v1
+              name: Setup NuGet
+              with:
+                  nuget-version: "6.x"
 
             # Cache NuGet packages
             - name: Cache NuGet packages
@@ -47,7 +52,79 @@ jobs:
 
             # Test .NET solution
             - name: Test solution
-              run: dotnet test --no-build --configuration Release
+              shell: bash
+              run: |
+                  set -euo pipefail
+
+                  while IFS= read -r project; do
+                      dotnet test "$project" --no-build --configuration Release
+                  done < <(find test -name '*.csproj' | sort)
+
+            # Build modular template source
+            - name: Restore modular template source
+              run: dotnet restore templates/ddvs-modular/DomainDrivenVerticalSlices.Template.slnx
+
+            - name: Build modular template source
+              run: dotnet build templates/ddvs-modular/DomainDrivenVerticalSlices.Template.slnx --no-restore --configuration Release
+
+            - name: Test modular template source
+              shell: bash
+              run: |
+                  set -euo pipefail
+
+                  while IFS= read -r project; do
+                      dotnet test "$project" --no-build --configuration Release
+                  done < <(find templates/ddvs-modular/tests -name '*.csproj' | sort)
+
+            # Pack and smoke test installed templates
+            - name: Install Mono
+              run: sudo apt-get update && sudo apt-get install -y mono-complete
+
+            - name: Pack template package
+              run: |
+                  mkdir -p artifacts
+                  nuget pack DomainDrivenVerticalSlices.Template.nuspec -OutputDirectory artifacts -NoDefaultExcludes
+
+            - name: Smoke test template package
+              shell: bash
+              run: |
+                  set -euo pipefail
+
+                  package="$(find artifacts -maxdepth 1 -name 'RM.DomainDrivenVerticalSlices.Template.*.nupkg' | sort | tail -n 1)"
+                  hive="$RUNNER_TEMP/ddvs-template-hive"
+                  smoke="$RUNNER_TEMP/ddvs-template-smoke"
+
+                  mkdir -p "$hive" "$smoke"
+
+                  dotnet new install "$package" --debug:custom-hive "$hive"
+                  dotnet new list ddvs --debug:custom-hive "$hive"
+                  dotnet new list ddvs-clean --debug:custom-hive "$hive"
+                  dotnet new list ddvs-modular --debug:custom-hive "$hive"
+
+                  dotnet new ddvs -n SmokeDdvs --debug:custom-hive "$hive" -o "$smoke/SmokeDdvs"
+                  dotnet new ddvs-clean -n SmokeClean --debug:custom-hive "$hive" -o "$smoke/SmokeClean"
+                  dotnet new ddvs-modular -n SmokeModular --debug:custom-hive "$hive" -o "$smoke/SmokeModular"
+                  dotnet new ddvs-modular -n SmokeModularNoAspire --UseAspire false --debug:custom-hive "$hive" -o "$smoke/SmokeModularNoAspire"
+
+                  build_and_test() {
+                      local project_dir="$1"
+                      local solution_file="$2"
+                      local test_dir="$3"
+
+                      dotnet build "$project_dir/$solution_file" --configuration Release
+
+                      while IFS= read -r project; do
+                          dotnet test "$project" --no-build --configuration Release
+                      done < <(find "$project_dir/$test_dir" -name '*.csproj' | sort)
+                  }
+
+                  build_and_test "$smoke/SmokeDdvs" "SmokeDdvs.slnx" "test"
+                  build_and_test "$smoke/SmokeClean" "SmokeClean.slnx" "test"
+                  build_and_test "$smoke/SmokeModular" "SmokeModular.slnx" "tests"
+                  build_and_test "$smoke/SmokeModularNoAspire" "SmokeModularNoAspire.slnx" "tests"
+
+                  test ! -d "$smoke/SmokeModularNoAspire/src/SmokeModularNoAspire.AppHost"
+                  test ! -d "$smoke/SmokeModularNoAspire/src/SmokeModularNoAspire.ServiceDefaults"
 
             # Setup Node.js for React project
             - name: Setup Node.js

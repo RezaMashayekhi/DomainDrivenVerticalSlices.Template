@@ -3,11 +3,12 @@
     <metadata>
         <id>RM.DomainDrivenVerticalSlices.Template</id>
         <title>ASP.NET Core Domain Driven Vertical Slices</title>
-        <version>10.5.0</version>
+        <version>10.6.0</version>
         <description>
             A comprehensive ASP.NET Core template implementing Domain-Driven Design (DDD) with Vertical Slice Architecture.
             
             Features include:
+            • Two template styles: ddvs/ddvs-clean for Clean Architecture and ddvs-modular for an LLM-friendly modular monolith
             • .NET Aspire 13.2 integration for orchestrated development and observability
             • BaseEntity/BaseAuditableEntity with domain events and automatic audit tracking
             • EF Core interceptors for domain event dispatch and audit field population
@@ -23,6 +24,23 @@
         <license type="expression">MIT</license>
         <projectUrl>https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template</projectUrl>
         <releaseNotes>
+Version 10.6.0:
+
+Templates:
+- Added ddvs-modular: an LLM-friendly modular monolith API template organized by business module and vertical slice
+- Added ddvs-clean as an explicit compatibility short name for the existing Clean Architecture template
+- Preserved ddvs as the backward-compatible Clean Architecture template short name
+
+Modular architecture:
+- Added a single-project Minimal API backend with Entity1 module sample
+- Added direct Endpoint -> Validator -> Handler -> DbContext/Domain flow without mediator, generic repositories, or Unit of Work
+- Added Result/Error/ProblemDetails mapping for expected business failures
+- Added SQLite persistence with EF Core configuration kept inside the Entity1 module
+- Added optional Aspire AppHost and ServiceDefaults via --UseAspire, default true
+
+Testing and docs:
+- Added generated unit, integration, and architecture tests for ddvs-modular
+
 Version 10.5.0:
 
 Security:
@@ -95,7 +113,7 @@ UI Improvements:
         <repository type="git" url="https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template.git" />
     </metadata>
     <files>
-        <file src=".\**" target="content" exclude="**\node_modules\**;**\bin\**;**\obj\**;**\.git\**;**\.gitignore;**\*.user;**\.vs\**;**\.vscode\**;**\.scripts\**;.\.github\workflows\package.yml;.\.github\workflows\codeql.yml;**\nupkgs\**;**\templatedb.db;**\sample\**;.\CODE_OF_CONDUCT.md;.\LICENSE;" />
+        <file src=".\**" target="content" exclude="**\node_modules\**;**\bin\**;**\obj\**;**\.git\**;**\.gitignore;**\*.user;**\.vs\**;**\.vscode\**;**\.scripts\**;.\.github\codeql\**;.\.github\instructions\**;.\.github\plans\**;.\.github\releases\**;.\.github\tasks.md;.\.github\workflows\**;**\artifacts\**;**\nupkgs\**;**\*.nupkg;**\*.snupkg;.\nuget.exe;.\COMMIT_MSG.txt;.\RELEASE_NOTES_*.md;.\instruction.md;**\templatedb.db;**\sample\**;.\CODE_OF_CONDUCT.md;.\LICENSE;" />
         <file src="README.md" />
     </files>
 </package>
