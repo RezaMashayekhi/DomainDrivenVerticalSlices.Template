@@ -131,6 +131,30 @@ dotnet new install RM.DomainDrivenVerticalSlices.Template@10.6.0
 
 ### Create a New Project
 
+**Clean Architecture (backward-compatible `ddvs`):**
+
+```bash
+dotnet new ddvs -n MyApplication
+```
+
+**Clean Architecture (`ddvs-clean` explicit alias):**
+
+```bash
+dotnet new ddvs-clean -n MyApplication
+```
+
+**Modular Monolith (Aspire enabled by default):**
+
+```bash
+dotnet new ddvs-modular -n MyApplication
+```
+
+**Modular Monolith without Aspire:**
+
+```bash
+dotnet new ddvs-modular -n MyApplication --UseAspire false
+```
+
 **WebAPI Only (Controller API — default):**
 
 ```bash

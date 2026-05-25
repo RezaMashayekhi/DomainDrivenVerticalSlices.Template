@@ -113,7 +113,7 @@ UI Improvements:
         <repository type="git" url="https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template.git" />
     </metadata>
     <files>
-        <file src=".\**" target="content" exclude="**\node_modules\**;**\bin\**;**\obj\**;**\.git\**;**\.gitignore;**\*.user;**\.vs\**;**\.vscode\**;**\.scripts\**;.\.github\plans\**;.\.github\workflows\package.yml;.\.github\workflows\codeql.yml;**\artifacts\**;**\nupkgs\**;**\*.nupkg;**\*.snupkg;**\templatedb.db;**\sample\**;.\CODE_OF_CONDUCT.md;.\LICENSE;" />
+        <file src=".\**" target="content" exclude="**\node_modules\**;**\bin\**;**\obj\**;**\.git\**;**\.gitignore;**\*.user;**\.vs\**;**\.vscode\**;**\.scripts\**;.\.github\codeql\**;.\.github\instructions\**;.\.github\plans\**;.\.github\releases\**;.\.github\tasks.md;.\.github\workflows\**;**\artifacts\**;**\nupkgs\**;**\*.nupkg;**\*.snupkg;.\nuget.exe;.\COMMIT_MSG.txt;.\RELEASE_NOTES_*.md;.\instruction.md;**\templatedb.db;**\sample\**;.\CODE_OF_CONDUCT.md;.\LICENSE;" />
         <file src="README.md" />
     </files>
 </package>

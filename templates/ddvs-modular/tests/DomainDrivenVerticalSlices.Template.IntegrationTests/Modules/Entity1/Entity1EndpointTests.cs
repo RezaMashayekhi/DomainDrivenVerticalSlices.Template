@@ -52,8 +52,8 @@ public sealed class Entity1EndpointTests(CustomWebApplicationFactory factory)
 
         Assert.NotNull(response);
         Assert.True(response.TotalCount >= 2);
-        Assert.Contains(response.Entity1, entity1 => entity1.ValueObject1.Property1 == "list-value-one");
-        Assert.Contains(response.Entity1, entity1 => entity1.ValueObject1.Property1 == "list-value-two");
+        Assert.Contains(response.Items, entity1 => entity1.ValueObject1.Property1 == "list-value-one");
+        Assert.Contains(response.Items, entity1 => entity1.ValueObject1.Property1 == "list-value-two");
     }
 
     [Fact]

@@ -16,7 +16,7 @@ internal sealed class ListEntity1Handler(AppDbContext dbContext)
 
         int totalCount = await dbContext.Entities1.CountAsync(cancellationToken);
 
-        Entity1Dto[] entity1 = await dbContext.Entities1
+        Entity1Dto[] items = await dbContext.Entities1
             .OrderBy(entity1 => entity1.ValueObject1.Property1)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
@@ -25,6 +25,6 @@ internal sealed class ListEntity1Handler(AppDbContext dbContext)
                 new ValueObject1Dto(entity1.ValueObject1.Property1)))
             .ToArrayAsync(cancellationToken);
 
-        return new ListEntity1Response(entity1, page, pageSize, totalCount);
+        return new ListEntity1Response(items, page, pageSize, totalCount);
     }
 }

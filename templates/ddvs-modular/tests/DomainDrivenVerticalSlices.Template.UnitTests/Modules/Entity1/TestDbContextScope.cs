@@ -36,9 +36,41 @@ internal sealed class TestDbContextScope : IAsyncDisposable
         await DbContext.DisposeAsync();
         SqliteConnection.ClearAllPools();
 
-        if (File.Exists(_databasePath))
+        await DeleteDatabaseFileAsync(_databasePath);
+    }
+
+    private static async Task DeleteDatabaseFileAsync(string databasePath)
+    {
+        const int maxAttempts = 5;
+
+        for (int attempt = 1; attempt <= maxAttempts; attempt++)
         {
-            File.Delete(_databasePath);
+            if (!File.Exists(databasePath))
+            {
+                return;
+            }
+
+            try
+            {
+                File.Delete(databasePath);
+                return;
+            }
+            catch (IOException) when (attempt < maxAttempts)
+            {
+                await Task.Delay(TimeSpan.FromMilliseconds(50 * attempt));
+            }
+            catch (UnauthorizedAccessException) when (attempt < maxAttempts)
+            {
+                await Task.Delay(TimeSpan.FromMilliseconds(50 * attempt));
+            }
+            catch (IOException)
+            {
+                return;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return;
+            }
         }
     }
 }
