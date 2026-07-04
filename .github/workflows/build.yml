@@ -85,6 +85,13 @@ jobs:
                   mkdir -p artifacts
                   nuget pack DomainDrivenVerticalSlices.Template.nuspec -OutputDirectory artifacts -NoDefaultExcludes
 
+            - name: Upload template package artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: nuget-package
+                  path: artifacts/*.nupkg
+                  if-no-files-found: error
+
             - name: Smoke test template package
               shell: bash
               run: |
@@ -145,7 +152,7 @@ jobs:
             - name: Install React dependencies
               run: |
                   cd src/DomainDrivenVerticalSlices.Template.UI.React
-                  npm install
+                  npm ci
 
             # Build React project
             - name: Build React project

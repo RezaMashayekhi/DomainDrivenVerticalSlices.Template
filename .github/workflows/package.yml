@@ -15,7 +15,7 @@ jobs:
     if: github.event.inputs.confirm == 'publish'
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         name: Checkout code
 
       - uses: nuget/setup-nuget@v1
@@ -24,7 +24,7 @@ jobs:
           nuget-version: "6.x"
 
       - name: Install Mono
-        run: sudo apt-get install -y mono-complete
+        run: sudo apt-get update && sudo apt-get install -y mono-complete
 
       - name: Create the package
         run: nuget pack DomainDrivenVerticalSlices.Template.nuspec -NoDefaultExcludes

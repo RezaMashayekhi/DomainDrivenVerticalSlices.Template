@@ -3,7 +3,7 @@
     <metadata>
         <id>RM.DomainDrivenVerticalSlices.Template</id>
         <title>ASP.NET Core Domain Driven Vertical Slices</title>
-        <version>10.6.0</version>
+        <version>10.7.0</version>
         <description>
             A comprehensive ASP.NET Core template implementing Domain-Driven Design (DDD) with Vertical Slice Architecture.
             
@@ -24,6 +24,45 @@
         <license type="expression">MIT</license>
         <projectUrl>https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template</projectUrl>
         <releaseNotes>
+Version 10.7.0:
+
+Security:
+- Pinned vulnerable transitive NuGet packages in both template trees via Central Package Management
+  (without these pins, newly generated projects fail to build because NuGet audit raises NU1902/NU1903
+  on fresh restore and TreatWarningsAsErrors turns them into errors):
+  MessagePack 2.5.192 -> 2.5.302 (GHSA-hv8m-jj95-wg3x),
+  Microsoft.OpenApi 2.4.1 -> 2.7.5 (GHSA-v5pm-xwqc-g5wc),
+  SQLitePCLRaw.lib.e_sqlite3 2.1.11 -> 3.50.3 (GHSA-2m69-gcr7-jv3q / CVE-2025-6965)
+- React UI: resolved all 9 npm audit findings (2 critical, 2 high, 4 moderate, 1 low) via lockfile refresh:
+  vitest 4.1.9 (GHSA-5xrq-8626-4rwp), vite 6.4.3 (GHSA-v6wh-96g9-6wx3, GHSA-fx2h-pf6j-xcff),
+  ws 8.21.0 (GHSA-58qx-3vcg-4xpx, GHSA-96hv-2xvq-fx4p), react-router 6.30.4 (GHSA-2j2x-hqr9-3h42),
+  js-yaml 4.3.0, brace-expansion 5.0.7, @babel/core 7.29.7
+
+Dependencies:
+- Updated all outdated NuGet packages to latest-in-major in both trees:
+  EF Core / Microsoft.Extensions.* / AspNetCore.Mvc.Testing 10.0.7 -> 10.0.9,
+  Http.Resilience + ServiceDiscovery 10.5.0 -> 10.7.0, Aspire 13.2.4 -> 13.4.6,
+  OpenTelemetry 1.15.x -> 1.16.0 (Instrumentation.Runtime held at 1.15.1; no 1.16.0 published),
+  Swashbuckle.AspNetCore 10.1.7 -> 10.2.3, Microsoft.NET.Test.Sdk 18.5.1 -> 18.7.0,
+  coverlet 10.0.0 -> 10.0.1, Testcontainers 4.11.0 -> 4.13.0
+- Both trees build 0-warning and stay vulnerability-clean; all generated variants build and test green
+
+Domain events (ddvs/ddvs-clean):
+- Fixed Mediator.Publish to resolve handlers by the notification's runtime type; events raised via
+  BaseEntity.AddDomainEvent were previously dropped silently by the interceptor dispatch
+- DispatchDomainEventsInterceptor now dispatches after a successful save (SavedChanges) and honors
+  the cancellation token
+- CreateEntity1CommandHandler no longer publishes the event manually; events flow exactly once
+  through the interceptor (migration: the handler no longer takes an IPublisher parameter)
+- Added mediator unit tests and interceptor tests; integration-test factories keep the production
+  interceptors attached
+
+Logging (ddvs/ddvs-clean):
+- LoggingBehaviour logs request/response payload properties at Debug level only (PII and log-volume
+  safety); Information level keeps request name, outcome, and error details
+- PerformanceBehaviour and UnhandledExceptionBehaviour no longer embed the full request object in
+  Warning/Error messages - only the request name
+
 Version 10.6.0:
 
 Templates:
@@ -113,7 +152,7 @@ UI Improvements:
         <repository type="git" url="https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template.git" />
     </metadata>
     <files>
-        <file src=".\**" target="content" exclude="**\node_modules\**;**\bin\**;**\obj\**;**\.git\**;**\.gitignore;**\*.user;**\.vs\**;**\.vscode\**;**\.scripts\**;.\.github\codeql\**;.\.github\instructions\**;.\.github\plans\**;.\.github\releases\**;.\.github\tasks.md;.\.github\workflows\**;**\artifacts\**;**\nupkgs\**;**\*.nupkg;**\*.snupkg;.\nuget.exe;.\COMMIT_MSG.txt;.\RELEASE_NOTES_*.md;.\instruction.md;**\templatedb.db;**\sample\**;.\CODE_OF_CONDUCT.md;.\LICENSE;" />
+        <file src=".\**" target="content" exclude="**\node_modules\**;**\bin\**;**\obj\**;**\.git\**;.\.gitignore;**\*.user;**\.vs\**;**\.vscode\**;**\.scripts\**;.\.github\codeql\**;.\.github\instructions\**;.\.github\plans\**;.\.github\releases\**;.\.github\tasks.md;.\.github\workflows\**;**\artifacts\**;**\nupkgs\**;**\*.nupkg;**\*.snupkg;.\nuget.exe;.\COMMIT_MSG.txt;.\RELEASE_NOTES_*.md;.\instruction.md;**\templatedb.db;**\sample\**;.\CODE_OF_CONDUCT.md;.\LICENSE;.\.claude\**;.\CLAUDE.md;.\CHANGELOG.md;.\docs\ROADMAP.md;.\docs\RELEASE_PROCESS.md;**\*.code-workspace;**\packages.lock.json;**\coverage\**;**\dist\**;**\*.opencover.xml;**\TestResults\**;.\.github\copilot-instructions.md;.\.prettierignore;.\templates\ddvs-modular\.github\**;.\templates\ddvs-modular\docs\**;" />
         <file src="README.md" />
     </files>
 </package>

@@ -26,7 +26,7 @@ jobs:
               if: matrix.language == 'csharp'
               uses: actions/setup-dotnet@v4
               with:
-                  dotnet-version: "10.0.100"
+                  dotnet-version: "10.0.x"
 
             - name: Setup Node.js for JavaScript/TypeScript analysis
               if: matrix.language == 'javascript'
@@ -47,7 +47,7 @@ jobs:
             - name: Install and build JavaScript/TypeScript
               if: matrix.language == 'javascript'
               run: |
-                  npm install
+                  npm ci
                   npm run build
               working-directory: src/DomainDrivenVerticalSlices.Template.UI.React
 

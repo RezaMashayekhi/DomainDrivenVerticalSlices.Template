@@ -1,6 +1,7 @@
 namespace DomainDrivenVerticalSlices.Template.IntegrationTests;
 
 using DomainDrivenVerticalSlices.Template.Infrastructure.Data;
+using DomainDrivenVerticalSlices.Template.Infrastructure.Data.Interceptors;
 using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Containers;
 using Microsoft.AspNetCore.Hosting;
@@ -104,9 +105,14 @@ public class TestcontainersWebApplicationFactory : WebApplicationFactory<Program
                 services.Remove(descriptor);
             }
 
-            // Register the DbContext using SQLite with our testcontainer connection
-            services.AddDbContext<AppDbContext>(options =>
+            // Register the DbContext using SQLite with our testcontainer connection, keeping
+            // the production interceptors attached so their behavior stays under test
+            services.AddDbContext<AppDbContext>((sp, options) =>
             {
+                options.AddInterceptors(
+                    sp.GetRequiredService<AuditableEntityInterceptor>(),
+                    sp.GetRequiredService<DispatchDomainEventsInterceptor>());
+
                 options.UseSqlite(_connectionString);
             });
 

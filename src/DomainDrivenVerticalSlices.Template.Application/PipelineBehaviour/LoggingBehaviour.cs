@@ -26,7 +26,13 @@ public class LoggingBehaviour<TRequest, TResponse>(
     {
         _logger.LogInformation("Handling {Request}", typeof(TRequest).Name);
 
-        LogProperties(request);
+        // Request/response payloads are logged at Debug only: they can contain personal or
+        // sensitive data, and the name-based denylist below is not exhaustive. Information
+        // level carries the operational signal (request name, outcome, error details).
+        if (_logger.IsEnabled(LogLevel.Debug))
+        {
+            LogProperties(request);
+        }
 
         var response = await next();
 
@@ -40,7 +46,8 @@ public class LoggingBehaviour<TRequest, TResponse>(
 
                 // Try to log value from Result<T> without using dynamic
                 var responseType = typeof(TResponse);
-                if (responseType.IsGenericType && responseType.GetGenericTypeDefinition() == typeof(Result<>))
+                if (_logger.IsEnabled(LogLevel.Debug) &&
+                    responseType.IsGenericType && responseType.GetGenericTypeDefinition() == typeof(Result<>))
                 {
                     var valueProperty = responseType.GetProperty("Value");
                     if (valueProperty != null)
@@ -67,7 +74,7 @@ public class LoggingBehaviour<TRequest, TResponse>(
     {
         if (obj == null)
         {
-            _logger.LogInformation("Current: (null)");
+            _logger.LogDebug("Current: (null)");
             return;
         }
 
@@ -80,7 +87,7 @@ public class LoggingBehaviour<TRequest, TResponse>(
                 count++;
             }
 
-            _logger.LogInformation("Count: {Count}", count);
+            _logger.LogDebug("Count: {Count}", count);
             return;
         }
 
@@ -105,11 +112,11 @@ public class LoggingBehaviour<TRequest, TResponse>(
 
             if (propValue is DateTime dateTimeValue)
             {
-                _logger.LogInformation("{Property}: {@Value}", prop.Name, dateTimeValue.ToString("yyyy/MM/dd HH:mm:ss"));
+                _logger.LogDebug("{Property}: {@Value}", prop.Name, dateTimeValue.ToString("yyyy/MM/dd HH:mm:ss"));
             }
             else
             {
-                _logger.LogInformation("{Property}: {@Value}", prop.Name, propValue);
+                _logger.LogDebug("{Property}: {@Value}", prop.Name, propValue);
             }
         }
     }

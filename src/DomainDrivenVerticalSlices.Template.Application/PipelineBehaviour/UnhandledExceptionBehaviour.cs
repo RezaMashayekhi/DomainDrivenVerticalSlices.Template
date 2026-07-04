@@ -25,11 +25,12 @@ public class UnhandledExceptionBehaviour<TRequest, TResponse>(
         {
             var requestName = typeof(TRequest).Name;
 
+            // Log the request name only — destructuring the request object would leak
+            // payload values (incl. sensitive data) into Error-level production logs.
             _logger.LogError(
                 ex,
-                "Unhandled Exception for Request {RequestName} {@Request}",
-                requestName,
-                request);
+                "Unhandled Exception for Request {RequestName}",
+                requestName);
 
             throw;
         }

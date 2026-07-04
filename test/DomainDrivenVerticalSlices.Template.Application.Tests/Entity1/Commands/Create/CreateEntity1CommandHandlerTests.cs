@@ -4,7 +4,6 @@ using DomainDrivenVerticalSlices.Template.Application.Dtos;
 using DomainDrivenVerticalSlices.Template.Application.Entity1.Commands.Create;
 using DomainDrivenVerticalSlices.Template.Application.Interfaces;
 using DomainDrivenVerticalSlices.Template.Application.Tests.Helpers;
-using DomainDrivenVerticalSlices.Template.Common.Mediator;
 using DomainDrivenVerticalSlices.Template.Common.Results;
 using DomainDrivenVerticalSlices.Template.Domain.Entities;
 using DomainDrivenVerticalSlices.Template.Domain.Events;
@@ -17,7 +16,6 @@ public class CreateEntity1CommandHandlerTests
     private readonly Mock<IEntity1Repository> _entity1RepositoryMock;
     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly Mock<ILogger<CreateEntity1CommandHandler>> _loggerMock;
-    private readonly Mock<IPublisher> _publisherMock;
 
     private readonly CreateEntity1CommandHandler _handler;
 
@@ -26,13 +24,11 @@ public class CreateEntity1CommandHandlerTests
         _entity1RepositoryMock = new Mock<IEntity1Repository>();
         _unitOfWorkMock = new Mock<IUnitOfWork>();
         _loggerMock = new Mock<ILogger<CreateEntity1CommandHandler>>();
-        _publisherMock = new Mock<IPublisher>();
 
         _handler = new CreateEntity1CommandHandler(
             _entity1RepositoryMock.Object,
             _unitOfWorkMock.Object,
-            _loggerMock.Object,
-            _publisherMock.Object);
+            _loggerMock.Object);
     }
 
     [Fact]
@@ -43,8 +39,7 @@ public class CreateEntity1CommandHandlerTests
             new CreateEntity1CommandHandler(
                 null!, // Entity1Repository
                 _unitOfWorkMock.Object,
-                _loggerMock.Object,
-                _publisherMock.Object);
+                _loggerMock.Object);
         });
 
         Assert.Equal("entity1Repository", exception.ParamName);
@@ -59,8 +54,7 @@ public class CreateEntity1CommandHandlerTests
             new CreateEntity1CommandHandler(
                 Mock.Of<IEntity1Repository>(),
                 null!, // IUnitOfWork
-                _loggerMock.Object,
-                _publisherMock.Object);
+                _loggerMock.Object);
         });
 
         Assert.Equal("unitOfWork", exception.ParamName);
@@ -75,28 +69,11 @@ public class CreateEntity1CommandHandlerTests
             new CreateEntity1CommandHandler(
                 Mock.Of<IEntity1Repository>(),
                 _unitOfWorkMock.Object,
-                null!, // logger
-                _publisherMock.Object);
+                null!); // logger
         });
 
         Assert.Equal("logger", exception.ParamName);
         Assert.Contains("logger", exception.Message);
-    }
-
-    [Fact]
-    public void Constructor_ThrowsArgumentNullException_WhenPublisherIsNull()
-    {
-        var exception = Assert.Throws<ArgumentNullException>(() =>
-        {
-            new CreateEntity1CommandHandler(
-                Mock.Of<IEntity1Repository>(),
-                _unitOfWorkMock.Object,
-                _loggerMock.Object,
-                null!); // IPublisher
-        });
-
-        Assert.Equal("publisher", exception.ParamName);
-        Assert.Contains("publisher", exception.Message);
     }
 
     [Fact]
@@ -120,7 +97,9 @@ public class CreateEntity1CommandHandlerTests
 
         _entity1RepositoryMock.Verify(r => r.AddAsync(It.IsAny<Entity1>(), CancellationToken.None), Times.Once);
         _unitOfWorkMock.Verify(u => u.SaveChangesAsync(CancellationToken.None), Times.Once);
-        _publisherMock.Verify(p => p.Publish(It.Is<Entity1CreatedEvent>(e => e.Entity1Id == entity1.Id), It.IsAny<CancellationToken>()), Times.Once);
+
+        // The created event stays on the entity; DispatchDomainEventsInterceptor publishes it at save time.
+        Assert.Contains(entity1.DomainEvents, e => e is Entity1CreatedEvent created && created.Entity1Id == entity1.Id);
     }
 
     [Fact]
@@ -141,7 +120,6 @@ public class CreateEntity1CommandHandlerTests
 
         _loggerMock.VerifyLogLevelTotalCalls(LogLevel.Error, Times.Once);
         _loggerMock.VerifyLogging("Error creating Entity1", LogLevel.Error, Times.Once());
-        _publisherMock.Verify(p => p.Publish(It.IsAny<Entity1CreatedEvent>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 
     [Fact]
@@ -158,6 +136,5 @@ public class CreateEntity1CommandHandlerTests
         Assert.False(result.IsSuccess);
         _loggerMock.VerifyLogLevelTotalCalls(LogLevel.Error, Times.Once);
         _loggerMock.VerifyLogging("An error occurred: property1 cannot be empty.", LogLevel.Error, Times.Once());
-        _publisherMock.Verify(p => p.Publish(It.IsAny<Entity1CreatedEvent>(), It.IsAny<CancellationToken>()), Times.Never);
     }
 }
