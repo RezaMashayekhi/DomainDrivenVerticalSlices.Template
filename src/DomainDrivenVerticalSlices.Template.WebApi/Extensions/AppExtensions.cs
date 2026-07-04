@@ -18,7 +18,7 @@ public static class AppExtensions
             app.UseSwagger();
             app.UseSwaggerUI(options =>
             {
-                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Entity1 API (v1)");
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "DomainDrivenVerticalSlices.Template API (v1)");
             });
 
             var connectionString = config.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("No connection string named 'DefaultConnection' found in the configuration.");

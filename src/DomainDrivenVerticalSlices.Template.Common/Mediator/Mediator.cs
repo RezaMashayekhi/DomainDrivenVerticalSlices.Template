@@ -48,11 +48,16 @@ public class Mediator(IServiceProvider serviceProvider) : IMediator
     {
         ArgumentNullException.ThrowIfNull(notification);
 
-        var handlers = _serviceProvider.GetServices<INotificationHandler<TNotification>>();
+        // Resolve handlers by the notification's runtime type, not the compile-time TNotification.
+        // Events published through a base-typed reference (e.g. the INotification instances that
+        // DispatchDomainEventsInterceptor reads from BaseEntity.DomainEvents) must still reach
+        // handlers registered as INotificationHandler<TConcreteEvent>.
+        var handlerType = typeof(INotificationHandler<>).MakeGenericType(notification.GetType());
+        var handleMethod = handlerType.GetMethod("Handle")!;
 
-        foreach (var handler in handlers)
+        foreach (var handler in _serviceProvider.GetServices(handlerType))
         {
-            await handler.Handle(notification, cancellationToken);
+            await (Task)handleMethod.Invoke(handler, [notification, cancellationToken])!;
         }
     }
 }

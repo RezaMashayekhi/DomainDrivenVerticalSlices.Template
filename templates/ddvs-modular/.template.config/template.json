@@ -54,8 +54,12 @@
             "target": "./",
             "exclude": [
                 ".template.config/**",
+                ".github/**",
+                "docs/**",
+                ".vs/**",
                 "**/bin/**",
                 "**/obj/**",
+                "**/*.user",
                 "**/*.lock.json"
             ],
             "modifiers": [

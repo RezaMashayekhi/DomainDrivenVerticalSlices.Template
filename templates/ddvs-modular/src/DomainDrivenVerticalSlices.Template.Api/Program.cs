@@ -17,7 +17,7 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new()
     {
-        Title = "Entity1 API",
+        Title = "DomainDrivenVerticalSlices.Template API",
         Version = "v1",
     });
 });
@@ -32,7 +32,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Entity1 API (v1)");
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "DomainDrivenVerticalSlices.Template API (v1)");
     });
 
     await app.InitializeDatabaseAsync();

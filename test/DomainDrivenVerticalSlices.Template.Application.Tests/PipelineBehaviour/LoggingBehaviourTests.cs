@@ -22,10 +22,11 @@ public class LoggingBehaviourTests
     }
 
     [Fact]
-    public async Task Handle_LogsRequestAndResponse()
+    public async Task Handle_LogsRequestAndResponse_PayloadPropertiesAtDebugOnly()
     {
         // Arrange
         var loggerMock = new Mock<ILogger<LoggingBehaviour<ICommand<Unit>, Unit>>>();
+        loggerMock.Setup(l => l.IsEnabled(LogLevel.Debug)).Returns(true);
         var loggingBehaviour = new LoggingBehaviour<ICommand<Unit>, Unit>(loggerMock.Object);
         var request = new RequestStub("TestValue1", "TestValue2");
 
@@ -37,14 +38,36 @@ public class LoggingBehaviourTests
         // Act
         await loggingBehaviour.Handle(request, next, CancellationToken.None);
 
-        // Assert
-        loggerMock.VerifyLogLevelTotalCalls(LogLevel.Information, Times.Exactly(4));
+        // Assert - request name at Information; payload properties only at Debug
+        loggerMock.VerifyLogLevelTotalCalls(LogLevel.Information, Times.Exactly(2));
+        loggerMock.VerifyLogLevelTotalCalls(LogLevel.Debug, Times.Exactly(2));
 
         loggerMock
             .VerifyLogging(handlingMessage)
             .VerifyLogging(handledMessage)
-            .VerifyLogging("TestProp1: TestValue1")
-            .VerifyLogging("TestProp2: TestValue2");
+            .VerifyLogging("TestProp1: TestValue1", LogLevel.Debug)
+            .VerifyLogging("TestProp2: TestValue2", LogLevel.Debug);
+    }
+
+    [Fact]
+    public async Task Handle_DoesNotLogPayloadProperties_WhenDebugDisabled()
+    {
+        // Arrange - default mock: IsEnabled(Debug) returns false (production-like)
+        var loggerMock = new Mock<ILogger<LoggingBehaviour<ICommand<Unit>, Unit>>>();
+        var loggingBehaviour = new LoggingBehaviour<ICommand<Unit>, Unit>(loggerMock.Object);
+        var request = new RequestStub("TestValue1", "TestValue2");
+
+        RequestHandlerDelegate<Unit> next = () => Task.FromResult(Unit.Value);
+
+        // Act
+        await loggingBehaviour.Handle(request, next, CancellationToken.None);
+
+        // Assert - no payload values reach the logs at any level
+        loggerMock.VerifyLogLevelTotalCalls(LogLevel.Information, Times.Exactly(2));
+        loggerMock.VerifyLogLevelTotalCalls(LogLevel.Debug, Times.Never());
+        loggerMock
+            .VerifyNotLogged("TestProp1: TestValue1")
+            .VerifyNotLogged("TestProp1: TestValue1", LogLevel.Debug);
     }
 
     [Fact]
@@ -189,6 +212,7 @@ public class LoggingBehaviourTests
     {
         // Arrange
         var loggerMock = new Mock<ILogger<LoggingBehaviour<ICommand<Unit>, Unit>>>();
+        loggerMock.Setup(l => l.IsEnabled(LogLevel.Debug)).Returns(true);
         var loggingBehaviour = new LoggingBehaviour<ICommand<Unit>, Unit>(loggerMock.Object);
         var time = DateTime.Now;
         var emptyRequest = new WithSensitiveAndDateTimePropertiesRequestStub("TestValue1", time, "password");
@@ -201,15 +225,17 @@ public class LoggingBehaviourTests
         // Act
         await loggingBehaviour.Handle(emptyRequest, next, CancellationToken.None);
 
-        // Assert
-        loggerMock.VerifyLogLevelTotalCalls(LogLevel.Information, Times.Exactly(4));
+        // Assert - denylisted properties are skipped even at Debug
+        loggerMock.VerifyLogLevelTotalCalls(LogLevel.Information, Times.Exactly(2));
+        loggerMock.VerifyLogLevelTotalCalls(LogLevel.Debug, Times.Exactly(2));
 
         loggerMock
             .VerifyLogging(handlingMessage)
             .VerifyLogging(handledMessage)
-            .VerifyLogging("TestProp1: TestValue1")
-            .VerifyLogging($"TestProp2: {time:yyyy/MM/dd HH:mm:ss}")
-            .VerifyNotLogged("password");
+            .VerifyLogging("TestProp1: TestValue1", LogLevel.Debug)
+            .VerifyLogging($"TestProp2: {time:yyyy/MM/dd HH:mm:ss}", LogLevel.Debug)
+            .VerifyNotLogged("Password: password")
+            .VerifyNotLogged("Password: password", LogLevel.Debug);
     }
 
     [Fact]

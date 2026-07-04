@@ -8,20 +8,17 @@ using DomainDrivenVerticalSlices.Template.Common.Errors;
 using DomainDrivenVerticalSlices.Template.Common.Mediator;
 using DomainDrivenVerticalSlices.Template.Common.Results;
 using DomainDrivenVerticalSlices.Template.Domain.Entities;
-using DomainDrivenVerticalSlices.Template.Domain.Events;
 using DomainDrivenVerticalSlices.Template.Domain.ValueObjects;
 using Microsoft.Extensions.Logging;
 
 public class CreateEntity1CommandHandler(
     IEntity1Repository entity1Repository,
     IUnitOfWork unitOfWork,
-    ILogger<CreateEntity1CommandHandler> logger,
-    IPublisher publisher) : ICommandHandler<CreateEntity1Command, Result<Entity1Dto>>
+    ILogger<CreateEntity1CommandHandler> logger) : ICommandHandler<CreateEntity1Command, Result<Entity1Dto>>
 {
     private readonly IEntity1Repository _entity1Repository = entity1Repository ?? throw new ArgumentNullException(nameof(entity1Repository));
     private readonly IUnitOfWork _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
     private readonly ILogger<CreateEntity1CommandHandler> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-    private readonly IPublisher _publisher = publisher ?? throw new ArgumentNullException(nameof(publisher));
 
     public async Task<Result<Entity1Dto>> Handle(CreateEntity1Command request, CancellationToken cancellationToken)
     {
@@ -42,9 +39,10 @@ public class CreateEntity1CommandHandler(
         try
         {
             var entity1 = await _entity1Repository.AddAsync(entity1Result.Value, cancellationToken);
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            await _publisher.Publish(new Entity1CreatedEvent(entity1.Id), cancellationToken);
+            // Entity1.Create raised Entity1CreatedEvent on the entity; DispatchDomainEventsInterceptor
+            // publishes it once the save completes, so no manual Publish is needed here.
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             _logger.LogInformation("Entity1 created with id {Entity1Id}.", entity1.Id);
             var entity1Dto = entity1.MapToDto();

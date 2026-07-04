@@ -1,6 +1,7 @@
 ﻿namespace DomainDrivenVerticalSlices.Template.IntegrationTests;
 
 using DomainDrivenVerticalSlices.Template.Infrastructure.Data;
+using DomainDrivenVerticalSlices.Template.Infrastructure.Data.Interceptors;
 using DomainDrivenVerticalSlices.Template.IntegrationTests.Helpers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -39,9 +40,14 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
                 services.Remove(descriptor);
             }
 
-            // Register the DbContext using in-memory database
-            services.AddDbContext<AppDbContext>(options =>
+            // Register the DbContext using in-memory database, keeping the production
+            // interceptors attached so audit fields and domain-event dispatch stay under test
+            services.AddDbContext<AppDbContext>((sp, options) =>
             {
+                options.AddInterceptors(
+                    sp.GetRequiredService<AuditableEntityInterceptor>(),
+                    sp.GetRequiredService<DispatchDomainEventsInterceptor>());
+
                 options.UseInMemoryDatabase("TestDatabase");
             });
 
@@ -62,6 +68,10 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         {
             logging.ClearProviders();
             logging.AddProvider(new ListLoggerProvider(LogMessages));
+
+            // LoggingBehaviour emits request/response payload properties at Debug only;
+            // appsettings.integrationtest.json raises the app's log level to Debug so the
+            // payload-logging path stays covered by the log assertions in these tests.
         });
     }
 }

@@ -15,7 +15,7 @@ The Application layer serves as the core of our business logic, orchestrating th
 
 ### LoggingBehaviour
 
-Automatically logs the execution of commands and queries, wrapping the handling process and logging key details about the request and its result. Sensitive information is intentionally omitted.
+Automatically logs the execution of commands and queries: the request name, outcome, and error details at `Information`/`Warning`. Request and response payload properties are logged at `Debug` only (enable the `Debug` level for this category to see them); properties with sensitive names (e.g. `Password`, `Token`) are skipped, but the denylist is name-based and not exhaustive — payload logging stays opt-in by design.
 
 ### ValidationBehaviour
 

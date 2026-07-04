@@ -13,14 +13,37 @@ If you find this template helpful, please [give it a star on GitHub](https://git
 
 ---
 
-## What's New in 10.6.0
+## What's New in 10.7.0
+
+### Security release — new projects build again
+
+- **Fixed generated projects failing to build**: newly published security advisories against
+  transitive packages (`MessagePack`, `Microsoft.OpenApi`, `SQLitePCLRaw.lib.e_sqlite3`) broke
+  fresh `dotnet new` output via NuGet audit + `TreatWarningsAsErrors`. All three are now pinned
+  to patched versions in **both** templates.
+- **React UI dependency audit clean**: resolved all 9 `npm audit` findings (including a
+  critical Vitest advisory) via a lockfile refresh.
+- **Domain events fixed (Clean Architecture)**: events raised with `AddDomainEvent` are now
+  actually dispatched — exactly once, after a successful save. Previously the interceptor
+  dispatch was a silent no-op masked by a duplicate manual publish.
+- **Safer logging defaults**: request/response payload properties are logged at `Debug` only,
+  and slow-request/unhandled-exception logs no longer embed the full request object;
+  `Information` keeps the request name, outcome, and error details.
+- **Leaner, reproducible package**: repo/AI maintainer files, editor state, and build outputs
+  no longer ship into the package or generated projects; the React project `.gitignore` ships
+  again; the Swagger title now takes your project's name in both templates.
+
+<details>
+<summary><strong>What's New in 10.6.0</strong></summary>
 
 ### Modular Monolith Template
 
 - **New `ddvs-modular` template**: LLM-friendly modular monolith with vertical slices organized by business capability.
 - **Compatibility preserved**: `ddvs` keeps the existing Clean Architecture behavior, and `ddvs-clean` is now an explicit short name for that template style.
 - **API-first modular release**: The first modular template uses Minimal APIs, SQLite, and optional Aspire support. React UI, controller support, and database-provider selection are deferred for future modular releases.
-- **Generated guidance**: Modular projects include architecture docs and Copilot instruction files for consistent AI-assisted development.
+- **LLM-friendly by structure**: organized by business module and vertical slice so features stay local and easy for humans and AI agents to navigate. (Architecture ADRs and Copilot instructions live in the template repository as reference — generated projects are kept clean and do not receive them.)
+
+</details>
 
 ## Available Templates
 
@@ -44,7 +67,7 @@ dotnet new ddvs-clean -n MyApplication
 
 ### ddvs-modular
 
-LLM-friendly modular monolith with vertical slices organized by business module. The `10.6.0` modular release is API-only Minimal API with SQLite and Aspire enabled by default.
+LLM-friendly modular monolith with vertical slices organized by business module. The modular template (since `10.6.0`) is API-only Minimal API with SQLite and Aspire enabled by default.
 
 ```bash
 dotnet new ddvs-modular -n MyApplication
@@ -55,6 +78,18 @@ To omit Aspire projects:
 ```bash
 dotnet new ddvs-modular -n MyApplication --UseAspire false
 ```
+
+<details>
+<summary><strong>Security &amp; Dependencies in 10.5.0</strong></summary>
+
+- **OpenTelemetry DoS fixes**: exporter/hosting upgraded to 1.15.3 (CVE-2026-40894, CVE-2026-40182, CVE-2026-40891); transitive `OpenTelemetry.Api` pinned to 1.15.3.
+- **Front-end fixes**: Vite → 6.4.2 (CVE-2026-39363, CVE-2026-39365); PostCSS → 8.5.12 (GHSA-qx2v-qp2m-jg93).
+- **Dependency upgrades**: EF Core → 10.0.7, Aspire → 13.2.4, and refreshed test tooling.
+- **Deterministic builds**: enabled NuGet transitive pinning.
+
+See the [CHANGELOG](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template/blob/main/CHANGELOG.md) for full details.
+
+</details>
 
 ## What's New in 10.4.0
 
@@ -126,7 +161,7 @@ dotnet new ddvs-modular -n MyApplication --UseAspire false
 Install the template from NuGet:
 
 ```bash
-dotnet new install RM.DomainDrivenVerticalSlices.Template@10.6.0
+dotnet new install RM.DomainDrivenVerticalSlices.Template@10.7.0
 ```
 
 ### Create a New Project
@@ -180,6 +215,11 @@ dotnet new ddvs -n YourProjectName --ApiType MinimalApi --UiType React
 ```
 
 ## Running the Application
+
+> The sections below describe the **Clean Architecture** output (`ddvs` / `ddvs-clean`).
+> For the modular monolith (`ddvs-modular`) see
+> [Modular Monolith layout](#modular-monolith-layout-ddvs-modular) — its API lives in
+> `src/YourProjectName.Api` and its tests in `tests/` (not `test/`).
 
 ### Option 1: Using .NET Aspire (Recommended)
 
@@ -247,6 +287,31 @@ YourProjectName/
 | **Common**          | Custom mediator, Result pattern, Error types, and ValueObject base class               |
 | **UI.React**        | React 19 + Vite 6 + Tailwind CSS v4 frontend with dark mode support                    |
 
+### Modular Monolith layout (ddvs-modular)
+
+The `ddvs-modular` template generates a different, single-project layout organized by
+business module and vertical slice:
+
+```
+YourProjectName/
+├── src/
+│   ├── YourProjectName.Api/                  # Single Minimal API project
+│   │   ├── Common/{Endpoints,Errors,Persistence}
+│   │   └── Modules/Entity1/{Contracts,Domain,Endpoints,Features,Infrastructure}
+│   ├── YourProjectName.AppHost/              # only with --UseAspire true (default)
+│   └── YourProjectName.ServiceDefaults/      # only with --UseAspire true (default)
+└── tests/                                    # note: 'tests', not 'test'
+    ├── YourProjectName.UnitTests/
+    ├── YourProjectName.IntegrationTests/
+    └── YourProjectName.ArchitectureTests/
+```
+
+Run it with `dotnet run --project src/YourProjectName.AppHost` (Aspire) or
+`dotnet run --project src/YourProjectName.Api` (API only / `--UseAspire false`). Each
+feature follows an explicit **Endpoint → Validator → Handler → DbContext/Domain** flow —
+no mediator, generic repositories, or Unit of Work. See the generated project's `README.md`
+and the `Modules/Entity1/README.md` for details.
+
 ## Key Features
 
 ### Architecture
@@ -276,18 +341,29 @@ YourProjectName/
 
 - **BaseEntity**: Domain event collection and identity
 - **BaseAuditableEntity**: Automatic `CreatedAt`, `CreatedBy`, `ModifiedAt`, `ModifiedBy`
-- **EF Core Interceptors**: Auto-populate audit fields and dispatch domain events on save<br> - **IUser Abstraction**: Clean access to current user context
+- **EF Core Interceptors**: Auto-populate audit fields and dispatch domain events after a successful save
+- **IUser Abstraction**: Clean access to current user context
 
 ### Pipeline Behaviors
 
 - **ValidationBehaviour**: FluentValidation integration — validates before handler execution
-- **LoggingBehaviour**: Request/response logging with timing
+- **LoggingBehaviour**: Logs request name and outcome at `Information`; payload properties at `Debug` only (sensitive property names skipped)
 - **PerformanceBehaviour**: Warns when requests exceed threshold (default: 500ms)
 - **UnhandledExceptionBehaviour**: Centralized exception logging
 
+## Project Documentation
+
+These maintainer docs live in the GitHub repository only — they are intentionally **not**
+shipped in the NuGet package or into generated projects:
+
+- [CHANGELOG.md](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template/blob/main/CHANGELOG.md) — notable changes per version (Keep a Changelog format).
+- [docs/ROADMAP.md](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template/blob/main/docs/ROADMAP.md) — planned direction (candidates, not promises).
+- [docs/RELEASE_PROCESS.md](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template/blob/main/docs/RELEASE_PROCESS.md) — validation, packaging, and release steps.
+- [CLAUDE.md](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template/blob/main/CLAUDE.md) — guidance for Claude Code and other AI agents working in this repository.
+
 ## License
 
-Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
+Distributed under the MIT License. See [LICENSE](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template/blob/main/LICENSE) for more information.
 
 ## Development Notes
 

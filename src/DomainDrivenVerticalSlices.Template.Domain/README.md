@@ -7,11 +7,11 @@ The Domain layer is at the heart of the application, encapsulating the business 
 ### Base Classes
 
 - **BaseEntity**: Abstract base class providing identity and domain event collection. All entities can raise domain events that are dispatched after persistence.
-- **BaseAuditableEntity**: Extends `BaseEntity` with automatic audit tracking — `CreatedAt`, `CreatedBy`, `ModifiedAt`, and `ModifiedBy` fields are populated automatically via EF Core interceptors.
+- **BaseAuditableEntity**: Extends `BaseEntity` with automatic audit tracking — `Created`, `CreatedBy`, `LastModified`, and `LastModifiedBy` fields are populated automatically via EF Core interceptors.
 
 ### Entities
 
-Entities are the primary objects within the domain, each with a unique identifier. `Entity1` demonstrates a domain entity inheriting from `BaseAuditableEntity` for full audit support.
+Entities are the primary objects within the domain, each with a unique identifier. `Entity1` demonstrates a domain entity inheriting from `BaseEntity` with domain-event support; inherit from `BaseAuditableEntity` instead when an entity also needs audit tracking.
 
 ### Events
 
@@ -41,10 +41,10 @@ public abstract class BaseEntity
 ```csharp
 public abstract class BaseAuditableEntity : BaseEntity
 {
-    public DateTimeOffset CreatedAt { get; set; }
+    public DateTimeOffset Created { get; set; }
     public string? CreatedBy { get; set; }
-    public DateTimeOffset? ModifiedAt { get; set; }
-    public string? ModifiedBy { get; set; }
+    public DateTimeOffset LastModified { get; set; }
+    public string? LastModifiedBy { get; set; }
 }
 ```
 

@@ -22,7 +22,7 @@ public static class ServiceExtensions
         {
             options.SwaggerDoc("v1", new()
             {
-                Title = "Entity1 API",
+                Title = "DomainDrivenVerticalSlices.Template API",
                 Version = "v1",
             });
         });

@@ -13,22 +13,22 @@ public class DispatchDomainEventsInterceptor(IPublisher publisher) : SaveChanges
 {
     private readonly IPublisher _publisher = publisher;
 
-    public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
+    public override int SavedChanges(SaveChangesCompletedEventData eventData, int result)
     {
-        DispatchDomainEvents(eventData.Context).GetAwaiter().GetResult();
-        return base.SavingChanges(eventData, result);
+        DispatchDomainEvents(eventData.Context, CancellationToken.None).GetAwaiter().GetResult();
+        return base.SavedChanges(eventData, result);
     }
 
-    public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(
-        DbContextEventData eventData,
-        InterceptionResult<int> result,
+    public override async ValueTask<int> SavedChangesAsync(
+        SaveChangesCompletedEventData eventData,
+        int result,
         CancellationToken cancellationToken = default)
     {
-        await DispatchDomainEvents(eventData.Context);
-        return await base.SavingChangesAsync(eventData, result, cancellationToken);
+        await DispatchDomainEvents(eventData.Context, cancellationToken);
+        return await base.SavedChangesAsync(eventData, result, cancellationToken);
     }
 
-    private async Task DispatchDomainEvents(DbContext? context)
+    private async Task DispatchDomainEvents(DbContext? context, CancellationToken cancellationToken)
     {
         if (context is null)
         {
@@ -54,7 +54,7 @@ public class DispatchDomainEventsInterceptor(IPublisher publisher) : SaveChanges
         // Dispatch each event
         foreach (var domainEvent in domainEvents)
         {
-            await _publisher.Publish(domainEvent);
+            await _publisher.Publish(domainEvent, cancellationToken);
         }
     }
 }

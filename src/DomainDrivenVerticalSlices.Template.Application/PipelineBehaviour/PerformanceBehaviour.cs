@@ -36,11 +36,12 @@ public class PerformanceBehaviour<TRequest, TResponse>(
         {
             var requestName = typeof(TRequest).Name;
 
+            // Log the request name only — destructuring the request object would leak
+            // payload values (incl. sensitive data) into Warning-level production logs.
             _logger.LogWarning(
-                "Long Running Request: {RequestName} ({ElapsedMilliseconds}ms) {@Request}",
+                "Long Running Request: {RequestName} ({ElapsedMilliseconds}ms)",
                 requestName,
-                elapsedMilliseconds,
-                request);
+                elapsedMilliseconds);
         }
 
         return response;
