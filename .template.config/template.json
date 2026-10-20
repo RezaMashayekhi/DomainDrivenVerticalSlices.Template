@@ -118,7 +118,13 @@
                 ".github/tasks.md",
                 ".github/workflows/**",
                 "artifacts/**",
-                "templates/**"
+                "templates/**",
+                "AGENTS.md",
+                "scripts/**",
+                "docs/MAINTAINER_GUIDE.md",
+                "docs/DEPENDENCIES.md",
+                "docs/MIGRATIONS.md",
+                "docs/archive/**"
             ],
             "modifiers": [
                 {

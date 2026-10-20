@@ -3,6 +3,7 @@ namespace DomainDrivenVerticalSlices.Template.UnitTests.Modules.Entity1;
 using DomainDrivenVerticalSlices.Template.Api.Common.Persistence;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 internal sealed class TestDbContextScope : IAsyncDisposable
 {
@@ -16,12 +17,13 @@ internal sealed class TestDbContextScope : IAsyncDisposable
 
     public AppDbContext DbContext { get; }
 
-    public static async Task<TestDbContextScope> CreateAsync()
+    public static async Task<TestDbContextScope> CreateAsync(params IInterceptor[] interceptors)
     {
         string databasePath = Path.Combine(Path.GetTempPath(), $"{Guid.NewGuid():N}.db");
 
         DbContextOptions<AppDbContext> options = new DbContextOptionsBuilder<AppDbContext>()
             .UseSqlite($"Data Source={databasePath}")
+            .AddInterceptors(interceptors)
             .Options;
 
         AppDbContext dbContext = new(options);

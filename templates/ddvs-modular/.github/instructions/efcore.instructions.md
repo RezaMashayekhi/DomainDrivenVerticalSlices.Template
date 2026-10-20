@@ -7,4 +7,4 @@ Apply these instructions when modifying persistence code.
 - Use explicit configurations instead of relying on conventions for important fields.
 - Prefer real database integration tests for persistence behavior.
 - Avoid generic repositories.
-- Use repositories only when they represent meaningful domain-specific persistence operations.
+- Use AppDbContext directly for persistence; use explicit ports for external systems. Do not add repositories or Unit of Work.

@@ -10,7 +10,7 @@ This project uses [Vite](https://vitejs.dev/) as the build tool for a faster and
 
 Before you begin, ensure you have met the following requirements:
 
--   Install [Node.js 20.19+ or 22.12+](https://nodejs.org/) (which brings npm 10+) to match the toolchain used by the .NET 10 template. Earlier 20.x releases can cause build warnings with the SWC-powered Vite plugin.
+-   Install [Node.js 20.19+, 22.13+, or 24+](https://nodejs.org/) (which brings npm 10+) to match the supported Vite/SWC toolchain.
 
 ### Available Scripts
 

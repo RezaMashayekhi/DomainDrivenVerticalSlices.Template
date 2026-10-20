@@ -35,15 +35,21 @@ public class Entity1Endpoints : EndpointGroupBase
     }
 
 #pragma warning disable SA1204 // Static elements should appear before instance elements
-    internal static async Task<Results<Ok<IEnumerable<Entity1Dto>>, BadRequest<Error>>> GetAll(
+    internal static async Task<Results<Ok<IEnumerable<Entity1Dto>>, NotFound<Error>, BadRequest<Error>>> GetAll(
         ISender mediator,
         CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new GetEntity1AllQuery(), cancellationToken);
 
-        return result.IsSuccess
-            ? TypedResults.Ok(result.Value)
-            : TypedResults.BadRequest((Error)result.CheckedError);
+        if (result.IsSuccess)
+        {
+            return TypedResults.Ok(result.Value);
+        }
+
+        var (statusCode, error) = ApiErrors.Map(result);
+        return statusCode == StatusCodes.Status404NotFound
+            ? TypedResults.NotFound((Error)error)
+            : TypedResults.BadRequest((Error)error);
     }
 
     internal static async Task<Results<Ok<Entity1Dto>, NotFound<Error>, BadRequest<Error>>> GetById(
@@ -58,21 +64,28 @@ public class Entity1Endpoints : EndpointGroupBase
             return TypedResults.Ok(result.Value);
         }
 
-        return result.CheckedError.ErrorType == Common.Enums.ErrorType.NotFound
-            ? TypedResults.NotFound((Error)result.CheckedError)
-            : TypedResults.BadRequest((Error)result.CheckedError);
+        var (statusCode, error) = ApiErrors.Map(result);
+        return statusCode == StatusCodes.Status404NotFound
+            ? TypedResults.NotFound((Error)error)
+            : TypedResults.BadRequest((Error)error);
     }
 
-    internal static async Task<Results<Ok<IEnumerable<Entity1Dto>>, BadRequest<Error>>> List(
+    internal static async Task<Results<Ok<IEnumerable<Entity1Dto>>, NotFound<Error>, BadRequest<Error>>> List(
         string property1,
         ISender mediator,
         CancellationToken cancellationToken)
     {
         var result = await mediator.Send(new ListEntity1ByProperty1Query(property1), cancellationToken);
 
-        return result.IsSuccess
-            ? TypedResults.Ok(result.Value)
-            : TypedResults.BadRequest((Error)result.CheckedError);
+        if (result.IsSuccess)
+        {
+            return TypedResults.Ok(result.Value);
+        }
+
+        var (statusCode, error) = ApiErrors.Map(result);
+        return statusCode == StatusCodes.Status404NotFound
+            ? TypedResults.NotFound((Error)error)
+            : TypedResults.BadRequest((Error)error);
     }
 
     internal static async Task<Results<Ok<Entity1Dto>, NotFound<Error>, BadRequest<Error>>> Find(
@@ -87,21 +100,28 @@ public class Entity1Endpoints : EndpointGroupBase
             return TypedResults.Ok(result.Value);
         }
 
-        return result.CheckedError.ErrorType == Common.Enums.ErrorType.NotFound
-            ? TypedResults.NotFound((Error)result.CheckedError)
-            : TypedResults.BadRequest((Error)result.CheckedError);
+        var (statusCode, error) = ApiErrors.Map(result);
+        return statusCode == StatusCodes.Status404NotFound
+            ? TypedResults.NotFound((Error)error)
+            : TypedResults.BadRequest((Error)error);
     }
 
-    internal static async Task<Results<CreatedAtRoute<Entity1Dto>, BadRequest<Error>>> Create(
+    internal static async Task<Results<CreatedAtRoute<Entity1Dto>, NotFound<Error>, BadRequest<Error>>> Create(
         CreateEntity1Command command,
         ISender mediator,
         CancellationToken cancellationToken)
     {
         var result = await mediator.Send(command, cancellationToken);
 
-        return result.IsSuccess
-            ? TypedResults.CreatedAtRoute(result.Value, "GetById", new { id = result.Value.Id })
-            : TypedResults.BadRequest((Error)result.CheckedError);
+        if (result.IsSuccess)
+        {
+            return TypedResults.CreatedAtRoute(result.Value, "GetById", new { id = result.Value.Id });
+        }
+
+        var (statusCode, error) = ApiErrors.Map(result);
+        return statusCode == StatusCodes.Status404NotFound
+            ? TypedResults.NotFound((Error)error)
+            : TypedResults.BadRequest((Error)error);
     }
 
     internal static async Task<Results<Ok, NotFound<Error>, BadRequest<Error>>> Update(
@@ -122,9 +142,10 @@ public class Entity1Endpoints : EndpointGroupBase
             return TypedResults.Ok();
         }
 
-        return result.CheckedError.ErrorType == Common.Enums.ErrorType.NotFound
-            ? TypedResults.NotFound((Error)result.CheckedError)
-            : TypedResults.BadRequest((Error)result.CheckedError);
+        var (statusCode, error) = ApiErrors.Map(result);
+        return statusCode == StatusCodes.Status404NotFound
+            ? TypedResults.NotFound((Error)error)
+            : TypedResults.BadRequest((Error)error);
     }
 
     internal static async Task<Results<Ok, NotFound<Error>, BadRequest<Error>>> Delete(
@@ -139,9 +160,10 @@ public class Entity1Endpoints : EndpointGroupBase
             return TypedResults.Ok();
         }
 
-        return result.CheckedError.ErrorType == Common.Enums.ErrorType.NotFound
-            ? TypedResults.NotFound((Error)result.CheckedError)
-            : TypedResults.BadRequest((Error)result.CheckedError);
+        var (statusCode, error) = ApiErrors.Map(result);
+        return statusCode == StatusCodes.Status404NotFound
+            ? TypedResults.NotFound((Error)error)
+            : TypedResults.BadRequest((Error)error);
     }
 #pragma warning restore SA1204 // Static elements should appear before instance elements
 }

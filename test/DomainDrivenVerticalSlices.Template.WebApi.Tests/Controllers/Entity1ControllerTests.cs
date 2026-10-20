@@ -390,7 +390,9 @@ public class Entity1ControllerTests
 
         // Assert
         Assert.IsType<BadRequestObjectResult>(result);
-        Assert.Equal("ID mismatch", ((BadRequestObjectResult)result).Value);
+        var error = Assert.IsType<Error>(((BadRequestObjectResult)result).Value);
+        Assert.Equal("ID mismatch", error.ErrorMessage);
+        Assert.Equal(ErrorType.InvalidInput, error.ErrorType);
     }
 
     [Fact]

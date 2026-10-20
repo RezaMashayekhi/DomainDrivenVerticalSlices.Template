@@ -49,7 +49,14 @@ internal sealed class UpdateEntity1Handler(AppDbContext dbContext)
             return Result<UpdateEntity1Response>.Failure(updateResult.Error);
         }
 
-        await dbContext.SaveChangesAsync(cancellationToken);
+        try
+        {
+            await dbContext.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateException exception) when (SqliteErrors.IsUniqueConstraintViolation(exception))
+        {
+            return Result<UpdateEntity1Response>.Failure(Entity1Errors.Property1AlreadyExists(valueObject1.Property1));
+        }
 
         Entity1Dto dto = new(entity1.Id, new ValueObject1Dto(entity1.ValueObject1.Property1));
 

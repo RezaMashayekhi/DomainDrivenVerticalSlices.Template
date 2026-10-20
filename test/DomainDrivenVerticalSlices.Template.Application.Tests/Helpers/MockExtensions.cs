@@ -10,9 +10,9 @@ public static class MockExtensions
     {
         times ??= Times.Once();
 
-        Func<object, Type, bool> state = (v, t) =>
+        Func<object?, Type, bool> state = (v, t) =>
         {
-            var actualMessage = v.ToString();
+            var actualMessage = v?.ToString();
             Debug.WriteLine($"Expected: {expectedMessage}");
             Debug.WriteLine($"Actual: {actualMessage}");
             return string.Compare(actualMessage, expectedMessage, StringComparison.Ordinal) == 0;

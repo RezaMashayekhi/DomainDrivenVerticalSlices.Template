@@ -12,6 +12,7 @@ using DomainDrivenVerticalSlices.Template.Common.Enums;
 using DomainDrivenVerticalSlices.Template.Common.Errors;
 using DomainDrivenVerticalSlices.Template.Common.Mediator;
 using DomainDrivenVerticalSlices.Template.Common.Results;
+using DomainDrivenVerticalSlices.Template.WebApi.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("api/[controller]")]
@@ -20,7 +21,7 @@ public class Entity1Controller(ISender mediator) : ControllerBase
 {
     private readonly ISender _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
     [ProducesResponseType(typeof(Entity1Dto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -82,7 +83,7 @@ public class Entity1Controller(ISender mediator) : ControllerBase
     }
 
     [HttpPut]
-    [Route("{id}")]
+    [Route("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -90,7 +91,7 @@ public class Entity1Controller(ISender mediator) : ControllerBase
     {
         if (id != command.Entity1.Id)
         {
-            return BadRequest("ID mismatch");
+            return BadRequest(Error.Create(ErrorType.InvalidInput, "ID mismatch"));
         }
 
         var result = await _mediator.Send(command, cancellationToken);
@@ -99,7 +100,7 @@ public class Entity1Controller(ISender mediator) : ControllerBase
     }
 
     [HttpDelete]
-    [Route("{id}")]
+    [Route("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -114,12 +115,7 @@ public class Entity1Controller(ISender mediator) : ControllerBase
 
     private IActionResult HandleErrors(IResult result)
     {
-        return result.CheckedError.ErrorType switch
-        {
-            ErrorType.NotFound => NotFound(result.Error),
-            ErrorType.InvalidInput => BadRequest(result.Error),
-            ErrorType.OperationFailed => BadRequest(result.Error),
-            _ => BadRequest(Error.Create(ErrorType.OperationFailed, "An error occurred while processing the request.")),
-        };
+        var (statusCode, error) = ApiErrors.Map(result);
+        return statusCode == StatusCodes.Status404NotFound ? NotFound(error) : BadRequest(error);
     }
 }

@@ -214,7 +214,7 @@ csx/
 ecf/
 rcf/
 
-# Windows Store app package directories and files
+# Store app package directories and files
 AppPackages/
 BundleArtifacts/
 Package.StoreAssociation.xml
@@ -387,7 +387,7 @@ FodyWeavers.xsd
 # Local History for Visual Studio Code
 .history/
 
-# Windows Installer files from build outputs
+# Installer files from build outputs
 *.cab
 *.msi
 *.msix
@@ -400,9 +400,6 @@ FodyWeavers.xsd
 # Sqlite db template
 templatedb.db
 
-.github/copilot-instructions.md
-.github/instructions/
-.github/tasks.md
 src/DomainDrivenVerticalSlices.Template.UI.React/dist/
 .vite/
 nuget.exe
