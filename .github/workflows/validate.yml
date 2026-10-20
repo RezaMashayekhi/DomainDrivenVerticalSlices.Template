@@ -1,0 +1,33 @@
+name: Validate all template configurations
+on:
+  workflow_call:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: nuget/setup-nuget@v1
+        with:
+          nuget-version: '6.x'
+      - name: Install Mono for NuGet CLI
+        run: sudo apt-get update && sudo apt-get install -y mono-complete
+      - name: Build, test, license audit, pack, generate and validate all options
+        shell: pwsh
+        run: ./scripts/validate-template.ps1
+      - name: Upload the validated package and evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: validated-template
+          path: artifacts/validation/*
+          if-no-files-found: error

@@ -3,18 +3,18 @@
     <metadata>
         <id>RM.DomainDrivenVerticalSlices.Template</id>
         <title>ASP.NET Core Domain Driven Vertical Slices</title>
-        <version>10.7.0</version>
+        <version>10.8.0</version>
         <description>
             A comprehensive ASP.NET Core template implementing Domain-Driven Design (DDD) with Vertical Slice Architecture.
             
             Features include:
             • Two template styles: ddvs/ddvs-clean for Clean Architecture and ddvs-modular for an LLM-friendly modular monolith
-            • .NET Aspire 13.2 integration for orchestrated development and observability
+            • .NET Aspire 13.4 integration for orchestrated development and observability
             • BaseEntity/BaseAuditableEntity with domain events and automatic audit tracking
             • EF Core interceptors for domain event dispatch and audit field population
             • Performance and exception logging pipeline behaviors
             • Choose between traditional MVC controllers or modern Minimal API endpoints
-            • Testcontainers support for integration testing
+            • In-host SQLite integration testing
             • Optional React 19 UI with Vite 6, Tailwind CSS v4, and dark mode
             
             Ideal for developers looking to adopt DDD principles with modern .NET tooling.
@@ -23,7 +23,34 @@
         <language>en-US</language>
         <license type="expression">MIT</license>
         <projectUrl>https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template</projectUrl>
-        <releaseNotes>
+            <releaseNotes>
+Version 10.8.0:
+
+Fixes and architecture:
+- Result&lt;TValue&gt; now accepts default values such as 0 and false and uses
+  InvalidOperationException when a success value is unavailable.
+- Clean API error mapping is shared across controller and Minimal API styles.
+- Modular architecture tests inspect IL-level method-body references; persistence ownership
+  is explicit and SQLite unique-constraint races map to HTTP 409.
+- Replaced the idle Testcontainers setup with a real in-host SQLite integration test factory.
+
+Dependencies and validation:
+- Updated NuGet dependencies and lock files; retained only licenses that permit use and
+  redistribution in this MIT repository, preserving third-party terms and notices.
+- React UI: pinned transitive source-map-js 1.2.2 (BSD-3-Clause) to resolve
+  GHSA-68fv-2mgg-jv7q; the shared validation script now fails on npm advisories or audit-feed errors.
+- React Router was upgraded from 6.30.6 to 7.18.4; existing projects should review
+  `docs/MIGRATIONS.md` before upgrading.
+- Added resolved license and vulnerability audits and a shared ten-configuration validation
+  script. CI and the publish workflow use the same script and publish its SHA-256-verified
+  package artifact.
+
+Documentation:
+- Added maintainer, dependency, release, and migration guidance; consolidated architecture documentation.
+
+Migration: see docs/MIGRATIONS.md in the repository for Result&lt;TValue&gt;, integration-test,
+and modular persistence changes.
+
 Version 10.7.0:
 
 Security:
@@ -152,7 +179,7 @@ UI Improvements:
         <repository type="git" url="https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template.git" />
     </metadata>
     <files>
-        <file src=".\**" target="content" exclude="**\node_modules\**;**\bin\**;**\obj\**;**\.git\**;.\.gitignore;**\*.user;**\.vs\**;**\.vscode\**;**\.scripts\**;.\.github\codeql\**;.\.github\instructions\**;.\.github\plans\**;.\.github\releases\**;.\.github\tasks.md;.\.github\workflows\**;**\artifacts\**;**\nupkgs\**;**\*.nupkg;**\*.snupkg;.\nuget.exe;.\COMMIT_MSG.txt;.\RELEASE_NOTES_*.md;.\instruction.md;**\templatedb.db;**\sample\**;.\CODE_OF_CONDUCT.md;.\LICENSE;.\.claude\**;.\CLAUDE.md;.\CHANGELOG.md;.\docs\ROADMAP.md;.\docs\RELEASE_PROCESS.md;**\*.code-workspace;**\packages.lock.json;**\coverage\**;**\dist\**;**\*.opencover.xml;**\TestResults\**;.\.github\copilot-instructions.md;.\.prettierignore;.\templates\ddvs-modular\.github\**;.\templates\ddvs-modular\docs\**;" />
+        <file src=".\**" target="content" exclude=".\AGENTS.md;.\scripts\**;.\docs\MAINTAINER_GUIDE.md;.\docs\DEPENDENCIES.md;.\docs\MIGRATIONS.md;.\docs\archive\**;**\node_modules\**;**\bin\**;**\obj\**;**\.git\**;.\.gitignore;**\*.user;**\.vs\**;**\.vscode\**;**\.scripts\**;.\.github\codeql\**;.\.github\instructions\**;.\.github\plans\**;.\.github\releases\**;.\.github\tasks.md;.\.github\workflows\**;**\artifacts\**;**\nupkgs\**;**\*.nupkg;**\*.snupkg;.\nuget.exe;.\COMMIT_MSG.txt;.\RELEASE_NOTES_*.md;.\instruction.md;**\templatedb.db;**\sample\**;.\CODE_OF_CONDUCT.md;.\LICENSE;.\.claude\**;.\CLAUDE.md;.\CHANGELOG.md;.\docs\ROADMAP.md;.\docs\RELEASE_PROCESS.md;**\*.code-workspace;**\packages.lock.json;**\coverage\**;**\dist\**;**\*.opencover.xml;**\TestResults\**;.\.github\copilot-instructions.md;.\.prettierignore;.\templates\ddvs-modular\.github\**;.\templates\ddvs-modular\docs\**;" />
         <file src="README.md" />
     </files>
 </package>

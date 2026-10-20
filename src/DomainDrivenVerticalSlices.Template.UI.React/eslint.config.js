@@ -4,7 +4,7 @@ import reactPlugin from "eslint-plugin-react";
 import reactHooksPlugin from "eslint-plugin-react-hooks";
 
 const sourceFiles = ["src/**/*.{js,jsx}", "vite.config.js"];
-const testFiles = ["src/**/*.{test,spec}.{js,jsx}"];
+const testFiles = ["src/**/*.{test,spec}.{js,jsx}", "src/setupTests.js"];
 
 export default [
     {

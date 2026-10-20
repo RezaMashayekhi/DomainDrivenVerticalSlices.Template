@@ -23,7 +23,8 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
-builder.Services.AddEntity1Module(builder.Configuration);
+builder.Services.AddPersistence(builder.Configuration);
+builder.Services.AddEntity1Module();
 
 var app = builder.Build();
 

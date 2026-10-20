@@ -54,7 +54,7 @@ public class ValueResultTests
         // Assert
         Assert.False(result.IsSuccess);
         Assert.Equal(_error, result.Error);
-        var exception = Assert.Throws<InvalidDataException>(act);
+        var exception = Assert.Throws<InvalidOperationException>(act);
         Assert.Contains("Cannot retrieve value from a failed result.", exception.Message);
     }
 
@@ -113,12 +113,17 @@ public class ValueResultTests
     }
 
     [Fact]
-    public void Success_WithDefaultValue_ThrowsException()
+    public void Success_WithDefaultValue_ReturnsValue()
     {
-        Action act = () => Result<int>.Success(default);
+        Assert.Equal(0, Result<int>.Success(0).Value);
+        Assert.False(Result<bool>.Success(false).Value);
+        Assert.Equal(Guid.Empty, Result<Guid>.Success(Guid.Empty).Value);
+    }
 
-        var exception = Assert.Throws<ArgumentException>(act);
-        Assert.Contains("Value cannot be null or empty for a successful result.", exception.Message);
+    [Fact]
+    public void Failure_WithValueType_DoesNotExposeDefaultValue()
+    {
+        Assert.Throws<InvalidOperationException>(() => Result<int>.Failure(_error).Value);
     }
 
     [Fact]
@@ -141,7 +146,7 @@ public class ValueResultTests
         Action act = () => { _ = result.Value; };
 
         // Assert
-        var exception = Assert.Throws<InvalidDataException>(act);
+        var exception = Assert.Throws<InvalidOperationException>(act);
         Assert.Contains("Cannot retrieve value from a failed result.", exception.Message);
     }
 }

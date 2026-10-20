@@ -13,25 +13,32 @@ If you find this template helpful, please [give it a star on GitHub](https://git
 
 ---
 
-## What's New in 10.7.0
+## What's New in 10.8.0
 
-### Security release — new projects build again
+- `Result<TValue>` accepts valid default values such as `0` and `false`; missing values now
+  raise `InvalidOperationException`.
+- Clean controller and Minimal API styles use shared error mapping. Modular architecture
+  checks inspect method-body dependencies, and SQLite uniqueness races return HTTP 409.
+- Clean Architecture integration tests now use in-host SQLite instead of the unused
+  container-based factory.
+- Updated dependencies and added license, vulnerability, package, and full generated-template
+  validation gates to CI and the publish workflow.
+- Added migration and maintainer guidance. See the [changelog](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template/blob/main/CHANGELOG.md) for details.
 
-- **Fixed generated projects failing to build**: newly published security advisories against
-  transitive packages (`MessagePack`, `Microsoft.OpenApi`, `SQLitePCLRaw.lib.e_sqlite3`) broke
-  fresh `dotnet new` output via NuGet audit + `TreatWarningsAsErrors`. All three are now pinned
-  to patched versions in **both** templates.
-- **React UI dependency audit clean**: resolved all 9 `npm audit` findings (including a
-  critical Vitest advisory) via a lockfile refresh.
-- **Domain events fixed (Clean Architecture)**: events raised with `AddDomainEvent` are now
-  actually dispatched — exactly once, after a successful save. Previously the interceptor
-  dispatch was a silent no-op masked by a duplicate manual publish.
-- **Safer logging defaults**: request/response payload properties are logged at `Debug` only,
-  and slow-request/unhandled-exception logs no longer embed the full request object;
-  `Information` keeps the request name, outcome, and error details.
-- **Leaner, reproducible package**: repo/AI maintainer files, editor state, and build outputs
-  no longer ship into the package or generated projects; the React project `.gitignore` ships
-  again; the Swagger title now takes your project's name in both templates.
+<details>
+<summary><strong>What's New in 10.7.0</strong></summary>
+
+- **Fixed generated projects failing to build**: advisories against transitive packages
+  (`MessagePack`, `Microsoft.OpenApi`, and SQLitePCLRaw) broke fresh projects through NuGet
+  audit and warnings-as-errors. Patched versions are pinned in both templates.
+- **React UI dependency audit clean**: resolved nine npm audit findings via a lockfile refresh.
+- **Domain events fixed**: events raised with `AddDomainEvent` dispatch exactly once after a
+  successful save.
+- **Safer logging defaults**: payload properties are logged at Debug only.
+- **Leaner package**: maintainer files/build outputs no longer ship, and the React `.gitignore`
+  and project-name Swagger title are preserved.
+
+</details>
 
 <details>
 <summary><strong>What's New in 10.6.0</strong></summary>
@@ -153,15 +160,14 @@ See the [CHANGELOG](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices
 ### Prerequisites
 
 - [.NET 10.0 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) (10.0.102 or later)
-- [Node.js 20.19+ or 22.12+](https://nodejs.org/) (required only for React UI)
-- [Docker](https://www.docker.com/) (optional, for Testcontainers integration tests)
+- [Node.js 20.19+, 22.13+, or 24+](https://nodejs.org/) (required only for React UI)
 
 ### Installation
 
 Install the template from NuGet:
 
 ```bash
-dotnet new install RM.DomainDrivenVerticalSlices.Template@10.7.0
+dotnet new install RM.DomainDrivenVerticalSlices.Template@10.8.0
 ```
 
 ### Create a New Project
@@ -266,7 +272,7 @@ YourProjectName/
 │   ├── YourProjectName.Common/           # Shared utilities, Result pattern, Mediator
 │   └── YourProjectName.UI.React/         # React frontend (if included)
 └── test/
-    ├── YourProjectName.IntegrationTests/ # Integration tests with Testcontainers
+    ├── YourProjectName.IntegrationTests/ # Integration tests with SQLite
     ├── YourProjectName.Application.Tests/
     ├── YourProjectName.Domain.Tests/
     ├── YourProjectName.Infrastructure.Tests/
@@ -334,7 +340,7 @@ and the `Modules/Entity1/README.md` for details.
 - **Unit Tests**: xUnit + Moq for isolated testing
 - **Integration Tests**: Two options included:
     - `CustomWebApplicationFactory` — In-memory SQLite database
-    - `TestcontainersWebApplicationFactory` — Real SQLite in Docker container
+    - `SqliteWebApplicationFactory` — SQLite database for full HTTP integration tests
 - **React Tests**: Vitest + MSW for component and API mocking tests
 
 ### Domain Infrastructure
@@ -359,6 +365,7 @@ shipped in the NuGet package or into generated projects:
 - [CHANGELOG.md](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template/blob/main/CHANGELOG.md) — notable changes per version (Keep a Changelog format).
 - [docs/ROADMAP.md](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template/blob/main/docs/ROADMAP.md) — planned direction (candidates, not promises).
 - [docs/RELEASE_PROCESS.md](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template/blob/main/docs/RELEASE_PROCESS.md) — validation, packaging, and release steps.
+- [docs/MIGRATIONS.md](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template/blob/main/docs/MIGRATIONS.md) — migration notes for generated projects.
 - [CLAUDE.md](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template/blob/main/CLAUDE.md) — guidance for Claude Code and other AI agents working in this repository.
 
 ## License

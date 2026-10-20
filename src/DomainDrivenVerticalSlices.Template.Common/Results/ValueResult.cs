@@ -10,9 +10,9 @@ public class Result<TValue> : IResult<TValue>
 
     protected Result(bool isSuccess, IError? error, TValue? value)
     {
-        if (isSuccess && (value is null || value.Equals(default(TValue))))
+        if (isSuccess && value is null)
         {
-            throw new ArgumentException("Value cannot be null or empty for a successful result.", nameof(value));
+            throw new ArgumentException("Value cannot be null for a successful result.", nameof(value));
         }
 
         if (isSuccess && !EqualityComparer<IError>.Default.Equals(error, default))
@@ -46,7 +46,7 @@ public class Result<TValue> : IResult<TValue>
     {
         get
         {
-            return _value ?? throw new InvalidDataException("Cannot retrieve value from a failed result.");
+            return IsSuccess ? _value! : throw new InvalidOperationException("Cannot retrieve value from a failed result.");
         }
     }
 

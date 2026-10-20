@@ -1,0 +1,20 @@
+{
+  "fractions/7.3.0": {
+    "license": "BSD-2-Clause",
+    "sha256": "2C02C9F02A8BA27EA7BCD5F75AAD45BEA7DCCD0F55024C663D6E769800C0C841",
+    "source": "https://www.nuget.org/packages/Fractions/7.3.0/License",
+    "rationale": "The package's license.txt contains the two-clause BSD redistribution grant and disclaimer. Retain its copyright and conditions."
+  },
+  "sqlitepclraw.lib.e_sqlite3/3.53.3": {
+    "license": "Public domain (SQLite)",
+    "sha256": "99464C3A88DF7B708CE59E462CDCB85F72DFC9B1335B4FCC68BE56131B634B95",
+    "source": "https://sqlite.org/copyright.html",
+    "rationale": "The pinned package's LICENSE.txt declares SQLite public domain and links to SQLite's copyright statement. This is not an MIT relicensing."
+  },
+  "xunit.abstractions/2.0.3": {
+    "license": "Apache-2.0",
+    "sha256": "E59191DF9E3047DD953B695C886597786AC2771F66897BAA40877F643DA9F7B1",
+    "source": "https://github.com/xunit/xunit/blob/main/LICENSE",
+    "rationale": "Legacy package metadata predates SPDX license fields and links to the xUnit repository license. Pinned nuspec bytes identify the reviewed package; xUnit declares Apache-2.0. Retain its notices."
+  }
+}

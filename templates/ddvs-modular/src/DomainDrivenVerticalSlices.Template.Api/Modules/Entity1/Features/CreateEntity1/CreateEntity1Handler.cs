@@ -40,7 +40,14 @@ internal sealed class CreateEntity1Handler(AppDbContext dbContext)
 
         dbContext.Entities1.Add(entity1);
 
-        await dbContext.SaveChangesAsync(cancellationToken);
+        try
+        {
+            await dbContext.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateException exception) when (SqliteErrors.IsUniqueConstraintViolation(exception))
+        {
+            return Result<CreateEntity1Response>.Failure(Entity1Errors.Property1AlreadyExists(valueObject1.Property1));
+        }
 
         return new CreateEntity1Response(entity1.Id);
     }

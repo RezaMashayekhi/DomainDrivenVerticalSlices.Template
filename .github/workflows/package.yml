@@ -1,33 +1,38 @@
 name: Publish NuGet
-
 on:
   workflow_dispatch:
     inputs:
       confirm:
-        description: 'Type "publish" to confirm NuGet package publish'
+        description: 'Type "publish" to validate and publish this commit'
         required: true
         type: string
-
+permissions:
+  contents: read
 jobs:
-  publish:
-    name: Publish to NuGet.org
-    runs-on: ubuntu-latest
+  validate:
     if: github.event.inputs.confirm == 'publish'
-
+    uses: ./.github/workflows/validate.yml
+  publish:
+    needs: validate
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-        name: Checkout code
-
-      - uses: nuget/setup-nuget@v1
-        name: Setup NuGet
+      - uses: actions/setup-dotnet@v4
         with:
-          nuget-version: "6.x"
-
-      - name: Install Mono
-        run: sudo apt-get update && sudo apt-get install -y mono-complete
-
-      - name: Create the package
-        run: nuget pack DomainDrivenVerticalSlices.Template.nuspec -NoDefaultExcludes
-
-      - name: Publish the package
-        run: nuget push RM.DomainDrivenVerticalSlices.Template.*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_API_KEY}} -SkipDuplicate
+          dotnet-version: '10.0.x'
+      - uses: actions/download-artifact@v4
+        with:
+          name: validated-template
+          path: validated
+      - name: Verify identity and publish the tested package
+        shell: pwsh
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $evidence = Get-Content validated/validation.json -Raw | ConvertFrom-Json
+          if ($evidence.Commit -ne '${{ github.sha }}') { throw 'Validated commit mismatch' }
+          $packages = @(Get-ChildItem validated -Filter '*.nupkg')
+          if ($packages.Count -ne 1 -or $packages[0].Name -ne $evidence.Package) { throw 'Package identity mismatch' }
+          if ((Get-FileHash $packages[0].FullName -Algorithm SHA256).Hash -ne $evidence.Sha256) { throw 'Package hash mismatch' }
+          dotnet nuget push $packages[0].FullName --source https://api.nuget.org/v3/index.json --api-key $env:NUGET_API_KEY --skip-duplicate
+          if ($LASTEXITCODE -ne 0) { throw 'NuGet publish failed' }

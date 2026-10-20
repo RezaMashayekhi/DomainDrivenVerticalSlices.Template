@@ -16,6 +16,7 @@ public sealed class CustomWebApplicationFactory : WebApplicationFactory<Program>
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment("Testing");
+        builder.UseSetting("ConnectionStrings:DefaultConnection", $"Data Source={_databasePath}");
 
         builder.ConfigureLogging(logging =>
         {

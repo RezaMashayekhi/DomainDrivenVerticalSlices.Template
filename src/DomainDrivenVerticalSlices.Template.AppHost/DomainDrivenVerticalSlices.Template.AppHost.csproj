@@ -1,4 +1,4 @@
-<Project Sdk="Aspire.AppHost.Sdk/13.1.0">
+<Project Sdk="Aspire.AppHost.Sdk/13.4.6">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -7,7 +7,7 @@
     <!-- Exclude from test run - AppHost is a runtime orchestrator, not a test project -->
     <IsTestProject>false</IsTestProject>
     <!-- Aspire SDK injects platform-specific packages (Dashboard.Sdk, Orchestration) that differ between
-         Windows and Linux. A single lock file cannot satisfy both, so disable locked mode for this project. -->
+         different host operating systems. A single lock file cannot satisfy all hosts, so disable locked mode for this project. -->
     <RestoreLockedMode>false</RestoreLockedMode>
   </PropertyGroup>
 
