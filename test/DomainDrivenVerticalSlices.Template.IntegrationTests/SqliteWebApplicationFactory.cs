@@ -35,7 +35,7 @@ public class SqliteWebApplicationFactory : WebApplicationFactory<Program>, IAsyn
     /// <inheritdoc/>
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.UseEnvironment("IntegrationTest");
+        builder.UseEnvironment("integrationtest");
         builder.ConfigureServices(services =>
         {
             services.RemoveAll<IDbContextOptionsConfiguration<AppDbContext>>();

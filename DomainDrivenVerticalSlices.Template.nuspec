@@ -27,6 +27,8 @@
 Version 10.8.0:
 
 Fixes and architecture:
+- Matched integration-test environment names to settings-file casing so React-enabled
+  generated projects load their CORS configuration on case-sensitive filesystems.
 - Result&lt;TValue&gt; now accepts default values such as 0 and false and uses
   InvalidOperationException when a success value is unavailable.
 - Clean API error mapping is shared across controller and Minimal API styles.
