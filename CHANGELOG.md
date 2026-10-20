@@ -40,6 +40,8 @@ derived from the `.nuspec` release notes and README history already present in t
 
 ### Fixed
 
+- Restored missing bundled Tailwind WebAssembly dependency entries in the React lock file
+  so clean npm installs can validate the complete dependency tree.
 - Matched integration-test environment names to the exact settings-file casing, preventing
   React-enabled test hosts from failing CORS configuration on case-sensitive filesystems.
 - `Result<TValue>` success accepts default values such as `0` and `false`; unavailable values
