@@ -15,6 +15,9 @@ jobs:
   publish:
     needs: validate
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/setup-dotnet@v4
         with:
@@ -23,10 +26,8 @@ jobs:
         with:
           name: validated-template
           path: validated
-      - name: Verify identity and publish the tested package
+      - name: Verify identity and tested package
         shell: pwsh
-        env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
         run: |
           $ErrorActionPreference = 'Stop'
           $evidence = Get-Content validated/validation.json -Raw | ConvertFrom-Json
@@ -34,5 +35,17 @@ jobs:
           $packages = @(Get-ChildItem validated -Filter '*.nupkg')
           if ($packages.Count -ne 1 -or $packages[0].Name -ne $evidence.Package) { throw 'Package identity mismatch' }
           if ((Get-FileHash $packages[0].FullName -Algorithm SHA256).Hash -ne $evidence.Sha256) { throw 'Package hash mismatch' }
+      - name: NuGet login
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{ secrets.NUGET_USER }}
+      - name: Push tested package
+        shell: pwsh
+        env:
+          NUGET_API_KEY: ${{ steps.login.outputs.NUGET_API_KEY }}
+        run: |
+          $packages = @(Get-ChildItem validated -Filter '*.nupkg')
+          if ($packages.Count -ne 1) { throw 'Expected exactly one tested package' }
           dotnet nuget push $packages[0].FullName --source https://api.nuget.org/v3/index.json --api-key $env:NUGET_API_KEY --skip-duplicate
           if ($LASTEXITCODE -ne 0) { throw 'NuGet publish failed' }
