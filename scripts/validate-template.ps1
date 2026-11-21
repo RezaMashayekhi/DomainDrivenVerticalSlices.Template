@@ -129,6 +129,29 @@ function Assert-CleanOutput {
     }
 }
 
+function Assert-FrameworkOutput {
+    param([string] $Directory, [string] $Framework)
+    $sdkVersion = if ($Framework -eq 'net11.0') { '11.0.100' } else { '10.0.102' }
+    $sdk = (Get-Content "$Directory/global.json" -Raw | ConvertFrom-Json).sdk
+    $build = [xml](Get-Content "$Directory/Directory.Build.props" -Raw)
+    $packages = [xml](Get-Content "$Directory/Directory.Packages.props" -Raw)
+    $frameworkFiles = @(Get-ChildItem $Directory -Filter 'Directory.Packages.net*.props')
+    if ($sdk.version -ne $sdkVersion -or $sdk.allowPrerelease -ne $false -or
+        $build.Project.PropertyGroup.TargetFramework -ne $Framework -or
+        $frameworkFiles.Count -ne 1 -or $frameworkFiles[0].Name -ne "Directory.Packages.$Framework.props" -or
+        $packages.Project.Import.Project -ne ('$(MSBuildThisFileDirectory)Directory.Packages.' + "$Framework.props")) {
+        throw "Incorrect framework or SDK configuration: $Directory"
+    }
+    $frameworkPackages = [xml](Get-Content $frameworkFiles[0].FullName -Raw)
+    $ef = $frameworkPackages.Project.ItemGroup.PackageVersion | Where-Object Include -eq 'Microsoft.EntityFrameworkCore'
+    $major = if ($Framework -eq 'net11.0') { 11 } else { 10 }
+    if ([version]::Parse($ef.Version).Major -ne $major) { throw "Incorrect EF Core major: $Directory" }
+    if (Test-Path "$Directory/src/App.Infrastructure") {
+        $tools = Get-Content "$Directory/.config/dotnet-tools.json" -Raw | ConvertFrom-Json
+        if ($tools.tools.'dotnet-ef'.version -ne $ef.Version) { throw "Incorrect EF tool version: $Directory" }
+    }
+}
+
 function Get-Manifest {
     param([string] $Directory)
     @(Get-ChildItem $Directory -Recurse -File -Force | ForEach-Object {
@@ -178,6 +201,10 @@ try {
         })
         if ($bad.Count) { throw "Package leaks: $($bad -join ', ')" }
         foreach ($required in @('content/.editorconfig', 'content/.template.config/template.json',
+            'content/.config/dotnet-tools.json',
+            'content/Directory.Packages.net10.0.props', 'content/Directory.Packages.net11.0.props',
+            'content/templates/ddvs-modular/Directory.Packages.net10.0.props',
+            'content/templates/ddvs-modular/Directory.Packages.net11.0.props',
             'content/templates/ddvs-clean/.template.config/template.json',
             'content/templates/ddvs-modular/.template.config/template.json',
             'content/templates/ddvs-modular/.editorconfig',
@@ -188,42 +215,55 @@ try {
     } finally { $zip.Dispose() }
     Invoke-Checked dotnet @('new', 'install', $package, '--debug:custom-hive', $hive)
 
-    foreach ($variant in @('ddvs', 'ddvs-clean')) {
-        foreach ($api in @('Controller', 'MinimalApi')) {
-            foreach ($ui in @('None', 'React')) {
-                $key = "$variant-$api-$ui"
-                $destination = Join-Path $scratch $key
-                Invoke-Checked dotnet @('new', $variant, '-n', 'App', '-o', $destination, '--ApiType', $api, '--UiType', $ui, '--debug:custom-hive', $hive)
-                Assert-CleanOutput $destination
-                $controllerExists = Test-Path "$destination/src/App.WebApi/Controllers"
-                $endpointExists = Test-Path "$destination/src/App.WebApi/Endpoints"
-                if ($controllerExists -ne ($api -eq 'Controller') -or $endpointExists -ne ($api -eq 'MinimalApi')) {
-                    throw "API option not respected: $key"
+    foreach ($framework in @('net10.0', 'net11.0')) {
+        # Omit the option for .NET 10 so the matrix exercises the default.
+        $frameworkArgs = @()
+        if ($framework -eq 'net11.0') { $frameworkArgs = @('--Framework', $framework) }
+        foreach ($variant in @('ddvs', 'ddvs-clean')) {
+            foreach ($api in @('Controller', 'MinimalApi')) {
+                foreach ($ui in @('None', 'React')) {
+                    $key = "$framework-$variant-$api-$ui"
+                    $destination = Join-Path $scratch $key
+                    Invoke-Checked dotnet (@('new', $variant, '-n', 'App', '-o', $destination, '--ApiType', $api, '--UiType', $ui, '--debug:custom-hive', $hive) + $frameworkArgs)
+                    Assert-CleanOutput $destination
+                    Assert-FrameworkOutput $destination $framework
+                    $controllerExists = Test-Path "$destination/src/App.WebApi/Controllers"
+                    $endpointExists = Test-Path "$destination/src/App.WebApi/Endpoints"
+                    if ($controllerExists -ne ($api -eq 'Controller') -or $endpointExists -ne ($api -eq 'MinimalApi')) {
+                        throw "API option not respected: $key"
+                    }
+                    if ((Test-Path "$destination/src/App.UI.React") -ne ($ui -eq 'React')) { throw "UI option not respected: $key" }
+                    $generated[$key] = @{ Path = $destination; Manifest = @(Get-Manifest $destination); Framework = $framework; Tests = 'test'; React = ($ui -eq 'React') }
                 }
-                if ((Test-Path "$destination/src/App.UI.React") -ne ($ui -eq 'React')) { throw "UI option not respected: $key" }
-                $generated[$key] = @{ Path = $destination; Manifest = @(Get-Manifest $destination); Tests = 'test'; React = ($ui -eq 'React') }
             }
         }
-    }
-    foreach ($api in @('Controller', 'MinimalApi')) {
-        foreach ($ui in @('None', 'React')) {
-            $diff = Compare-Object $generated["ddvs-$api-$ui"].Manifest $generated["ddvs-clean-$api-$ui"].Manifest
-            if ($diff) { throw "Generated alias mismatch: $api/$ui`n$($diff | Out-String)" }
+        foreach ($api in @('Controller', 'MinimalApi')) {
+            foreach ($ui in @('None', 'React')) {
+                $diff = Compare-Object $generated["$framework-ddvs-$api-$ui"].Manifest $generated["$framework-ddvs-clean-$api-$ui"].Manifest
+                if ($diff) { throw "Generated alias mismatch: $framework/$api/$ui`n$($diff | Out-String)" }
+            }
         }
-    }
-    foreach ($aspire in @('true', 'false')) {
-        $key = "modular-$aspire"
-        $destination = Join-Path $scratch $key
-        Invoke-Checked dotnet @('new', 'ddvs-modular', '-n', 'App', '-o', $destination, '--UseAspire', $aspire, '--debug:custom-hive', $hive)
-        Assert-CleanOutput $destination
-        foreach ($project in @('AppHost', 'ServiceDefaults')) {
-            if ((Test-Path "$destination/src/App.$project") -ne ($aspire -eq 'true')) { throw "Aspire option not respected: $key/$project" }
+        foreach ($aspire in @('true', 'false')) {
+            $key = "$framework-modular-$aspire"
+            $destination = Join-Path $scratch $key
+            Invoke-Checked dotnet (@('new', 'ddvs-modular', '-n', 'App', '-o', $destination, '--UseAspire', $aspire, '--debug:custom-hive', $hive) + $frameworkArgs)
+            Assert-CleanOutput $destination
+            Assert-FrameworkOutput $destination $framework
+            foreach ($project in @('AppHost', 'ServiceDefaults')) {
+                if ((Test-Path "$destination/src/App.$project") -ne ($aspire -eq 'true')) { throw "Aspire option not respected: $key/$project" }
+            }
+            $generated[$key] = @{ Path = $destination; Framework = $framework; Tests = 'tests'; React = $false }
         }
-        $generated[$key] = @{ Path = $destination; Tests = 'tests'; React = $false }
     }
     foreach ($key in ($generated.Keys | Sort-Object)) {
         $item = $generated[$key]
-        Test-Solution $item.Path 'App.slnx' $item.Tests -Generated
+        Push-Location $item.Path
+        try {
+            Test-Solution $item.Path 'App.slnx' $item.Tests -Generated
+            if ($item.Framework -eq 'net11.0') {
+                Test-Vulnerabilities 'App.slnx' (Join-Path $output "vulnerabilities-$key.json")
+            }
+        } finally { Pop-Location }
         if ($item.React) {
             Push-Location (Join-Path $item.Path 'src/App.UI.React')
             try {
@@ -233,12 +273,17 @@ try {
             } finally { Pop-Location }
         }
     }
+    $licenseArguments = @('scripts/dependency-audit.py', '--output', (Join-Path $output 'licenses-net11.json'), '--fail-on-review')
+    foreach ($item in $generated.Values | Where-Object Framework -eq 'net11.0') {
+        $licenseArguments += @('--generated-root', $item.Path)
+    }
+    Invoke-Checked python $licenseArguments
     # Copy only the package that passed every check. Publication consumes this path.
     Copy-Item -LiteralPath $package -Destination $output
     @{ Package = $packages[0].Name; Sha256 = (Get-FileHash $package -Algorithm SHA256).Hash;
         Variants = @($generated.Keys | Sort-Object); Commit = (& git rev-parse HEAD); Scratch = $scratch
     } | ConvertTo-Json -Depth 5 | Set-Content (Join-Path $output 'validation.json')
-    Write-Host "Validated all 10 configurations. Package: $output/$($packages[0].Name)"
+    Write-Host "Validated all $($generated.Count) configurations. Package: $output/$($packages[0].Name)"
 } finally {
     Pop-Location
     # Preserve diagnostics, including generated projects, on both success and failure.

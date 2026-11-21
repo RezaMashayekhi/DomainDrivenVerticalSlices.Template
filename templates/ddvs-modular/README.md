@@ -1,6 +1,8 @@
 # DomainDrivenVerticalSlices.Template
 
-A .NET 10 modular monolith API template organized around business modules and vertical slices.
+A .NET modular monolith API template organized around business modules and vertical slices.
+
+Install the SDK specified in this project's `global.json` before restoring or building.
 
 ## Run
 

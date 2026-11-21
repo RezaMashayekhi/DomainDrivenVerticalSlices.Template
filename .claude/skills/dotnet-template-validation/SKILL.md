@@ -11,13 +11,13 @@ Read `docs/MAINTAINER_GUIDE.md` for template boundaries. Run from the repository
 pwsh -File scripts/validate-template.ps1
 ```
 
-Requires .NET 10 (see global.json), PowerShell 7, Python 3.12+, Node.js, and NuGet CLI
+Requires .NET 10 and .NET 11 (see the maintainer guide), PowerShell 7, Python 3.12+, Node.js, and NuGet CLI
 (`nuget.exe`, or `nuget` with Mono, as appropriate for the host).
 
 The script builds/tests both source trees, audits resolved NuGet licenses, packs with
-`-NoDefaultExcludes`, and generates all ten configurations from that exact package.
+`-NoDefaultExcludes`, and generates all 20 configurations from that exact package.
 It checks package exclusions, generated file/name leaks, option gating, normalized
-alias parity, and builds/tests every generated solution and all four React outputs.
+alias parity, and builds/tests every generated solution and all eight React outputs.
 Assertions run before restore so newly generated lock files are not mistaken for leaks.
 
 Scratch projects and an isolated template hive are created under the OS temp directory.

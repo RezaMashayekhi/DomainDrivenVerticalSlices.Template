@@ -14,7 +14,7 @@ generic advice.
 ## 1. Project purpose
 
 `RM.DomainDrivenVerticalSlices.Template` is an ASP.NET Core template package implementing
-Domain-Driven Design (DDD) with Vertical Slice Architecture on **.NET 10**. It ships
+Domain-Driven Design (DDD) with Vertical Slice Architecture on **.NET 10 LTS**, with **.NET 11 STS** as an opt-in target. It ships
 multiple `dotnet new` template variants from a single NuGet package
 (`DomainDrivenVerticalSlices.Template.nuspec`). Package version is defined in the `.nuspec`; do not duplicate it in instructions.
 
@@ -34,6 +34,7 @@ is a **separate source tree** under `templates/ddvs-modular/`.
 
 | Option | Applies to | Values (default) | Effect |
 | ------ | ---------- | ---------------- | ------ |
+| `--Framework` | All three | `net10.0` (default), `net11.0` | Selects the TFM, SDK, and framework-dependent packages. |
 | `--ApiType` | `ddvs`, `ddvs-clean` | `Controller` (default), `MinimalApi` | Emit MVC controllers or Minimal API endpoints. Mutually exclusive source is excluded via template modifiers. |
 | `--UiType`  | `ddvs`, `ddvs-clean` | `None` (default), `React` | Include the `*.UI.React` project (React 19 + Vite 6 + Tailwind v4). |
 | `--UseAspire` | `ddvs-modular` | `true` (default), `false` | `false` excludes `*.AppHost` and `*.ServiceDefaults`. |
@@ -81,12 +82,12 @@ DomainDrivenVerticalSlices.Template/
 ## 4. Build, test, pack, smoke-test commands
 
 Prerequisites: **.NET 10 SDK 10.0.102+** (`global.json`, `rollForward: latestFeature`),
-PowerShell 7, Python 3.12+, Node.js 20.19+, 22.13+, or 24+ (React only), and NuGet CLI
+**.NET 11 SDK 11.0.100+** for the opt-in matrix, PowerShell 7, Python 3.12+, Node.js 20.19+, 22.13+, or 24+ (React only), and NuGet CLI
 (`nuget.exe` in the repo root or `nuget` with Mono, as appropriate for the host). Integration tests use
 in-host SQLite and do not need Docker.
 
 ```bash
-# Full source, dependency, package, and ten-configuration validation
+# Full source, dependency, package, and 20-configuration validation
 pwsh -File scripts/validate-template.ps1
 ```
 
@@ -230,7 +231,7 @@ has authorized the full matrix, run the shared script; otherwise agree on a targ
 | `ddvs-clean` | same 4 combos (must match `ddvs` output — parity) |
 | `ddvs-modular` | `--UseAspire {true,false}` = 2 combos |
 
-That is ten generated projects; the four React variants additionally build and test the UI.
+Run each row for both framework choices, for 20 projects total. The eight React projects also build and test the UI.
 
 ## 11. Security and dependency expectations
 
@@ -240,7 +241,7 @@ That is ten generated projects; the four React variants additionally build and t
 - Lock files are enabled in both source trees. CI restores in locked mode; AppHost projects
   opt out because Aspire injects platform-specific packages. Generated projects omit maintainer
   lock files and need an unlocked initial restore. Refresh locks intentionally after version changes.
-- Keep CI `setup-dotnet` versions aligned with `global.json` (10.0.x band).
+- Keep CI `setup-dotnet` versions aligned with `global.json` (10.0.x and 11.0.x for generated validation).
 - Run the **`dependency-security-review`** skill when touching versions, workflows, Docker,
   npm, or NuGet. Do not suppress vulnerability warnings without a documented reason.
 

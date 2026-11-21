@@ -1,8 +1,11 @@
-<Project Sdk="Aspire.AppHost.Sdk/13.4.6">
+<Project Sdk="Aspire.AppHost.Sdk/13.6.5">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <IsAspireHost>true</IsAspireHost>
+    <!-- Use the SDK-provided dashboard and orchestrator packages so dotnet run works without a separate Aspire CLI. -->
+    <AspireUseCliBundle>false</AspireUseCliBundle>
+    <NoWarn>$(NoWarn);ASPIRE010</NoWarn>
     <UserSecretsId>ddvs-modular-template-aspire-host</UserSecretsId>
     <IsTestProject>false</IsTestProject>
     <!-- Aspire injects OS-specific packages; one lock cannot cover every host. -->

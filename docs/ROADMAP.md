@@ -60,13 +60,17 @@ option; neither is part of 10.8.0.
   the template must not push its own AI instructions or design ADRs into a user's project by
   default so generated projects do not inherit the template's own AI guidance or reference docs.
 
-## 11.0.0 candidates
+## 11.0.0
+
+- Add .NET 11 STS as an opt-in framework on all three templates. Keep .NET 10 LTS as
+  the default and validate all 20 configurations from a single package.
+
+### Deferred candidates
 
 - **Breaking cleanups** that would change generated structure, defaults, or option names —
   each must land with explicit migration notes.
 - **Modular placeholder rename** (e.g. `Entity1` → a domain-flavored sample) if it changes
   generated file/type names — breaking, needs migration notes.
-- **.NET major upgrade** when the next LTS/current band ships.
 
 ## Backlog
 
@@ -93,7 +97,7 @@ option; neither is part of 10.8.0.
 
 Before promoting a candidate into a release:
 
-- [ ] Change validated via `scripts/validate-template.ps1` (all ten variants for release).
+- [ ] Change validated via `scripts/validate-template.ps1` (all 20 configurations for release).
 - [ ] `Directory.Packages.props` / lock files updated; `dotnet list package --vulnerable` clean.
 - [ ] `.nuspec` `<version>` bumped and `<releaseNotes>` written.
 - [ ] `CHANGELOG.md` `Unreleased` moved to the new version section.

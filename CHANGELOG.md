@@ -10,6 +10,17 @@ derived from the `.nuspec` release notes and README history already present in t
 
 ## [Unreleased]
 
+### Added
+
+- All three templates support `--Framework net11.0` for .NET 11 STS and default to .NET 10 LTS.
+- Clean templates include a local EF CLI manifest that matches the selected EF Core version.
+- CI generates and validates all 20 combinations from one template package.
+
+### Security
+
+- Updated both templates to Aspire 13.6.5 and the framework-dependent .NET 10 NuGet packages to 10.0.15.
+- Refreshed the React lock file and updated the Vitest and minimatch pins to resolve npm advisories.
+
 ## [10.8.0] - 2026-10-20
 
 ### Added
