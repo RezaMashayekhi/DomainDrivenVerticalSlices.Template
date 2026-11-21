@@ -5,6 +5,12 @@
     "source": "https://www.nuget.org/packages/Fractions/7.3.0/License",
     "rationale": "The package's license.txt contains the two-clause BSD redistribution grant and disclaimer. Retain its copyright and conditions."
   },
+  "sqlite/3.53.4": {
+    "license": "Public domain (SQLite)",
+    "sha256": "99464C3A88DF7B708CE59E462CDCB85F72DFC9B1335B4FCC68BE56131B634B95",
+    "source": "https://www.nuget.org/packages/SQLite/3.53.4/License",
+    "rationale": "The native SQLite package includes LICENSE.txt declaring SQLite public domain and linking to SQLite's copyright statement."
+  },
   "sqlitepclraw.lib.e_sqlite3/3.53.3": {
     "license": "Public domain (SQLite)",
     "sha256": "99464C3A88DF7B708CE59E462CDCB85F72DFC9B1335B4FCC68BE56131B634B95",

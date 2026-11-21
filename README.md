@@ -13,6 +13,11 @@ If you find this template helpful, please [give it a star on GitHub](https://git
 
 ---
 
+## What's New in 11.0.0
+
+- All three templates default to .NET 10 LTS and offer .NET 11 STS through `--Framework`.
+- Generated projects pin the SDK and framework-dependent NuGet packages for the selected target.
+
 ## What's New in 10.8.0
 
 - `Result<TValue>` accepts valid default values such as `0` and `false`; missing values now
@@ -159,7 +164,7 @@ See the [CHANGELOG](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices
 
 ### Prerequisites
 
-- [.NET 10.0 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) (10.0.102 or later)
+- [.NET 10.0 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) for the default target, or [.NET 11 SDK](https://dotnet.microsoft.com/download/dotnet/11.0) for .NET 11 STS. The generated `global.json` specifies the minimum SDK.
 - [Node.js 20.19+, 22.13+, or 24+](https://nodejs.org/) (required only for React UI)
 
 ### Installation
@@ -167,7 +172,7 @@ See the [CHANGELOG](https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices
 Install the template from NuGet:
 
 ```bash
-dotnet new install RM.DomainDrivenVerticalSlices.Template@10.8.0
+dotnet new install RM.DomainDrivenVerticalSlices.Template@11.0.0
 ```
 
 ### Create a New Project
@@ -219,6 +224,18 @@ dotnet new ddvs -n YourProjectName --UiType React
 ```bash
 dotnet new ddvs -n YourProjectName --ApiType MinimalApi --UiType React
 ```
+
+### Target .NET 11 STS
+
+Use `--Framework net11.0` with any template name. It combines with the other options.
+
+```bash
+dotnet new ddvs-clean -n MyApplication --Framework net11.0 --ApiType MinimalApi
+dotnet new ddvs-modular -n MyModularApi --Framework net11.0 --UseAspire false
+```
+
+For EF migrations with `ddvs` or `ddvs-clean`, run `dotnet tool restore` in the generated
+solution directory to install the matching `dotnet ef` CLI.
 
 ## Running the Application
 

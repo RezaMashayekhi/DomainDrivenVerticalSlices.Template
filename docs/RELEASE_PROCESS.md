@@ -36,14 +36,14 @@ How to validate, package, and (when approved) publish
 
 ```bash
 git diff --check
-dotnet --info                                  # SDK 10.0.102+ (global.json)
+dotnet --list-sdks                                  # SDKs 10.0.102+ and 11.0.100+
 pwsh -File scripts/validate-template.ps1
 ```
 
 The script is the canonical gate used locally and in CI. It restores, builds, and tests both
 source trees; audits resolved direct/transitive NuGet licenses and vulnerabilities; packs with
 `nuget.exe`/`nuget`; installs into an isolated template hive; and generates, builds, tests, and
-asserts all ten configurations, including React. It leaves diagnostics in a temporary directory.
+asserts all 20 configurations, including React. It leaves diagnostics in a temporary directory.
 All builds treat warnings as errors.
 
 ## 4. Smoke-test matrix

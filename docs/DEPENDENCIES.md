@@ -21,7 +21,10 @@ neither report claims to cover every supported operating system. Generated proje
 their own graph when users choose their target platform.
 
 Versions are centrally managed in the root and modular `Directory.Packages.props` files.
-Lock files are committed for both template trees. Aspire AppHost projects disable locked
+The shared central package file imports a framework-specific set of pins. Generated projects
+keep the pins for their selected framework. The checked-in .NET 10 source lock files cover
+both template trees. The generated .NET 11 graphs undergo license and vulnerability review
+during the package matrix. Aspire AppHost projects disable locked
 restore because Aspire adds host-specific packages. Keep the Aspire SDK version aligned across
 both trees and review major upgrades for compatibility before applying them.
 
@@ -56,9 +59,7 @@ Python-2.0. No fee-bearing or proprietary terms were identified. Keep each packa
 text and notices, provide attribution where required, and follow MPL source-disclosure terms
 when distributing modified covered files.
 
-Current compatibility holds: Aspire 13.4.6 is retained. The latest Aspire line verified on
-2026-09-27 is 13.5.4; a temporary restore of that graph included Json.More.Net 3.0.1,
-JsonPatch.Net 5.0.2, and JsonPointer.Net 7.0.1 with `OSMFEULA.txt` agreements that can require
-maintenance fees for qualifying revenue-generating use. MessagePack 2.x and Microsoft.OpenApi
+Aspire 13.6.5 and MessagePack 2.5.307 address current security advisories. The resolved
+Windows .NET 10 graph passed the license gate. MessagePack 2.x and Microsoft.OpenApi
 2.x are retained to avoid unreviewed major API changes; the prerelease StyleCop analyzer is
 retained rather than downgraded to the previous stable line.

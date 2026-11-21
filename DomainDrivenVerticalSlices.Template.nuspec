@@ -3,13 +3,14 @@
     <metadata>
         <id>RM.DomainDrivenVerticalSlices.Template</id>
         <title>ASP.NET Core Domain Driven Vertical Slices</title>
-        <version>10.8.0</version>
+        <version>11.0.0</version>
         <description>
             A comprehensive ASP.NET Core template implementing Domain-Driven Design (DDD) with Vertical Slice Architecture.
             
             Features include:
             • Two template styles: ddvs/ddvs-clean for Clean Architecture and ddvs-modular for an LLM-friendly modular monolith
-            • .NET Aspire 13.4 integration for orchestrated development and observability
+            • .NET 10 LTS by default, with optional .NET 11 STS
+            • .NET Aspire 13.6 integration for orchestrated development and observability
             • BaseEntity/BaseAuditableEntity with domain events and automatic audit tracking
             • EF Core interceptors for domain event dispatch and audit field population
             • Performance and exception logging pipeline behaviors
@@ -24,6 +25,13 @@
         <license type="expression">MIT</license>
         <projectUrl>https://github.com/RezaMashayekhi/DomainDrivenVerticalSlices.Template</projectUrl>
             <releaseNotes>
+Version 11.0.0:
+
+- Added --Framework net11.0 to ddvs, ddvs-clean, and ddvs-modular. The default is net10.0 (LTS).
+- Generated solutions select the matching SDK and framework-dependent NuGet versions.
+- Expanded validation to cover both frameworks across all template options.
+- Updated Aspire, .NET 10 servicing packages, and React tooling to address dependency advisories.
+
 Version 10.8.0:
 
 Fixes and architecture:

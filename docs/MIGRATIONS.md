@@ -3,6 +3,14 @@
 This document records changes that affect code in generated projects. Version numbers refer to
 the NuGet template package.
 
+## 11.0.0
+
+Existing .NET 10 applications can keep their SDK and target framework. To opt in when
+generating a project, pass `--Framework net11.0`. Updating the template package does
+not rewrite projects you already generated. To retarget an existing app, align
+`global.json`, `TargetFramework`, matching central package versions, and the EF CLI
+version if used. Refresh its lock files and run its build and test suite.
+
 ## 10.8.0
 
 ### `Result<TValue>` default-value behavior

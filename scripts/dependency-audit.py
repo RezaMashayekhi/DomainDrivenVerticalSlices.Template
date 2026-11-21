@@ -71,23 +71,24 @@ def updates(entry):
     return result
 
 
-def collect_resolved():
+def collect_resolved(roots):
     packages = set()
     assets_files = []
-    for source in (ROOT / 'src', ROOT / 'test', ROOT / 'templates/ddvs-modular/src', ROOT / 'templates/ddvs-modular/tests'):
-        for project in source.glob('*/*.csproj'):
+    for directory in roots:
+        projects = sorted(project for pattern in ('src/*/*.csproj', 'test/*/*.csproj', 'tests/*/*.csproj')
+                          for project in directory.glob(pattern))
+        if not projects:
+            raise RuntimeError(f'No projects found in {directory}')
+        for project in projects:
             assets = project.parent / 'obj/project.assets.json'
             if not assets.exists():
                 raise RuntimeError(f"Restore first: missing {assets}")
-            assets_files.append(str(assets.relative_to(ROOT)))
+            assets_files.append(str(assets.relative_to(ROOT)) if assets.is_relative_to(ROOT) else str(assets))
             data = json.loads(assets.read_text(encoding='utf-8-sig'))
             for name, library in data['libraries'].items():
                 if library['type'] == 'package':
                     packages.add(tuple(name.rsplit('/', 1)))
-    # Aspire's SDK is selected in the project Sdk attribute and is therefore not
-    # represented by project.assets.json. Include it explicitly in the license graph.
-    for project in ROOT.glob('**/*AppHost.csproj'):
-        if 'artifacts' not in project.parts:
+            # Aspire's SDK does not appear in project.assets.json.
             sdk = ET.parse(project).getroot().get('Sdk', '')
             if '/' in sdk:
                 packages.add(tuple(sdk.split('/')))
@@ -101,11 +102,13 @@ def main():
     parser.add_argument('--updates', action='store_true')
     parser.add_argument('--output', required=True)
     parser.add_argument('--fail-on-review', action='store_true')
+    parser.add_argument('--generated-root', type=Path, action='append')
     args = parser.parse_args()
     if args.updates:
         entries = set()
-        for file in (ROOT / 'Directory.Packages.props', ROOT / 'templates/ddvs-modular/Directory.Packages.props'):
-            entries.update((n.attrib['Include'], n.attrib['Version']) for n in ET.parse(file).iter('PackageVersion'))
+        for directory in (ROOT, ROOT / 'templates/ddvs-modular'):
+            for file in directory.glob('Directory.Packages*.props'):
+                entries.update((n.attrib['Include'], n.attrib['Version']) for n in ET.parse(file).iter('PackageVersion'))
         for file in ROOT.glob('**/*AppHost.csproj'):
             if 'artifacts' not in file.parts:
                 sdk = ET.parse(file).getroot().get('Sdk', '')
@@ -114,7 +117,8 @@ def main():
         worker = updates
         assets_files = []
     else:
-        entries, assets_files = collect_resolved()
+        roots = args.generated_root or (ROOT, ROOT / 'templates/ddvs-modular')
+        entries, assets_files = collect_resolved(roots)
         worker = lambda entry: metadata(*entry)
     with concurrent.futures.ThreadPoolExecutor(max_workers=8) as executor:
         rows = list(executor.map(worker, sorted(entries)))

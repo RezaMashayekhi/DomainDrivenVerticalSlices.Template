@@ -19,6 +19,59 @@
     "sourceName": "DomainDrivenVerticalSlices.Template",
     "preferNameDirectory": true,
     "symbols": {
+        "Framework": {
+            "type": "parameter",
+            "datatype": "choice",
+            "choices": [
+                {
+                    "choice": "net10.0",
+                    "description": "Target .NET 10 (LTS)"
+                },
+                {
+                    "choice": "net11.0",
+                    "description": "Target .NET 11 (STS)"
+                }
+            ],
+            "defaultValue": "net10.0",
+            "replaces": "net10.0",
+            "description": "Target framework for the generated solution"
+        },
+        "USE_NET11": {
+            "type": "computed",
+            "value": "(Framework == \"net11.0\")"
+        },
+        "EfToolVersion": {
+            "type": "generated",
+            "generator": "switch",
+            "replaces": "10.0.15",
+            "parameters": {
+                "evaluator": "C++",
+                "datatype": "string",
+                "cases": [
+                    { "condition": "USE_NET11", "value": "11.0.0" },
+                    { "condition": "", "value": "10.0.15" }
+                ]
+            }
+        },
+        "SdkVersion": {
+            "type": "generated",
+            "generator": "switch",
+            "replaces": "10.0.102",
+            "parameters": {
+                "evaluator": "C++",
+                "datatype": "string",
+                "cases": [
+                    {
+                        "condition": "USE_NET11",
+                        "value": "11.0.100"
+                    },
+                    {
+                        "condition": "",
+                        "value": "10.0.102"
+                    }
+                ]
+            }
+        },
         "projectName": {
             "type": "parameter",
             "dataType": "string",
@@ -127,6 +180,18 @@
                 "docs/archive/**"
             ],
             "modifiers": [
+            {
+                "condition": "(!USE_NET11)",
+                "exclude": [
+                    "Directory.Packages.net11.0.props"
+                ]
+            },
+            {
+                "condition": "(USE_NET11)",
+                "exclude": [
+                    "Directory.Packages.net10.0.props"
+                ]
+            },
                 {
                     "condition": "(INCLUDE_API_ONLY)",
                     "exclude": [
